@@ -1,85 +1,169 @@
-# camino-suite-2.0
+# Camino Suite 2.0
 
-✨ Your new, shiny [Nx workspace](https://nx.dev) is ready ✨.
+A modern monorepo workspace built with [Nx](https://nx.dev) for scalable enterprise applications.
 
-[Learn more about this workspace setup and its capabilities](https://nx.dev/nx-api/next?utm_source=nx_project&amp;utm_medium=readme&amp;utm_campaign=nx_projects) or run `npx nx graph` to visually explore what was created. Now, let's get you up to speed!
+## Installation
 
-## Run tasks
+```bash
+# Install dependencies
+yarn install
 
-To run the dev server for your app, use:
-
-```sh
-npx nx dev camino-suite
+# Or using npm
+npm install
 ```
-or 
-```sh
+
+## Available Scripts
+
+### Development
+```bash
+# Start all applications in development mode
 yarn dev:all
-```
-> Note: I will add other commands to `package.json` later.
 
-To create a production bundle:
-
-```sh
-npx nx build camino-suite
+# Start specific application
+nx dev camino-suite  # Runs only the camino-suite app
+# or
+nx dev your-app-name # Replace with specific app name
 ```
 
-To see all available targets to run for a project, run:
+> **Note:** `npx nx dev camino-suite` will only run the specified application, while `yarn dev:all` runs all applications in parallel. Use `dev:all` when you need to work with multiple applications simultaneously.
 
-```sh
-npx nx show project camino-suite
-```
-        
-These targets are either [inferred automatically](https://nx.dev/concepts/inferred-tasks?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) or defined in the `project.json` or `package.json` files.
+### Production
+```bash
+# Build all projects
+yarn build:all
 
-[More about running tasks in the docs &raquo;](https://nx.dev/features/run-tasks?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-
-## Add new projects
-
-While you could add new projects to your workspace manually, you might want to leverage [Nx plugins](https://nx.dev/concepts/nx-plugins?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) and their [code generation](https://nx.dev/features/generate-code?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) feature.
-
-Use the plugin's generator to create new projects.
-
-To generate a new application, use:
-
-```sh
-npx nx g @nx/next:app demo
+# Start production server
+yarn start:production
 ```
 
-To generate a new library, use:
+### Storybook
+```bash
+# Start Storybook development server
+yarn storybook
 
-```sh
-npx nx g @nx/next:lib mylib
+# Build Storybook
+yarn build:storybook
+
+# Serve built Storybook
+yarn start:storybook
 ```
 
-You can use `npx nx list` to get a list of installed plugins. Then, run `npx nx list <plugin-name>` to learn about more specific capabilities of a particular plugin. Alternatively, [install Nx Console](https://nx.dev/getting-started/editor-setup?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) to browse plugins and generators in your IDE.
+### Testing
+```bash
+# Run all tests
+yarn test:all
 
-[Learn more about Nx plugins &raquo;](https://nx.dev/concepts/nx-plugins?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) | [Browse the plugin registry &raquo;](https://nx.dev/plugin-registry?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
+# Run all e2e tests
+yarn e2e:all
 
-
-## Add a New Sub-App Inside Camino-suite
-
-```sh
-nx g @nrwl/next:lib name --directory=libs/apps
+# Run linting with auto-fix
+yarn lint:all
 ```
-We structure it this way rather than generating a new app because of the global store. If we need to use the global store across all the `sub-apps`, this is the only way to do it. The reason is that each app runs on its own port, and if we generated a new app, the global store would be initialized as a new store for each app.
 
-## Install Nx Console
+## Project Structure
 
-Nx Console is an editor extension that enriches your developer experience. It lets you run tasks, generate code, and improves code autocompletion in your IDE. It is available for VSCode and IntelliJ.
+The workspace is organized as a monorepo with the following structure:
 
-[Install Nx Console &raquo;](https://nx.dev/getting-started/editor-setup?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
+```
+├── apps/
+│   └── camino-suite/    # Main application
+├── libs/
+│   ├── apps/            # Feature sub-applications
+│   ├── data/            # Data models and types
+│   ├── logic/           # Business logic and services
+│   ├── store/           # State management (shared global store)
+│   ├── styles/          # Shared styles and themes
+│   └── ui/              # Reusable UI components
+```
 
-## Useful links
+## Running Specific Projects
 
-Learn more:
+To run a specific project or multiple projects:
 
-- [Learn more about this workspace setup](https://nx.dev/nx-api/next?utm_source=nx_project&amp;utm_medium=readme&amp;utm_campaign=nx_projects)
-- [Learn about Nx on CI](https://nx.dev/ci/intro/ci-with-nx?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-- [Releasing Packages with Nx release](https://nx.dev/features/manage-releases?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-- [What are Nx plugins?](https://nx.dev/concepts/nx-plugins?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
+```bash
+# Run a single project
+nx dev project-name
 
-And join the Nx community:
+# Run multiple specific projects
+nx run-many --target=dev --projects=app1,app2 --parallel=true
+```
+
+## Adding New Components
+
+### Creating a Sub-Application
+To add a new sub-application that shares the global store:
+
+```bash
+nx g @nrwl/next:lib my-feature --directory=libs/apps
+```
+
+### Creating Other Library Types
+
+```bash
+# Create a new library
+nx g @nx/next:lib my-library
+```
+
+## Adding New Packages
+
+To add a new package to the workspace:
+
+```bash
+# Add a package to the root workspace
+yarn add package-name
+
+# Add a dev dependency
+yarn add -D package-name
+
+# Add a package to a specific project
+yarn add package-name --scope=project-name
+```
+
+Example of adding common dependencies:
+```bash
+# Add UI dependencies
+yarn add @mui/material @emotion/react @emotion/styled
+yarn add -D @storybook/react @storybook/addon-essentials
+
+# Add testing dependencies
+yarn add -D @testing-library/react @testing-library/jest-dom
+
+# Add development tools
+yarn add -D eslint prettier typescript
+```
+
+> **Note:** When adding packages, make sure to check the workspace's package.json for existing dependencies to avoid version conflicts.
+
+## Development Tools
+
+### Nx Console
+
+For a better development experience, install [Nx Console](https://nx.dev/getting-started/editor-setup) - a powerful IDE extension that provides:
+- Visual task running
+- Code generation UI
+- Enhanced code completion
+- Project graph visualization
+
+Available for VSCode and IntelliJ.
+
+## Project Graph
+
+Visualize the project's dependency graph:
+
+```bash
+npx nx graph
+```
+
+## Learn More
+
+- [Nx Documentation](https://nx.dev/nx-api/next)
+- [Setting up CI with Nx](https://nx.dev/ci/intro/ci-with-nx)
+- [Managing Releases](https://nx.dev/features/manage-releases)
+
+## Community
+
 - [Discord](https://go.nx.dev/community)
-- [Follow us on X](https://twitter.com/nxdevtools) or [LinkedIn](https://www.linkedin.com/company/nrwl)
-- [Our Youtube channel](https://www.youtube.com/@nxdevtools)
-- [Our blog](https://nx.dev/blog?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
+- [Twitter](https://twitter.com/nxdevtools)
+- [LinkedIn](https://www.linkedin.com/company/nrwl)
+- [YouTube](https://www.youtube.com/@nxdevtools)
+- [Blog](https://nx.dev/blog)
