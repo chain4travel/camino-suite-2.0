@@ -22,15 +22,13 @@ const meta: Meta<typeof CamBtn> = {
 export default meta;
 type Story = StoryObj<typeof CamBtn>;
 
-export const Primary = {
-
+export const Primary: Story = {
   args: {
     variant: 'primary',
     size: 'md',
     children: 'button',
   },
   decorators: [
-    //@ts-ignore
     (Story) => (
       <div className="flex items-center justify-center w-full">
         {/* 👇 Decorators in Storybook also accept a function. Replace <Story/> with Story() to enable it  */}
