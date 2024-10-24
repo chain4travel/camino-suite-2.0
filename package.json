@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "license": "MIT",
   "scripts": {
-    "dev:all": "nx run-many --target=dev --projects=camino-suite --parallel=true",
+    "dev:all": "nx run-many --target=dev --parallel=true",
     "storybook": "nx run ui:storybook",
     "build:all": "npx nx run-many --target=build --all",
     "build:storybook": "nx run ui:build-storybook",
