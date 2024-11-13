@@ -1,0 +1,30 @@
+{
+  "name": "camino-suite",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/camino-suite",
+  "projectType": "application",
+  "tags": [],
+  "targets": {
+    "serve": {
+      "executor": "@nx/next:server",
+      "configurations": {
+        "production": {
+          "buildTarget": "camino-suite:build:production",
+          "dev": false,
+          "port": 3000
+        }
+      },
+      "defaultConfiguration": "development"
+    },
+    "build": {
+      "executor": "@nx/next:build",
+      "outputs": ["{options.outputPath}"],
+      "defaultConfiguration": "production",
+      "configurations": {
+        "production": {
+          "outputPath": "dist/apps/camino-suite"
+        }
+      }
+    }
+  }
+}
