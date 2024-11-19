@@ -1,5 +1,5 @@
 // tailwind-workspace-preset.js
-const { colors } = require('./libs/styles/src');
+const { colors, fontFamily } = require('./libs/styles/src');
 
 module.exports = {
   mode: 'jit',
@@ -10,6 +10,7 @@ module.exports = {
   theme: {
     extend: {
       colors: colors,
+      fontFamily: fontFamily,
     },
   },
   variants: {

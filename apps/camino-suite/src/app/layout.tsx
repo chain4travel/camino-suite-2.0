@@ -1,5 +1,12 @@
 import { StoreProvider } from '@rebuild/store';
+import { Inter } from 'next/font/google';
 import './global.css';
+
+const inter = Inter({
+  subsets: ['latin'],
+  weight: ['400', '500', '600', '700'],
+  variable: '--font-inter'
+});
 
 export const metadata = {
   title: 'Welcome to camino-suite',
@@ -13,7 +20,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className="flex flex-col items-center justify-center w-full">
+      <body className={`flex flex-col items-center justify-center w-full ${inter.variable}`}>
         <StoreProvider>
           {children}
         </StoreProvider>
