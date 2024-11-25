@@ -10,8 +10,8 @@ on:
 
 
 jobs:
-  cii:
-    name: Build Docker
+  deploy:
+    name: Build and Deploy
     runs-on: ubuntu-latest
     steps:
       - name: checkout 
@@ -29,7 +29,9 @@ jobs:
         run: |
           if [[ "${{ github.ref }}" == "refs/heads/c4t" ]]; then
               echo "bucket=new-suite.camino.network" >> $GITHUB_OUTPUT
-          elif [[ "${{ github.ref }}" == "refs/heads/dev" ]] 
+          elif [[ "${{ github.ref }}" == "refs/heads/dev" ]]; then
+              echo "bucket=dev.new-suite.camino.network" >> $GITHUB_OUTPUT
+          elif [[ "${{ github.ref }}" == "refs/heads/workflows" ]]; then
               echo "bucket=dev.new-suite.camino.network" >> $GITHUB_OUTPUT
           fi
 
