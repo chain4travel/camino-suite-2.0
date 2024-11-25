@@ -1,0 +1,53 @@
+name: 'Deploy Suite 2.0'
+
+on:
+  push:
+    branches:
+      - dev
+      - c4t
+      - workflows
+
+
+
+jobs:
+  cii:
+    name: Build Docker
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout 
+        uses: actions/checkout@v3
+        with:
+          submodules: recursive
+          fetch-depth: 0
+          
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '20'
+
+      - name: Prepare Bucket Name
+        id: setDefaults
+        run: |
+          if [[ "${{ github.ref }}" == "refs/heads/c4t" ]]; then
+              echo "bucket=new-suite.camino.network" >> $GITHUB_OUTPUT
+          elif [[ "${{ github.ref }}" == "refs/heads/dev" ]] 
+              echo "bucket=dev.new-suite.camino.network" >> $GITHUB_OUTPUT
+          fi
+
+      - name: install dependencies
+        run: yarn install
+        
+      - name: build
+        run: yarn build:all
+
+      - name: Cloud authentication
+        id: auth
+        uses: 'google-github-actions/auth@v1'
+        with:
+          credentials_json: '${{ secrets.GOOGLE_CREDENTIALS }}'
+
+      - name: Set up Cloud SDK
+        uses: google-github-actions/setup-gcloud@v1
+
+      - name: Update bucket
+        run: |
+          gsutil -m rsync -R -d dist gs://:${{ steps.setDefaults.outputs.bucket }}

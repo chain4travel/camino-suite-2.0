@@ -1,0 +1,41 @@
+name: 'CI'
+
+on:
+  push:
+    branches:
+      - workflows
+  pull_request:
+    branches:
+      - dev
+      - c4t
+
+
+jobs:
+  build_and_deploy:
+    name: Build Docker
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout 
+        uses: actions/checkout@v3
+        with:
+          submodules: recursive
+          fetch-depth: 0
+          
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '20'
+
+      - name: install dependencies
+        run: yarn install
+
+      - name: lint
+        run: yarn lint:all
+
+      - name: test
+        run: yarn test:all
+
+      - name: e2e
+        run: yarn e2e:all
+        
+      - name: build
+        run: yarn build:all
