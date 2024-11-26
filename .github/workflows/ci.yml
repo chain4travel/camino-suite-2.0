@@ -30,12 +30,20 @@ jobs:
 
       - name: lint
         run: yarn lint:all
+        env:
+          NX_NO_CLOUD: true
 
       - name: test
         run: yarn test:all
+        env:
+          NX_NO_CLOUD: true
 
       - name: e2e
         run: yarn e2e:all
+        env:
+          NX_NO_CLOUD: true
         
       - name: build
         run: yarn build:all
+        env:
+          NX_NO_CLOUD: true

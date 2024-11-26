@@ -40,6 +40,8 @@ jobs:
         
       - name: build
         run: yarn build:all
+        env:
+          NX_NO_CLOUD: true
 
       - name: Cloud authentication
         id: auth
