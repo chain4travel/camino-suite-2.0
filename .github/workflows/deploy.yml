@@ -7,6 +7,9 @@ on:
       - c4t
       - workflows
 
+env:
+  docker_image: "europe-west3-docker.pkg.dev/pwk-c4t-dev/internal-camino-dev/camino-new-suite"
+  cloudrun_region: europe-west1
 
 
 jobs:
@@ -20,38 +23,39 @@ jobs:
           submodules: recursive
           fetch-depth: 0
           
-      - uses: actions/setup-node@v3
-        with:
-          node-version: '20'
-
       - name: Prepare Bucket Name
         id: setDefaults
         run: |
-          if [[ "${{ github.ref }}" == "refs/heads/c4t" ]]; then
-              echo "bucket=new-suite.camino.network" >> $GITHUB_OUTPUT
-          elif [[ "${{ github.ref }}" == "refs/heads/dev" ]]; then
-              echo "bucket=dev.new-suite.camino.network" >> $GITHUB_OUTPUT
+          if [[ "${{ github.ref }}" == "refs/heads/c4t" ]] || [[ "${{ github.base_ref }}" == "c4t" ]]; then
+              echo "tag=c4t" >> $GITHUB_OUTPUT
+              echo "cloudrun_name=new-camino-suite-c4t" >> $GITHUB_OUTPUT
+          elif [[ "${{ github.ref }}" == "refs/heads/suite-c4t" ]] || [[ "${{ github.base_ref }}" == "suite-c4t" ]]; then
+              echo "tag=dev" >> $GITHUB_OUTPUT
+              echo "cloudrun_name=new-camino-suite-dev" >> $GITHUB_OUTPUT
           elif [[ "${{ github.ref }}" == "refs/heads/workflows" ]]; then
-              echo "bucket=dev.new-suite.camino.network" >> $GITHUB_OUTPUT
+              echo "tag=dev" >> $GITHUB_OUTPUT
+              echo "cloudrun_name=new-camino-suite-dev" >> $GITHUB_OUTPUT
           fi
 
-      - name: install dependencies
-        run: yarn install
-        
-      - name: build
-        run: yarn build:all
-        env:
-          NX_NO_CLOUD: true
+      - name: create docker image
+        run: docker build . -t ${{ env.docker_image }}:${{ steps.setDefaults.outputs.tag }} 
 
       - name: Cloud authentication
+        if: ${{ (github.event_name == 'push') }}
         id: auth
         uses: 'google-github-actions/auth@v1'
         with:
           credentials_json: '${{ secrets.GOOGLE_CREDENTIALS }}'
 
       - name: Set up Cloud SDK
+        if: ${{ (github.event_name == 'push') }}
         uses: google-github-actions/setup-gcloud@v1
 
-      - name: Update bucket
+
+
+      - name: push and deploy docker
+        if: ${{ (github.event_name == 'push') }}
         run: |
-          gsutil -m rsync -R -d dist gs://:${{ steps.setDefaults.outputs.bucket }}
+          gcloud auth configure-docker --quiet europe-west3-docker.pkg.dev
+          docker push ${{ env.docker_image }}:${{ steps.setDefaults.outputs.tag }} 
+          gcloud run deploy ${{ steps.setDefaults.outputs.cloudrun_name }} --image ${{ env.docker_image }}:${{ steps.setDefaults.outputs.tag }}   --region=${{ env.cloudrun_region }}
