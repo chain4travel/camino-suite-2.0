@@ -5,7 +5,6 @@ on:
     branches:
       - dev
       - c4t
-      - workflows
 
 env:
   docker_image: "europe-west3-docker.pkg.dev/pwk-c4t-dev/internal-camino-dev/camino-new-suite"
@@ -32,9 +31,8 @@ jobs:
           elif [[ "${{ github.ref }}" == "refs/heads/dev" ]] || [[ "${{ github.base_ref }}" == "dev" ]]; then
               echo "tag=dev" >> $GITHUB_OUTPUT
               echo "cloudrun_name=new-camino-suite-dev" >> $GITHUB_OUTPUT
-          elif [[ "${{ github.ref }}" == "refs/heads/workflows" ]]; then
-              echo "tag=dev" >> $GITHUB_OUTPUT
-              echo "cloudrun_name=new-camino-suite-dev" >> $GITHUB_OUTPUT
+          else
+              echo "tag=temp" >> $GITHUB_OUTPUT
           fi
 
       - name: create docker image
@@ -78,8 +76,6 @@ jobs:
           if [[ "${{ github.ref }}" == "refs/heads/c4t" ]] || [[ "${{ github.base_ref }}" == "c4t" ]]; then
               echo "bucket=storybook.new-suite.camino.network" >> $GITHUB_OUTPUT
           elif [[ "${{ github.ref }}" == "refs/heads/dev" ]] || [[ "${{ github.base_ref }}" == "dev" ]]; then
-              echo "bucket=dev.storybook.new-suite.camino.network" >> $GITHUB_OUTPUT
-          elif [[ "${{ github.ref }}" == "refs/heads/workflows" ]]; then
               echo "bucket=dev.storybook.new-suite.camino.network" >> $GITHUB_OUTPUT
           fi
 
