@@ -10,7 +10,9 @@ describe('CamBtn', () => {
         variant="primary"
         size="md"
         children="button"
-        onClick={() => {}}
+        onClick={() => {
+          // Intentionally left blank
+        }}
       />
     );
     expect(baseElement).toBeTruthy();
