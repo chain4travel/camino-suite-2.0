@@ -60,8 +60,7 @@ jobs:
           docker push ${{ env.docker_image }}:${{ steps.setDefaults.outputs.tag }} 
           gcloud run deploy ${{ steps.setDefaults.outputs.cloudrun_name }} --image ${{ env.docker_image }}:${{ steps.setDefaults.outputs.tag }}   --region=${{ env.cloudrun_region }}
 
-
- deploy-storybook:
+  deploy-storybook:
     name: Deploy Storybook
     if: ${{ (github.event_name == 'push') }}
     needs: docker
