@@ -17,8 +17,8 @@ COPY package.json yarn.lock* package-lock.json* pnpm-lock.yaml* .npmrc* ./
 #   else echo "Lockfile not found." && exit 1; \
 #   fi
 
-RUN yarn install --frozen-lockfile
-
+RUN rm -rf node_modules && yarn cache clean
+RUN yarn install --frozen-lockfile --ignore-scripts
 
 # Rebuild the source code only when needed
 FROM base AS builder
@@ -53,12 +53,13 @@ WORKDIR /app
 RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 nextjs
 
-COPY --from=builder /app/dist/apps/camino-suite/public ./public
+
 
 # Automatically leverage output traces to reduce image size
 # https://nextjs.org/docs/advanced-features/output-file-tracing
 COPY --from=builder --chown=nextjs:nodejs /app/dist/apps/camino-suite/.next/standalone ./
-COPY --from=builder --chown=nextjs:nodejs /app/dist/apps/camino-suite/.next/static ./.next/static
+COPY --from=builder --chown=nextjs:nodejs /app/dist/apps/camino-suite/.next/static ./dist/apps/camino-suite/.next/static
+COPY --from=builder --chown=nextjs:nodejs /app/dist/apps/camino-suite/public ./dist/apps/camino-suite/public
 
 USER nextjs
 
