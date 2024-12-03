@@ -1,0 +1,49 @@
+name: 'CI'
+
+on:
+  push:
+    branches:
+      - workflows
+  pull_request:
+    branches:
+      - dev
+      - c4t
+
+
+jobs:
+  ci:
+    name: CI
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout 
+        uses: actions/checkout@v3
+        with:
+          submodules: recursive
+          fetch-depth: 0
+          
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+
+      - name: install dependencies
+        run: yarn install
+
+      - name: lint
+        run: yarn lint:all
+        env:
+          NX_NO_CLOUD: true
+
+      - name: test
+        run: yarn test:all
+        env:
+          NX_NO_CLOUD: true
+
+      - name: e2e
+        run: yarn e2e:all
+        env:
+          NX_NO_CLOUD: true
+        
+      - name: build
+        run: yarn build:all
+        env:
+          NX_NO_CLOUD: true
