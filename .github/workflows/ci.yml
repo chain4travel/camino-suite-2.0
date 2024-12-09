@@ -29,6 +29,8 @@ jobs:
         run: |
           rm -rf node_modules && yarn cache clean
           yarn install --frozen-lockfile --ignore-scripts
+        env:
+          CYPRESS_CACHE_FOLDER: /tmp/Cypres
 
       - name: lint
         run: yarn lint:all
@@ -42,11 +44,10 @@ jobs:
 
       - name: e2e
         run: |
-          rm -rf /home/runner/.cache/Cypress
-          export PATH="$(pwd)/node_modules/.bin;$PATH"
           yarn e2e:all
         env:
           NX_NO_CLOUD: true
+          CYPRESS_CACHE_FOLDER: /tmp/Cypress
         
       - name: build
         run: yarn build:all
