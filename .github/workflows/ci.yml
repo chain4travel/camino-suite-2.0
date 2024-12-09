@@ -26,7 +26,11 @@ jobs:
           node-version: '18'
 
       - name: install dependencies
-        run: yarn install
+        run: |
+          rm -rf node_modules && yarn cache clean
+          yarn install --frozen-lockfile --ignore-scripts
+        env:
+          CYPRESS_CACHE_FOLDER: /tmp/Cypress
 
       - name: lint
         run: yarn lint:all
@@ -39,9 +43,12 @@ jobs:
           NX_NO_CLOUD: true
 
       - name: e2e
-        run: yarn e2e:all
+        run: |
+          yarn cypress install --force
+          yarn e2e:all
         env:
           NX_NO_CLOUD: true
+          CYPRESS_CACHE_FOLDER: /tmp/Cypress
         
       - name: build
         run: yarn build:all
