@@ -43,6 +43,7 @@ jobs:
       - name: e2e
         run: |
           rm -rf /home/runner/.cache/Cypress
+          export PATH=$(pwd)/node_modules/.bin;$PATH
           yarn e2e:all
         env:
           NX_NO_CLOUD: true
