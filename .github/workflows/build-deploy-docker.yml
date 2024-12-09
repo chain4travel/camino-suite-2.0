@@ -5,6 +5,10 @@ on:
     branches:
       - dev
       - c4t
+  pull_request:
+    branches:
+      - dev
+      - c4t
 
 env:
   docker_image: "europe-west3-docker.pkg.dev/pwk-c4t-dev/internal-camino-dev/camino-new-suite"
