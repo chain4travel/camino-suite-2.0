@@ -44,6 +44,7 @@ jobs:
 
       - name: e2e
         run: |
+          ./node_modules/.bin/cypress install --force
           yarn e2e:all
         env:
           NX_NO_CLOUD: true
