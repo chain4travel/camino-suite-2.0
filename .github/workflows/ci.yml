@@ -30,7 +30,7 @@ jobs:
           rm -rf node_modules && yarn cache clean
           yarn install --frozen-lockfile --ignore-scripts
         env:
-          CYPRESS_CACHE_FOLDER: /tmp/Cypres
+          CYPRESS_CACHE_FOLDER: /tmp/Cypress
 
       - name: lint
         run: yarn lint:all
