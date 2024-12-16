@@ -15,6 +15,9 @@ export const colors = {
   primaryDark: '#012C5D',
   secondaryDark: '#37175C',
   successDark: '#09DE6B',
+};
+
+export const gradients = {
   //gradient colors
   gradient1: 'linear-gradient(90deg, #0085FF 0%, #B440FC 100%)',
   gradient2: 'linear-gradient(135deg, #B440FC 0%, #35E9AD 100%)',

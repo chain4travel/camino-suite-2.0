@@ -1,11 +1,12 @@
 import { StoreProvider } from '@rebuild/store';
 import { Inter } from 'next/font/google';
 import './global.css';
+import { ThemeProvider } from '@rebuild/styles';
 
 const inter = Inter({
   subsets: ['latin'],
   weight: ['400', '500', '600', '700'],
-  variable: '--font-inter'
+  variable: '--font-inter',
 });
 
 export const metadata = {
@@ -20,10 +21,12 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={`flex flex-col items-center justify-center w-full ${inter.variable}`}>
-        <StoreProvider>
-          {children}
-        </StoreProvider>
+      <body
+        className={`flex flex-col items-center justify-center w-full ${inter.variable}`}
+      >
+        <ThemeProvider>
+          <StoreProvider>{children}</StoreProvider>
+        </ThemeProvider>
       </body>
     </html>
   );

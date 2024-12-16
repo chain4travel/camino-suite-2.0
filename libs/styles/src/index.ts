@@ -2,3 +2,4 @@
 
 export * from './lib/colors';
 export * from './lib/fontFamily';
+export * from './lib/ThemeContext';
