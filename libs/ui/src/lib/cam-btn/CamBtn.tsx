@@ -1,8 +1,8 @@
 import { CamBtnProps } from './CamBtn.types';
 
 export function CamBtn({
-  variant,
-  size,
+  variant = 'primary',
+  size = 'md',
   children,
   onClick,
   ...rest
