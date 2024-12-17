@@ -3,3 +3,8 @@
 export * from './lib/colors';
 export * from './lib/fontFamily';
 export * from './lib/ThemeContext';
+
+
+
+// SVg Logos
+export {default as CaminoLogo} from './Logos/CaminoLogo';

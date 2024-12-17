@@ -62,6 +62,6 @@ export const Default: Story = {
       },
     ],
     onSelect: (option: OptionType) => console.log('Selected option:', option),
-    defaultLabel: 'Select an option',
+    activeApp: 'Select an option',
   },
 };

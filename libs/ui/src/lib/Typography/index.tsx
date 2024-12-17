@@ -1,5 +1,5 @@
 import React from 'react';
-import { clsx } from 'clsx'; // To conditionally combine class names
+import { clsx } from 'clsx';
 import { TypographyProps, Variant } from './Typography.types';
 
 const variantClasses: Record<Variant, string> = {
@@ -22,15 +22,14 @@ const Typography: React.FC<TypographyProps> = ({
   color,
   children,
 }) => {
+  const classes = clsx(
+    'text-slate-950 dark:text-slate-100 font-inter',
+    variantClasses[variant],
+    className
+  );
+
   return (
-    <Component
-      className={clsx(
-        'text-slate-950 dark:text-slate-100 font-inter',
-        variantClasses[variant],
-        className
-      )}
-      style={{ color }}
-    >
+    <Component className={classes} style={{ color }}>
       {children}
     </Component>
   );

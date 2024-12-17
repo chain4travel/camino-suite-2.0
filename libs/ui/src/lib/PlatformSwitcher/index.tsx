@@ -15,7 +15,7 @@ import { CaminoLogo } from '@rebuild/styles';
 interface DropdownProps {
   options: OptionType[];
   onSelect: (selectedOption: OptionType) => void; // Callback when an option is selected
-  defaultLabel: string; // Default label for the dropdown button
+  activeApp: string; // Default label for the dropdown button
 }
 
 const PlatformSwitcher: React.FC<DropdownProps> = ({
@@ -23,24 +23,19 @@ const PlatformSwitcher: React.FC<DropdownProps> = ({
   onSelect,
   activeApp,
 }) => {
-  const [isOpen, setIsOpen] = useState(false);
   const [selectedOption, setSelectedOption] = useState<OptionType | null>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
-
-  const handleToggle = () => setIsOpen((prev) => !prev);
 
   const handleSelect = (option: OptionType) => {
     setSelectedOption(option);
     onSelect(option);
-    setIsOpen(false);
   };
 
   return (
     <div ref={dropdownRef} className="fixed w-fit">
       <Menu>
         <MenuButton
-          onClick={handleToggle}
-          className=" flex justify-center items-center gap-2 rounded-md bg-slate-950 py-1.5 px-3 text-sm/6 font-semibold text-slate-100 shadow-inner shadow-white/10 focus:outline-none"
+          className=" flex justify-center items-center gap-2 rounded-md py-1.5 px-3 text-sm/6 font-semibold text-slate-100 shadow-inner shadow-white/10 focus:outline-none"
         >
           <CaminoLogo />
           <Typography variant="h4" as="h4" color="#B5E3FD">
