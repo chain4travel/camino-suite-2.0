@@ -15,6 +15,9 @@
   },
   "private": true,
   "dependencies": {
+    "@headlessui/react": "^2.2.0",
+    "@mdi/js": "^7.4.47",
+    "@mdi/react": "^1.6.1",
     "@next/font": "^14.2.15",
     "@reduxjs/toolkit": "^2.2.7",
     "@tailwindcss/typography": "^0.5.15",

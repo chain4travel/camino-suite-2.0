@@ -32,10 +32,10 @@ const PlatformSwitcher: React.FC<DropdownProps> = ({
   };
 
   return (
-    <div ref={dropdownRef} className="fixed w-fit">
+    <div ref={dropdownRef} className="w-fit">
       <Menu>
         <MenuButton
-          className=" flex justify-center items-center gap-2 rounded-md py-1.5 px-3 text-sm/6 font-semibold text-slate-100 shadow-inner shadow-white/10 focus:outline-none"
+          className=" flex justify-center items-center gap-2 rounded-md py-1.5 px-3 text-sm/6 font-semibold text-slate-100"
         >
           <CaminoLogo />
           <Typography variant="h4" as="h4" color="#B5E3FD">
@@ -44,7 +44,7 @@ const PlatformSwitcher: React.FC<DropdownProps> = ({
           <Icon path={mdiChevronDown} size={1} />
         </MenuButton>
 
-        <MenuItems className="w-full mt-4 origin-top-right border rounded-xl border-slate-700 text-sm/6">
+        <MenuItems className="absolute mt-4 origin-top-right border w-fit rounded-xl border-slate-700 text-sm/6">
           {options.map((option, index) => (
             <>
               <MenuItem key={index}>
