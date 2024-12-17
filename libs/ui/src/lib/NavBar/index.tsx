@@ -15,7 +15,7 @@ const Navbar = () => {
   return (
     <nav
       className={clsx(
-        'flex items-center justify-between w-full px-6 py-4 text-white border border-b border-slate-700' ,
+        'flex items-center justify-between w-full px-6 py-4 border border-b border-0 border-slate-700' ,
         theme === 'light' ? 'bg-white' : 'bg-slate-950'
       )}
     >
