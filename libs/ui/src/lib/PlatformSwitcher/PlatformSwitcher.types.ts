@@ -5,3 +5,9 @@ export interface OptionType {
   private: boolean;
   hidden?: boolean;
 }
+
+export interface DropdownProps {
+  options: OptionType[];
+  onSelect: (selectedOption: OptionType) => void; // Callback when an option is selected
+  activeApp: string; // Default label for the dropdown button
+}
