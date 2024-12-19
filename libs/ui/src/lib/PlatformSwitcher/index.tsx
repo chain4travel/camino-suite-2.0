@@ -1,3 +1,4 @@
+'use client';
 import {
   Menu,
   MenuButton,
@@ -10,7 +11,7 @@ import { DropdownProps, OptionType } from './PlatformSwitcher.types';
 import Icon from '@mdi/react';
 import { mdiChevronDown } from '@mdi/js';
 import Typography from '../Typography';
-import { CaminoLogo } from '@camino/ui';
+import CaminoLogo from '../../logos/CaminoLogo';
 
 const PlatformSwitcher: React.FC<DropdownProps> = ({
   options,

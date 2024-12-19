@@ -1,8 +1,7 @@
 import { StoreProvider } from '@camino/store';
 import { Inter } from 'next/font/google';
 import './global.css';
-import { ThemeProvider } from '@camino/ui';
-
+import { ThemeProvider, Layout } from '@camino/ui';
 
 const inter = Inter({
   subsets: ['latin'],
@@ -26,7 +25,9 @@ export default function RootLayout({
         className={`flex flex-col items-center justify-center w-full ${inter.variable}`}
       >
         <ThemeProvider>
-          <StoreProvider>{children}</StoreProvider>
+          <StoreProvider>
+            <Layout>{children}</Layout>
+          </StoreProvider>
         </ThemeProvider>
       </body>
     </html>

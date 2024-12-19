@@ -1,4 +1,4 @@
-import { ThemeProvider } from '@camino/ui';
+import { ThemeProvider } from '../src/context/ThemeContext';
 import '../ui.css';
 import { Preview } from '@storybook/react';
 

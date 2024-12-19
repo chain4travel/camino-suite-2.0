@@ -22,6 +22,7 @@
       "@camino/styles": ["libs/styles/src/index.ts"],
       "@camino/test": ["libs/test/src/index.ts"],
       "@camino/ui": ["libs/ui/src/index.ts"],
+      // apps
       "@camino/login": ["libs/apps/login/src/index.ts"],
     }
   },

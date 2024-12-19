@@ -1,10 +1,11 @@
+'use client'
 import React from 'react';
-import Navbar from '../../ui/src/lib/NavBar';
-import Footer from '../../ui/src/lib/Footer';
+import Navbar from '../NavBar';
+import Footer from '../Footer';
 
 const Layout = ({ children }: { children: React.ReactNode }) => {
   return (
-    <div className="flex flex-col w-full h-auto min-h-screen">
+    <div className="flex flex-col items-center justify-between w-full h-auto min-h-screen dark:bg-slate-950">
       <Navbar />
       {children}
       <Footer />

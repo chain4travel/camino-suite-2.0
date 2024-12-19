@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import { CamBtn } from './CamBtn';
+import CamBtn from '.';
 
 const meta: Meta<typeof CamBtn> = {
   component: CamBtn,
@@ -27,7 +27,7 @@ export const Primary: Story = {
     variant: 'primary',
     size: 'md',
     children: 'button',
-    disabled: false
+    disabled: false,
   },
   decorators: [
     (Story) => (

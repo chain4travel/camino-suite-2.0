@@ -1,7 +1,7 @@
 import React from 'react';
 import { render } from '@testing-library/react';
 
-import CamBtn from './CamBtn';
+import CamBtn from '.';
 
 describe('CamBtn', () => {
   it('should render successfully', () => {

@@ -1,7 +1,8 @@
-import { useTheme } from '@camino/ui';
+import CaminoLogo from '../../logos/CaminoLogo';
+import { useTheme } from '../../context/ThemeContext';
 import { clsx } from 'clsx';
 import Typography from '../Typography';
-import CamBtn from '../cam-btn/CamBtn';
+import CamBtn from '../CamBtn';
 
 const Footer = () => {
   const { theme } = useTheme();
@@ -57,7 +58,7 @@ const Footer = () => {
           {/* Logo and Description */}
           <div className="max-w-sm">
             <div className="flex items-center gap-2 mb-4">
-              {/* <CaminoLogo /> */}
+              <CaminoLogo />
             </div>
             <Typography variant="caption" as="p">
               {footerData.description}

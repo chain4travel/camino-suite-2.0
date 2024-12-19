@@ -1,2 +1,2 @@
 // Layout
-export * from './layout';
+export * from '../ui/src/lib/Layout';

@@ -2,12 +2,12 @@ import Icon from '@mdi/react';
 import { mdiWhiteBalanceSunny } from '@mdi/js';
 import PlatformSwitcher from '../PlatformSwitcher';
 import { PLATFORM_SWITCHER } from '@camino/data';
-// import { useTheme } from '@camino/ui';
+import { useTheme } from '../../context/ThemeContext';
 import Typography from '../Typography';
 import { clsx } from 'clsx';
 
 const Navbar = () => {
-  // const { theme, toggleTheme } = useTheme();
+  const { theme, toggleTheme } = useTheme();
   const handleSwitcherSelect = () => {
     console.log('Selected option:');
   };

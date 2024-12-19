@@ -1,12 +1,12 @@
 import { CamBtnProps } from './CamBtn.types';
 
-export function CamBtn({
+const CamBtn = ({
   variant = 'primary',
   size = 'md',
   children,
   onClick,
   ...rest
-}: CamBtnProps) {
+}: CamBtnProps) => {
   const getVariantClass = () => {
     switch (variant) {
       case 'primary':
@@ -48,6 +48,6 @@ export function CamBtn({
       <span className="relative z-10">{children}</span>
     </button>
   );
-}
+};
 
 export default CamBtn;

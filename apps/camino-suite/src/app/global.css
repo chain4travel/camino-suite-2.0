@@ -3,16 +3,3 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
-html {
-  -webkit-text-size-adjust: 100%;
-  line-height: 1.5;
-  tab-size: 4;
-  scroll-behavior: smooth;
-  background-color: #020617;
-}
-body {
-  font-family: inherit;
-  line-height: inherit;
-  margin: 0;
-}
