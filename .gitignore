@@ -55,3 +55,6 @@ storybook-static
 !.yarn/plugins
 !.yarn/sdks
 .yarnrc
+
+# test __snapshots__ folders
+__snapshots__/

@@ -4,10 +4,7 @@ const { colors, fontFamily, gradients } = require('./libs/styles/src');
 module.exports = {
   mode: 'jit',
   darkMode: 'class', // Use class-based dark mode
-  content: [
-    './apps/**/*.{js,ts,jsx,tsx}',
-    './libs/**/*.{js,ts,jsx,tsx}',
-  ],
+  content: ['./apps/**/*.{js,ts,jsx,tsx}', './libs/**/*.{js,ts,jsx,tsx}'],
   theme: {
     extend: {
       colors: colors,

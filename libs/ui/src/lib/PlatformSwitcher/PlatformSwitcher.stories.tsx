@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react';
 
 import PlatformSwitcher from './index';
 import { OptionType } from './PlatformSwitcher.types';
-import { PLATFORM_SWITCHER } from '@rebuild/data';
+import { PLATFORM_SWITCHER } from '@camino/data';
 
 const meta: Meta = {
   title: 'Components/PlatformSwitcher',

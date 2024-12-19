@@ -20,6 +20,9 @@ export default meta;
 type Story = StoryObj<typeof Box>;
 
 export const Primary: Story = {
+  args: {
+    children: 'Box',
+  },
   decorators: [
     (Story: typeof Box) => (
       <div className="flex items-center justify-center w-full">

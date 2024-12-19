@@ -1,0 +1,9 @@
+{
+  "name": "apps-login",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/apps/login/src",
+  "projectType": "library",
+  "tags": [],
+  "// targets": "to see all targets run: nx show project apps-login --web",
+  "targets": {}
+}

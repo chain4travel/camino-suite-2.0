@@ -10,7 +10,7 @@ import { DropdownProps, OptionType } from './PlatformSwitcher.types';
 import Icon from '@mdi/react';
 import { mdiChevronDown } from '@mdi/js';
 import Typography from '../Typography';
-import { CaminoLogo } from '@rebuild/styles';
+import { CaminoLogo } from '@camino/ui';
 
 const PlatformSwitcher: React.FC<DropdownProps> = ({
   options,

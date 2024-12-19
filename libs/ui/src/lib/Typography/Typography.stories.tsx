@@ -4,7 +4,7 @@ import Typography from './index';
 
 const meta: Meta<typeof Typography> = {
   component: Typography,
-  title: 'Components/Typography',
+  title: 'Common/Typography',
   tags: ['autodocs'],
   argTypes: {
     variant: {

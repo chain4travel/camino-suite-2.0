@@ -1,7 +1,8 @@
-import { StoreProvider } from '@rebuild/store';
+import { StoreProvider } from '@camino/store';
 import { Inter } from 'next/font/google';
 import './global.css';
-import { ThemeProvider } from '@rebuild/styles';
+import { ThemeProvider } from '@camino/ui';
+
 
 const inter = Inter({
   subsets: ['latin'],

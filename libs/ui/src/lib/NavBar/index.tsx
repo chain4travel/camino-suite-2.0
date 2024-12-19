@@ -1,13 +1,13 @@
 import Icon from '@mdi/react';
 import { mdiWhiteBalanceSunny } from '@mdi/js';
 import PlatformSwitcher from '../PlatformSwitcher';
-import { PLATFORM_SWITCHER } from '@rebuild/data';
-import { useTheme } from '@rebuild/styles';
+import { PLATFORM_SWITCHER } from '@camino/data';
+// import { useTheme } from '@camino/ui';
 import Typography from '../Typography';
 import { clsx } from 'clsx';
 
 const Navbar = () => {
-  const { theme, toggleTheme } = useTheme();
+  // const { theme, toggleTheme } = useTheme();
   const handleSwitcherSelect = () => {
     console.log('Selected option:');
   };
@@ -15,7 +15,7 @@ const Navbar = () => {
   return (
     <nav
       className={clsx(
-        'flex items-center justify-between w-full px-6 py-4 border border-b border-0 border-slate-700' ,
+        'flex items-center justify-between w-full px-6 py-4 border-b border-slate-700',
         theme === 'light' ? 'bg-white' : 'bg-slate-950'
       )}
     >

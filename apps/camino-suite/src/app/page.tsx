@@ -7,7 +7,7 @@ export default function Index() {
         <div className="container ">
           <div id="welcome">
             <h1>
-              <span className="block text-primaryDark font-inter">Hello there, </span>
+              <span className="block bg-red-500 text-primaryDark font-inter">Hello there, </span>
               Welcome camino-suite 👋
             </h1>
           </div>
