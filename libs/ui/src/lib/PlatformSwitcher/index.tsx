@@ -39,8 +39,8 @@ const PlatformSwitcher: React.FC<DropdownProps> = ({
 
         <MenuItems className="absolute mt-4 origin-top-right border w-fit rounded-xl border-slate-700">
           {options.map((option, index) => (
-            <>
-              <MenuItem key={index}>
+            <div key={option.name + index}>
+              <MenuItem>
                 <button
                   onClick={() => handleSelect(option)}
                   className="group px-4 py-3 flex flex-col w-full items-start text-start gap-1.5 rounded-lg data-[focus]:bg-white/10"
@@ -56,7 +56,7 @@ const PlatformSwitcher: React.FC<DropdownProps> = ({
               {option !== options[options.length - 1] && (
                 <MenuSeparator className="h-px my-1 bg-slate-700" />
               )}
-            </>
+            </div>
           ))}
         </MenuItems>
       </Menu>
