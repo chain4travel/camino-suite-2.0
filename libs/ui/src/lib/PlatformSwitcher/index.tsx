@@ -12,6 +12,7 @@ import Icon from '@mdi/react';
 import { mdiChevronDown } from '@mdi/js';
 import Typography from '../Typography';
 import CaminoLogo from '../../logos/CaminoLogo';
+import { useTheme } from '../../context/ThemeContext';
 
 const PlatformSwitcher: React.FC<DropdownProps> = ({
   options,
@@ -20,6 +21,7 @@ const PlatformSwitcher: React.FC<DropdownProps> = ({
 }) => {
   const [selectedOption, setSelectedOption] = useState<OptionType | null>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const { theme } = useTheme();
 
   const handleSelect = (option: OptionType) => {
     setSelectedOption(option);
@@ -29,15 +31,23 @@ const PlatformSwitcher: React.FC<DropdownProps> = ({
   return (
     <div ref={dropdownRef} className="w-fit">
       <Menu>
-        <MenuButton className="flex items-center justify-center gap-2 font-semibold rounded-md text-sm/6 text-slate-100">
+        <MenuButton className="flex h-fit items-center justify-center gap-2 [&>h3]:mt-1">
           <CaminoLogo />
-          <Typography variant="h4" as="h4" color="#149EED">
-            {selectedOption?.name}
+          <Typography variant="h3" as="h3" color="#149EED">
+            {selectedOption?.name || options[0]?.name}
           </Typography>
-          <Icon path={mdiChevronDown} size={1} />
+          <Icon
+            path={mdiChevronDown}
+            size={1}
+            className={
+              theme === 'light'
+                ? '[&>path]:!fill-slate-950 mt-1.5'
+                : '[&>path]:!fill-slate-100 mt-1.5'
+            }
+          />
         </MenuButton>
 
-        <MenuItems className="absolute mt-4 origin-top-right border w-fit rounded-xl border-slate-700">
+        <MenuItems className="absolute mt-4 origin-top-right border w-fit rounded-xl border-slate-700 bg-slate-950">
           {options.map((option, index) => (
             <div key={option.name + index}>
               <MenuItem>
