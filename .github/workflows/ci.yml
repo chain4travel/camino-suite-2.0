@@ -38,7 +38,7 @@ jobs:
           NX_NO_CLOUD: true
 
       - name: test
-        run: yarn test:all --verbose
+        run: yarn test:all -u --verbose
         env:
           NX_NO_CLOUD: true
 
