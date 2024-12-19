@@ -3,4 +3,4 @@
 export * from './lib/wallet-api';
 
 // constants
-export * from './constant/appConsts';
+export * from './constants/suiteConsts';

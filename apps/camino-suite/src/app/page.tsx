@@ -8,10 +8,10 @@ export default function Index() {
       <div className="w-full">
         <div className="container ">
           <div className='flex flex-col items-start justify-center'>
-            <Typography variant="h6" as="h6">
+            <Typography variant="h3" as="h3">
               Hello there,
             </Typography>
-            <Typography variant="h5" as="h5">
+            <Typography variant="h1" as="h1">
               Welcome camino-suite 👋
             </Typography>
           </div>
