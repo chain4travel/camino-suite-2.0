@@ -1,5 +1,5 @@
 {
-  "name": "@rebuild/source",
+  "name": "@camino/source",
   "version": "0.0.0",
   "license": "MIT",
   "scripts": {
@@ -9,12 +9,16 @@
     "build:storybook": "nx run ui:build-storybook",
     "start:production": "nx run-many --target=serve --configuration=production --all",
     "start:storybook": "nx run ui:static-storybook",
-    "test:all": "nx run-many --target=test --all --parallel=true --exclude=camino-suite --no-cloud",
+    "test:all": "nx run-many --target=test --all --parallel=true --exclude=camino-suite --no-cloud -u --verbose",
     "lint:all": "nx run-many --target=lint --all --parallel=true --fix",
     "e2e:all": "nx run-many --target=e2e --all --parallel=true"
   },
   "private": true,
   "dependencies": {
+    "@headlessui/react": "^2.2.0",
+    "@mdi/js": "^7.4.47",
+    "@mdi/react": "^1.6.1",
+    "@next/font": "^14.2.15",
     "@reduxjs/toolkit": "^2.2.7",
     "@tailwindcss/typography": "^0.5.15",
     "next": "14.2.3",

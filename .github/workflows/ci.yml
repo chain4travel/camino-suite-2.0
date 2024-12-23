@@ -15,12 +15,12 @@ jobs:
     name: CI
     runs-on: ubuntu-latest
     steps:
-      - name: checkout 
+      - name: checkout
         uses: actions/checkout@v3
         with:
           submodules: recursive
           fetch-depth: 0
-          
+
       - uses: actions/setup-node@v4
         with:
           node-version: '18'
@@ -49,7 +49,7 @@ jobs:
         env:
           NX_NO_CLOUD: true
           CYPRESS_CACHE_FOLDER: /tmp/Cypress
-        
+
       - name: build
         run: yarn build:all
         env:

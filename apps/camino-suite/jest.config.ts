@@ -1,4 +1,4 @@
-export default {
+const jestConfig = {
   displayName: 'camino-suite',
   preset: '../../jest.preset.js',
   transform: {
@@ -8,3 +8,5 @@ export default {
   moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx'],
   coverageDirectory: '../../coverage/apps/camino-suite',
 };
+
+export default jestConfig;

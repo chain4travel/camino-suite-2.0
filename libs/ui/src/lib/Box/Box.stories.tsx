@@ -1,38 +1,33 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import { CamBtn } from './CamBtn';
+import Box from '.';
 
-const meta: Meta<typeof CamBtn> = {
-  component: CamBtn,
-  title: 'components/CamBtn',
+const meta: Meta<typeof Box> = {
+  component: Box,
+  title: 'components/Box',
   tags: ['autodocs'],
   argTypes: {
-    variant: {
-      description: 'Button style variant',
-    },
     children: {
-      description: 'Button text',
+      description: 'Box content',
       type: { name: 'string', required: false },
       control: {
         type: 'text',
       },
     },
-    onClick: { action: 'clicked' },
   },
 };
+
 export default meta;
-type Story = StoryObj<typeof CamBtn>;
+type Story = StoryObj<typeof Box>;
 
 export const Primary: Story = {
   args: {
-    variant: 'primary',
-    size: 'md',
-    children: 'button',
+    children: 'Box',
   },
   decorators: [
-    (Story) => (
+    (Story: typeof Box) => (
       <div className="flex items-center justify-center w-full">
         {/* 👇 Decorators in Storybook also accept a function. Replace <Story/> with Story() to enable it  */}
-        <Story />
+        <Story>Box</Story>
       </div>
     ),
   ],

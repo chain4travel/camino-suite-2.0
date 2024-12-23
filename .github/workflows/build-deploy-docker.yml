@@ -20,12 +20,12 @@ jobs:
     name: Build and Deploy
     runs-on: ubuntu-latest
     steps:
-      - name: checkout 
+      - name: checkout
         uses: actions/checkout@v4
         with:
           submodules: recursive
           fetch-depth: 0
-          
+
       - name: Prepare cloud run name
         id: setDefaults
         run: |
@@ -40,7 +40,7 @@ jobs:
           fi
 
       - name: create docker image
-        run: docker build . -t ${{ env.docker_image }}:${{ steps.setDefaults.outputs.tag }} 
+        run: docker build . -t ${{ env.docker_image }}:${{ steps.setDefaults.outputs.tag }}
 
       - name: Cloud authentication
         if: ${{ (github.event_name == 'push') }}
@@ -59,7 +59,7 @@ jobs:
         if: ${{ (github.event_name == 'push') }}
         run: |
           gcloud auth configure-docker --quiet europe-west3-docker.pkg.dev
-          docker push ${{ env.docker_image }}:${{ steps.setDefaults.outputs.tag }} 
+          docker push ${{ env.docker_image }}:${{ steps.setDefaults.outputs.tag }}
           gcloud run deploy ${{ steps.setDefaults.outputs.cloudrun_name }} --image ${{ env.docker_image }}:${{ steps.setDefaults.outputs.tag }}   --region=${{ env.cloudrun_region }}
 
   deploy-storybook:
@@ -68,12 +68,12 @@ jobs:
     needs: docker
     runs-on: ubuntu-latest
     steps:
-      - name: checkout 
+      - name: checkout
         uses: actions/checkout@v4
         with:
           submodules: recursive
           fetch-depth: 0
-          
+
       - name: Prepare Bucket Name
         id: setDefaults
         run: |
@@ -87,8 +87,8 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '18'
-          
-      - name: Install yarn dependencies       
+
+      - name: Install yarn dependencies
         run: yarn install
 
       - name: Build storybook
@@ -104,6 +104,6 @@ jobs:
         uses: google-github-actions/setup-gcloud@v1
 
 
-      - name: Update Bucket 
+      - name: Update Bucket
         run: |
           gsutil -m rsync -R -d libs/ui/storybook-static gs://${{ steps.setDefaults.outputs.bucket }}

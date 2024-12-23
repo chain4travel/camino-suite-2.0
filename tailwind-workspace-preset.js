@@ -1,15 +1,15 @@
 // tailwind-workspace-preset.js
-const { colors } = require('./libs/styles/src');
+const { colors, fontFamily, gradients } = require('./libs/styles/src');
 
 module.exports = {
   mode: 'jit',
-  content: [
-    './apps/**/*.{js,ts,jsx,tsx}',
-    './libs/**/*.{js,ts,jsx,tsx}',
-  ],
+  darkMode: 'class', // Use class-based dark mode
+  content: ['./apps/**/*.{js,ts,jsx,tsx}', './libs/**/*.{js,ts,jsx,tsx}'],
   theme: {
     extend: {
       colors: colors,
+      backgroundImage: gradients,
+      fontFamily: fontFamily,
     },
   },
   variants: {
