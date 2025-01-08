@@ -1,13 +1,8 @@
 'use client';
 
-import { ComponentPropsWithoutRef, forwardRef } from 'react';
-
+import { AccessOptionProps } from './AccessOption.types';
 import { Icon } from '@mdi/react';
-
-export interface AccessOptionProps extends ComponentPropsWithoutRef<'button'> {
-  icon: string;
-  text: string;
-}
+import {forwardRef} from 'react';
 
 export const AccessOption = forwardRef<HTMLButtonElement, AccessOptionProps>(
   ({ icon, text, className = '', ...props }, ref) => {

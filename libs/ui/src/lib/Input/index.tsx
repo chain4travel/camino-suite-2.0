@@ -1,22 +1,10 @@
 'use client';
 
-import React, { InputHTMLAttributes, MouseEvent, forwardRef } from 'react';
+import React, { forwardRef } from 'react';
 
+import { InputProps } from './Input.types';
 import clsx from 'clsx';
 import { useTranslation } from 'react-i18next';
-
-export interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
-  label?: string;
-  error?: string;
-  helpText?: string;
-  rightIcon?: React.ReactNode;
-  isSuccess?: boolean;
-  onIconClick?: (e: MouseEvent<HTMLButtonElement>) => void;
-  iconAriaLabel?: string;
-  iconDisabled?: boolean;
-  variant?: 'default' | 'validation-code' | 'textarea';
-  required?: boolean;
-}
 
 const Input = forwardRef<HTMLInputElement, InputProps>(
   ({
