@@ -22,3 +22,5 @@ export * from './lib/LanguageSwitcher';
 
 // i18n
 export * from './context/I18nContext';
+
+export type { TranslationType } from './context/I18nContext';

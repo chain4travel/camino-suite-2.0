@@ -9,7 +9,7 @@ export default function Index() {
 
   return (
     <div className="w-full">
-      <div className="container mx-auto p-6">
+      <div className="container p-6 mx-auto">
         <div className="flex flex-col gap-6">
           {/* Header Section */}
           <div className="flex flex-col gap-2">
@@ -23,13 +23,13 @@ export default function Index() {
 
           {/* Navigation Links */}
           <nav className="flex gap-4">
-            <Typography variant="body1" as="a" href="/">
+            <Typography variant="body1" >
               {t('navigation.home')}
             </Typography>
-            <Typography variant="body1" as="a" href="/about">
+            <Typography variant="body1">
               {t('navigation.about')}
             </Typography>
-            <Typography variant="body1" as="a" href="/settings">
+            <Typography variant="body1">
               {t('navigation.settings')}
             </Typography>
           </nav>
