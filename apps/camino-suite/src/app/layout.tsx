@@ -1,13 +1,24 @@
-import { StoreProvider } from '@camino/store';
-import { Inter } from 'next/font/google';
 import './global.css';
-import { ThemeProvider, Layout } from '@camino/ui';
+
+import { I18nProvider, Layout, ThemeProvider } from '@camino/ui';
+
+import { Inter } from 'next/font/google';
+import { StoreProvider } from '@camino/store';
+import enTranslations from '../locales/en.json';
+import esTranslations from '../locales/es.json';
+import frTranslations from '../locales/fr.json';
 
 const inter = Inter({
   subsets: ['latin'],
   weight: ['400', '500', '600', '700'],
   variable: '--font-inter',
 });
+
+const resources = {
+  en: { translation: enTranslations },
+  es: { translation: esTranslations },
+  fr: { translation: frTranslations }
+};
 
 export const metadata = {
   title: 'Welcome to camino-suite',
@@ -26,7 +37,9 @@ export default function RootLayout({
       >
         <ThemeProvider>
           <StoreProvider>
-            <Layout>{children}</Layout>
+            <I18nProvider resources={resources}>
+              <Layout>{children}</Layout>
+            </I18nProvider>
           </StoreProvider>
         </ThemeProvider>
       </body>

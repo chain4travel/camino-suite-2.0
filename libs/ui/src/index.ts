@@ -16,3 +16,9 @@ export { default as CaminoLogo } from './logos/CaminoLogo';
 
 // context Theme configuration
 export * from './context/ThemeContext';
+
+// LanguageSwitcher
+export * from './lib/LanguageSwitcher';
+
+// i18n
+export * from './context/I18nContext';
