@@ -1,8 +1,34 @@
+import '@testing-library/jest-dom';
+
 import { render, screen } from '@testing-library/react';
 
 import Input from '.';
-import React from 'react';
+import React from 'react'
 import userEvent from '@testing-library/user-event';
+
+// Mock clsx
+jest.mock('clsx', () => ({
+  __esModule: true,
+  default: (...args: unknown[]) => {
+    const classes = args.filter(Boolean).map(arg => {
+      if (arg && typeof arg === 'object' && !Array.isArray(arg)) {
+        return Object.entries(arg as Record<string, boolean>)
+          .filter(([_, value]) => value)
+          .map(([key]) => key);
+      }
+      return arg;
+    });
+    return classes.flat().join(' ');
+  },
+}));
+
+// Mock react-i18next
+jest.mock('react-i18next', () => ({
+  useTranslation: () => ({
+    t: (key: string) => key,
+  }),
+}));
+
 
 describe('Input', () => {
   it('renders correctly', () => {
@@ -42,7 +68,21 @@ describe('Input', () => {
 
   it('renders right icon when provided', () => {
     const iconTestId = 'test-icon';
-    render(<Input rightIcon={<div data-testid={iconTestId}>Icon</div>} />);
+    render(
+      <Input rightIcon={<div data-testid={iconTestId}>Icon</div>} />
+    );
     expect(screen.getByTestId(iconTestId)).toBeInTheDocument();
+  });
+
+  it('displays required text when required', () => {
+    render(<Input label="Test Label" required />);
+    expect(screen.getByText('(required)')).toBeInTheDocument();
+  });
+
+  it('renders validation code variant correctly', () => {
+    render(<Input variant="validation-code" />);
+    const input = screen.getByRole('textbox');
+    expect(input).toHaveAttribute('maxLength', '12');
+    expect(input).toHaveClass('text-center', 'tracking-widest');
   });
 });

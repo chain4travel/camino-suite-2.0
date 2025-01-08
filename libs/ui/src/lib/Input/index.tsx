@@ -1,8 +1,11 @@
-import React, { InputHTMLAttributes, MouseEvent, TextareaHTMLAttributes, forwardRef } from 'react';
+'use client';
+
+import React, { InputHTMLAttributes, MouseEvent, forwardRef } from 'react';
 
 import clsx from 'clsx';
+import { useTranslation } from 'react-i18next';
 
-type BaseProps = {
+export interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   label?: string;
   error?: string;
   helpText?: string;
@@ -11,17 +14,11 @@ type BaseProps = {
   onIconClick?: (e: MouseEvent<HTMLButtonElement>) => void;
   iconAriaLabel?: string;
   iconDisabled?: boolean;
-  variant?: 'input' | 'textarea';
-  rows?: number;
-};
+  variant?: 'default' | 'validation-code' | 'textarea';
+  required?: boolean;
+}
 
-export type InputProps = BaseProps &
-  (
-    | ({ variant?: 'input' } & InputHTMLAttributes<HTMLInputElement>)
-    | ({ variant: 'textarea' } & TextareaHTMLAttributes<HTMLTextAreaElement>)
-  );
-
-const Input = forwardRef<HTMLInputElement | HTMLTextAreaElement, InputProps>(
+const Input = forwardRef<HTMLInputElement, InputProps>(
   ({
     className,
     label,
@@ -32,11 +29,13 @@ const Input = forwardRef<HTMLInputElement | HTMLTextAreaElement, InputProps>(
     onIconClick,
     iconAriaLabel,
     iconDisabled,
-    variant = 'input',
-    rows = 3,
+    variant = 'default',
+    required,
     ...props
   }, ref) => {
-    const baseClasses = clsx(
+    const { t } = useTranslation();
+
+    const inputClasses = clsx(
       'w-full px-4 py-2.5 rounded-lg font-normal text-sm transition-colors',
       'bg-white dark:bg-gray-900',
       'border border-gray-200 dark:border-gray-700',
@@ -46,7 +45,8 @@ const Input = forwardRef<HTMLInputElement | HTMLTextAreaElement, InputProps>(
       {
         'border-red-500 dark:border-red-500 focus:border-red-500 dark:focus:border-red-500 focus:ring-red-500/20 dark:focus:ring-red-500/20': error,
         'border-green-500 dark:border-green-500 focus:border-green-500 dark:focus:border-green-500 focus:ring-green-500/20 dark:focus:ring-green-500/20': isSuccess,
-        'pr-12': rightIcon && variant === 'input',
+        'pr-12': rightIcon && variant === 'default',
+        'text-center tracking-widest': variant === 'validation-code',
       },
       className
     );
@@ -56,24 +56,21 @@ const Input = forwardRef<HTMLInputElement | HTMLTextAreaElement, InputProps>(
         {label && (
           <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
             {label}
+            {required && (
+              <span className="ml-1 font-normal text-gray-500 dark:text-gray-400">
+                (required)
+              </span>
+            )}
           </label>
         )}
         <div className="relative">
-          {variant === 'textarea' ? (
-            <textarea
-              ref={ref as React.ForwardedRef<HTMLTextAreaElement>}
-              rows={rows}
-              className={baseClasses}
-              {...(props as TextareaHTMLAttributes<HTMLTextAreaElement>)}
-            />
-          ) : (
-            <input
-              ref={ref as React.ForwardedRef<HTMLInputElement>}
-              className={baseClasses}
-              {...(props as InputHTMLAttributes<HTMLInputElement>)}
-            />
-          )}
-          {rightIcon && variant === 'input' && (
+          <input
+            ref={ref}
+            className={inputClasses}
+            maxLength={variant === 'validation-code' ? 12 : undefined}
+            {...props}
+          />
+          {rightIcon && variant === 'default' && (
             <button
               type="button"
               onClick={onIconClick}
@@ -92,7 +89,7 @@ const Input = forwardRef<HTMLInputElement | HTMLTextAreaElement, InputProps>(
         </div>
         {error && (
           <p className="flex items-center gap-1 mt-1 text-sm text-red-500 dark:text-red-400">
-            <span role="img" aria-label="warning" className="inline-block w-4 h-4">
+            <span role="img" aria-label={t('common.warning')} className="inline-block w-4 h-4">
               ⚠️
             </span>
             {error}

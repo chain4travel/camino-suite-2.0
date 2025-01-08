@@ -124,7 +124,6 @@ export const TextArea: Story = {
     label: 'Message',
     placeholder: 'Type your message here...',
     variant: 'textarea',
-    rows: 4,
   },
 };
 
@@ -134,7 +133,6 @@ export const TextAreaWithError: Story = {
     placeholder: 'Type your message here...',
     variant: 'textarea',
     error: 'Message is required',
-    rows: 4,
   },
 };
 
@@ -144,7 +142,6 @@ export const TextAreaWithHelpText: Story = {
     placeholder: 'Type your message here...',
     variant: 'textarea',
     helpText: 'Maximum 500 characters',
-    rows: 4,
   },
 };
 
