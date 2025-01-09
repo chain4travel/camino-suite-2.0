@@ -33,7 +33,7 @@ const getSizeStyles = (size: BadgeSize) => {
 const CamBadge = forwardRef<HTMLSpanElement, CamBadgeProps>(
   ({ variant = 'default', size = 'sm', className = '', text, ...props }, ref) => {
     const badgeClasses = clsx(
-      'inline-flex items-center rounded-md font-medium uppercase',
+      'h-fit inline-flex items-center rounded-md font-medium uppercase',
       getSizeStyles(size),
       getBadgeStyles(variant),
       className

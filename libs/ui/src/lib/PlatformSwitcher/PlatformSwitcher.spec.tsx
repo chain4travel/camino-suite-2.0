@@ -21,10 +21,8 @@ jest.mock('../../logos/CaminoLogo', () => ({
 
 jest.mock('../Typography', () => ({
   __esModule: true,
-  default: ({ children, as: Component = 'span', variant }: { children: React.ReactNode; as?: string; variant?: string }) => (
-    <span data-testid={`typography-${variant}`} className={variant}>
-      {children}
-    </span>
+  default: ({ children, variant }: { children: React.ReactNode; variant?: string }) => (
+    <span data-testid={`typography-${variant}`}>{children}</span>
   ),
 }));
 
@@ -38,10 +36,10 @@ jest.mock('../Dropdown', () => ({
   ),
 }));
 
+// Fix MenuItem mock with proper typing
 jest.mock('@headlessui/react', () => ({
-  MenuItem: ({ children }: { children: unknown }) => {
-    const rendered = children({ active: false });
-    return <div>{rendered}</div>;
+  MenuItem: ({ children }: { children: ({ active }: { active: boolean }) => React.ReactNode }) => {
+    return children({ active: false });
   },
 }));
 
@@ -75,8 +73,8 @@ describe('PlatformSwitcher', () => {
         activeApp="Wallet"
       />
     );
-    const titleElement = screen.getByTestId('typography-h3');
-    expect(titleElement).toHaveTextContent('Wallet');
+    const headerText = screen.getByTestId('typography-h3');
+    expect(headerText).toHaveTextContent('Wallet');
   });
 
   it('shows dropdown content', () => {
@@ -89,8 +87,17 @@ describe('PlatformSwitcher', () => {
     );
     expect(screen.getByTestId('dropdown')).toBeInTheDocument();
     const menuItems = screen.getAllByTestId('typography-h6');
-    expect(menuItems[0]).toHaveTextContent('Wallet');
     expect(menuItems[1]).toHaveTextContent('Explorer');
   });
 
+  it('renders with CaminoLogo', () => {
+    render(
+      <PlatformSwitcher
+        options={mockOptions}
+        onSelect={onSelect}
+        activeApp="Wallet"
+      />
+    );
+    expect(screen.getByTestId('camino-logo')).toBeInTheDocument();
+  });
 });

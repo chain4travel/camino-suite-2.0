@@ -1,131 +1,96 @@
 import type { Meta, StoryObj } from '@storybook/react';
+import { mdiAccount, mdiArrowRight } from '@mdi/js';
+
 import CamBtn from '.';
+import Icon from '@mdi/react';
 
 const meta: Meta<typeof CamBtn> = {
+  title: 'Components/CamBtn',
   component: CamBtn,
-  title: 'components/CamBtn',
   tags: ['autodocs'],
   argTypes: {
     variant: {
-      description: 'Button style variant',
+      control: 'select',
+      options: ['primary', 'secondary', 'positive', 'negative', 'accent', 'transparent'],
     },
-    children: {
-      description: 'Button text',
-      type: { name: 'string', required: false },
-      control: {
-        type: 'text',
-      },
+    size: {
+      control: 'select',
+      options: ['sm', 'md', 'lg'],
     },
-    onClick: { action: 'clicked' },
+    isLoading: { control: 'boolean' },
+    disabled: { control: 'boolean' },
+    fullWidth: { control: 'boolean' },
   },
 };
+
 export default meta;
 type Story = StoryObj<typeof CamBtn>;
 
-export const Primary: Story = {
-  args: {
-    variant: 'primary',
-    size: 'md',
-    children: 'button',
-    disabled: false,
-  },
-  decorators: [
-    (Story) => (
-      <div className="flex items-center justify-center w-full">
-        {/* 👇 Decorators in Storybook also accept a function. Replace <Story/> with Story() to enable it  */}
-        <Story />
+export const AllVariants: Story = {
+  render: () => (
+    <div className="flex flex-col gap-8 p-8">
+      {/* Light Theme */}
+      <div className="p-8 bg-white rounded-lg">
+        <h3 className="mb-4 text-lg font-semibold">Light Theme</h3>
+        <div className="grid grid-cols-3 gap-4">
+          {(['sm', 'md', 'lg'] as const).map((size) => (
+            <div key={size} className="flex flex-wrap gap-2">
+              <CamBtn variant="primary" size={size}>Button</CamBtn>
+              <CamBtn variant="secondary" size={size}>Button</CamBtn>
+              <CamBtn variant="positive" size={size}>Button</CamBtn>
+              <CamBtn variant="negative" size={size}>Button</CamBtn>
+              <CamBtn variant="accent" size={size}>Button</CamBtn>
+              <CamBtn variant="transparent" size={size}>Button</CamBtn>
+            </div>
+          ))}
+        </div>
       </div>
-    ),
-  ],
-};
 
-export const Secondary: Story = {
-  args: {
-    ...Primary.args,
-    variant: 'secondary',
-  },
-  decorators: [
-    (Story) => (
-      <div className="flex items-center justify-center w-full">
-        {/* 👇 Decorators in Storybook also accept a function. Replace <Story/> with Story() to enable it  */}
-        <Story />
+      {/* Dark Theme */}
+      <div className="p-8 rounded-lg bg-slate-950">
+        <h3 className="mb-4 text-lg font-semibold text-white">Dark Theme</h3>
+        <div className="grid grid-cols-3 gap-4">
+          {(['sm', 'md', 'lg'] as const).map((size) => (
+            <div key={size} className="flex flex-wrap gap-2">
+              <CamBtn variant="primary" size={size}>Button</CamBtn>
+              <CamBtn variant="secondary" size={size}>Button</CamBtn>
+              <CamBtn variant="positive" size={size}>Button</CamBtn>
+              <CamBtn variant="negative" size={size}>Button</CamBtn>
+              <CamBtn variant="accent" size={size}>Button</CamBtn>
+              <CamBtn variant="transparent" size={size}>Button</CamBtn>
+            </div>
+          ))}
+        </div>
       </div>
-    ),
-  ],
-};
 
-export const Positive: Story = {
-  args: {
-    ...Primary.args,
-    variant: 'positive',
-  },
-  decorators: [
-    (Story) => (
-      <div className="flex items-center justify-center w-full">
-        {/* 👇 Decorators in Storybook also accept a function. Replace <Story/> with Story() to enable it  */}
-        <Story />
+      {/* States */}
+      <div className="p-8 bg-white rounded-lg">
+        <h3 className="mb-4 text-lg font-semibold">States</h3>
+        <div className="grid grid-cols-3 gap-4">
+          <CamBtn variant="primary" isLoading>Loading</CamBtn>
+          <CamBtn variant="primary" disabled>Disabled</CamBtn>
+          <CamBtn variant="primary" fullWidth>Full Width</CamBtn>
+        </div>
       </div>
-    ),
-  ],
-};
 
-export const Negative: Story = {
-  args: {
-    ...Primary.args,
-    variant: 'negative',
-  },
-  decorators: [
-    (Story) => (
-      <div className="flex items-center justify-center w-full">
-        {/* 👇 Decorators in Storybook also accept a function. Replace <Story/> with Story() to enable it  */}
-        <Story />
+      {/* Icons */}
+      <div className="p-8 bg-white rounded-lg">
+        <h3 className="mb-4 text-lg font-semibold">With Icons</h3>
+        <div className="grid grid-cols-2 gap-4">
+          <CamBtn 
+            variant="primary" 
+            leftIcon={<Icon path={mdiAccount} size={1} />}
+          >
+            Left Icon
+          </CamBtn>
+          <CamBtn 
+            variant="primary" 
+            rightIcon={<Icon path={mdiArrowRight} size={1} />}
+          >
+            Right Icon
+          </CamBtn>
+        </div>
       </div>
-    ),
-  ],
-};
-
-export const Accent: Story = {
-  args: {
-    ...Primary.args,
-    variant: 'accent',
-  },
-  decorators: [
-    (Story) => (
-      <div className="flex items-center justify-center w-full">
-        {/* 👇 Decorators in Storybook also accept a function. Replace <Story/> with Story() to enable it  */}
-        <Story />
-      </div>
-    ),
-  ],
-};
-
-export const Transparent: Story = {
-  args: {
-    ...Primary.args,
-    variant: 'transparent',
-  },
-  decorators: [
-    (Story) => (
-      <div className="flex items-center justify-center w-full">
-        {/* 👇 Decorators in Storybook also accept a function. Replace <Story/> with Story() to enable it  */}
-        <Story />
-      </div>
-    ),
-  ],
-};
-
-// disabled
-export const Disabled: Story = {
-  args: {
-    ...Primary.args,
-    disabled: true,
-  },
-  decorators: [
-    (Story) => (
-      <div className="flex items-center justify-center w-full">
-        {/* 👇 Decorators in Storybook also accept a function. Replace <Story/> with Story() to enable it  */}
-        <Story />
-      </div>
-    ),
-  ],
+    </div>
+  ),
 };

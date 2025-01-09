@@ -21,44 +21,15 @@ const meta: Meta<typeof AccessOption> = {
 export default meta;
 type Story = StoryObj<typeof AccessOption>;
 
-export const Default: Story = {
-  args: {
-    icon: mdiShieldKey,
-    text: 'Private Key',
-  },
-};
-
-export const WithCustomIcon: Story = {
-  args: {
-    icon: mdiWallet,
-    text: 'Connect Wallet',
-  },
-};
-
-export const Disabled: Story = {
-  args: {
-    icon: mdiKey,
-    text: 'Access Key',
-    disabled: true,
-  },
-};
-
-export const WithOnClick: Story = {
-  args: {
-    icon: mdiTextBoxOutline,
-    text: 'Click Me',
-    onClick: () => alert('Clicked!'),
-  },
-};
-
-export const DarkMode: Story = {
-  args: {
-    icon: mdiShieldKey,
-    text: 'Dark Mode Example',
-  },
-  parameters: {
-    backgrounds: {
-      default: 'dark',
-    },
-  },
+export const AllVariant: Story = {
+  render: () => (
+    <div className="grid grid-cols-3 gap-4 max-w-[1200px]">
+      <AccessOption icon={mdiKey} text="Private Key" />
+      <AccessOption icon={mdiWallet} text="Connect Wallet" />
+      <AccessOption icon={mdiTextBoxOutline} text="Click Me"  onClick={() => alert('Clicked!')} />
+      <AccessOption icon={mdiKey} text="Private Key" disabled />
+      <AccessOption icon={mdiWallet} text="Connect Wallet" disabled />
+      <AccessOption icon={mdiTextBoxOutline} text="Click Me" disabled />
+    </div>
+  ),
 };
