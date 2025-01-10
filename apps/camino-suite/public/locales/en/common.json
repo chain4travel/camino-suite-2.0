@@ -4,5 +4,14 @@
     "home": "Home",
     "about": "About",
     "settings": "Settings"
+  },
+  "textField": {
+    "required": "This field is required",
+    "warning": "Warning",
+    "validationCode": {
+      "label": "Validation Code",
+      "placeholder": "000-000-000",
+      "helpText": "You can find this code on your phone"
+    }
   }
 }

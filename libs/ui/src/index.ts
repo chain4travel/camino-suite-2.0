@@ -5,6 +5,7 @@ import '../ui.css';
 export { default as CamBtn } from './lib/CamBtn';
 export { default as Typography } from './lib/Typography';
 export { default as Box } from './lib/Box';
+export { default as Input } from './lib/Input';
 
 //layout components
 export { default as Layout } from './lib/Layout';

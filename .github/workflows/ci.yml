@@ -9,7 +9,6 @@ on:
       - dev
       - c4t
 
-
 jobs:
   ci:
     name: CI
@@ -28,24 +27,25 @@ jobs:
       - name: install dependencies
         run: |
           rm -rf node_modules && yarn cache clean
-          yarn install --frozen-lockfile --ignore-scripts
+          yarn install --ignore-scripts
+          yarn add -D eslint@latest
         env:
           CYPRESS_CACHE_FOLDER: /tmp/Cypress
 
       - name: lint
-        run: yarn lint:all
+        run: yarn lint:all --verbose
         env:
           NX_NO_CLOUD: true
 
       - name: test
-        run: yarn test:all
+        run: yarn test:all --verbose
         env:
           NX_NO_CLOUD: true
 
       - name: e2e
         run: |
           yarn cypress install --force
-          yarn e2e:all
+          yarn e2e:all --verbose
         env:
           NX_NO_CLOUD: true
           CYPRESS_CACHE_FOLDER: /tmp/Cypress
