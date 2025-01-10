@@ -5,7 +5,20 @@ module.exports = [
   ...nx.configs['flat/typescript'],
   ...nx.configs['flat/javascript'],
   {
-    ignores: ['**/dist', '**/storybook-static', '**/node_modules'],
+    ignores: [
+      '**/node_modules/**',
+      '**/dist/**',
+      '**/build/**',
+      '**/.next/**',
+      '**/coverage/**',
+      '**/storybook-static/**',
+      '**/*.d.ts',
+      '**/jest.config.js',
+      '**/jest.setup.js',
+      '**/next.config.js',
+      '**/tailwind.config.js',
+      '**/postcss.config.js',
+    ],
   },
   {
     files: ['**/*.ts', '**/*.tsx', '**/*.js', '**/*.jsx'],
@@ -23,11 +36,7 @@ module.exports = [
           ],
         },
       ],
+      'import/no-amd': 'off',
     },
-  },
-  {
-    files: ['**/*.ts', '**/*.tsx', '**/*.js', '**/*.jsx'],
-    // Override or add rules here
-    rules: {},
   },
 ];

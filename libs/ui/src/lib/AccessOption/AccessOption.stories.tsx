@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import { mdiKey, mdiShieldKey, mdiTextBoxOutline, mdiWallet } from '@mdi/js';
+import { mdiKey, mdiTextBoxOutline, mdiWallet } from '@mdi/js';
 
 import { AccessOption } from './index';
 
