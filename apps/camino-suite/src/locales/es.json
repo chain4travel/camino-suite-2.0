@@ -1,0 +1,14 @@
+{
+  "welcome": "Bienvenido a Camino Suite",
+  "navigation": {
+    "home": "Inicio",
+    "about": "Acerca de",
+    "settings": "Configuración"
+  },
+  "common": {
+    "loading": "Cargando...",
+    "error": "Error",
+    "save": "Guardar",
+    "cancel": "Cancelar"
+  }
+}
