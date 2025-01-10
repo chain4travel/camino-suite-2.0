@@ -27,7 +27,7 @@ jobs:
       - name: install dependencies
         run: |
           rm -rf node_modules && yarn cache clean
-          yarn install --frozen-lockfile --ignore-scripts
+          yarn install --ignore-scripts
           yarn add -D eslint@latest
         env:
           CYPRESS_CACHE_FOLDER: /tmp/Cypress
