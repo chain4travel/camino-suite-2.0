@@ -21,6 +21,39 @@ const meta: Meta<typeof Input> = {
 export default meta;
 type Story = StoryObj<typeof Input>;
 
+export const AllVariant: Story = {
+  render: () => (
+    <div className="grid grid-cols-3 gap-4 max-w-[1200px]">
+      <Input label="Default" placeholder="Enter value" />
+      <Input label="With Label" placeholder="Enter value" />
+      <Input label="With Help Text" placeholder="Enter value" helpText="This is a help text" />
+      <Input label="With Error" placeholder="Enter value" error="This field is required" />
+      <Input label="With Success" placeholder="Enter value" isSuccess value="Correct value" />
+      <Input label="With Right Icon" placeholder="Enter value" rightIcon={<Icon path={mdiAccount} size={1} />} />
+      <Input label="Disabled" placeholder="Enter value" disabled />
+      <Input
+        label="With Clickable Icon"
+        placeholder="Enter value"
+        value="Text to copy"
+        rightIcon={<Icon path={mdiContentCopy} size={1} />}
+        onIconClick={() => alert('Icon clicked!')}
+        iconAriaLabel="Copy to clipboard"
+      />
+      <Input
+        label="With Disabled Icon"
+        placeholder="Enter value"
+        value="Text to copy"
+        rightIcon={<Icon path={mdiContentCopy} size={1} />}
+        iconDisabled
+      />
+      <Input label="Text Area" placeholder="Enter value" variant="textarea" />
+      <Input label="Validation Code" placeholder="000-000-000" variant="validation-code" helpText="You can find this code on your phone" />
+      <Input label="Required Field" placeholder="Enter value" required />
+    </div>
+  ),
+};
+
+
 export const Default: Story = {
   args: {
     placeholder: 'Placeholder text',
@@ -164,34 +197,3 @@ export const RequiredField: Story = {
   },
 };
 
-export const AllVariant: Story = {
-  render: () => (
-    <div className="grid grid-cols-3 gap-4 max-w-[1200px]">  
-      <Input label="Default" placeholder="Enter value" />
-      <Input label="With Label" placeholder="Enter value" />
-      <Input label="With Help Text" placeholder="Enter value" helpText="This is a help text" />
-      <Input label="With Error" placeholder="Enter value" error="This field is required" />
-      <Input label="With Success" placeholder="Enter value" isSuccess value="Correct value" />
-      <Input label="With Right Icon" placeholder="Enter value" rightIcon={<Icon path={mdiAccount} size={1} />} />
-      <Input label="Disabled" placeholder="Enter value" disabled />
-      <Input 
-        label="With Clickable Icon" 
-        placeholder="Enter value" 
-        value="Text to copy" 
-        rightIcon={<Icon path={mdiContentCopy} size={1} />} 
-        onIconClick={() => alert('Icon clicked!')} 
-        iconAriaLabel="Copy to clipboard" 
-      />
-      <Input 
-        label="With Disabled Icon" 
-        placeholder="Enter value" 
-        value="Text to copy" 
-        rightIcon={<Icon path={mdiContentCopy} size={1} />} 
-        iconDisabled 
-      />
-      <Input label="Text Area" placeholder="Enter value" variant="textarea" />
-      <Input label="Validation Code" placeholder="000-000-000" variant="validation-code" helpText="You can find this code on your phone" />
-      <Input label="Required Field" placeholder="Enter value" required />
-    </div>
-  ),
-};

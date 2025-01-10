@@ -59,6 +59,114 @@ const customItemStyles = {
   inactive: 'hover:bg-gray-50 dark:hover:bg-slate-800',
 };
 
+export const AllVariants: Story = {
+  render: () => (
+    <div className="flex flex-wrap gap-4">
+      {/* Default */}
+      <Dropdown trigger="Default" items={items} />
+
+      {/* With Start Icon */}
+      <Dropdown
+        trigger="With Start Icon"
+        items={items}
+        startIcon={mdiMenu}
+      />
+
+      {/* Without End Icon */}
+      <Dropdown
+        trigger="No End Icon"
+        items={items}
+        endIcon={undefined}
+      />
+
+      {/* With End Icon */}
+      <Dropdown
+        trigger="With End Icon"
+        items={items}
+        endIcon={mdiMenu}
+      />
+
+      {/* Custom Icon Combo */}
+      <Dropdown
+        trigger="Custom Icons"
+        items={items}
+        startIcon={mdiFilter}
+        endIcon={mdiChevronDown}
+      />
+
+      {/* Icon Only */}
+      <Dropdown
+        trigger={<Icon path={mdiDotsVertical} size={1} />}
+        items={items}
+        endIcon={undefined}
+      />
+
+      {/* Disabled */}
+      <Dropdown
+        trigger="Disabled"
+        items={items}
+        disabled
+      />
+
+      {/* Custom Styles */}
+      <Dropdown
+        trigger="Custom Style"
+        items={items}
+        menuButtonClassName="bg-blue-500 text-white hover:bg-blue-600 dark:bg-blue-600 dark:hover:bg-blue-700"
+        menuItemClassName="hover:bg-blue-50 dark:hover:bg-blue-900/50"
+      />
+
+      {/* With Custom Children */}
+      <Dropdown trigger="Custom Children">
+        <MenuItem>
+          {({ active }) => (
+            <button
+              className={`${customItemStyles.base} ${
+                active ? customItemStyles.active : customItemStyles.inactive
+              }`}
+            >
+              <Icon path={mdiAccount} size={0.9} className="text-gray-500" />
+              <span>Custom Child Item</span>
+            </button>
+          )}
+        </MenuItem>
+      </Dropdown>
+
+      {/* Different Placements */}
+      <div className="flex gap-4">
+        <Dropdown
+          trigger="Bottom Start"
+          items={items}
+          placement="bottom-start"
+        />
+        <Dropdown
+          trigger="Bottom End"
+          items={items}
+          placement="bottom-end"
+        />
+        <Dropdown
+          trigger="Top Start"
+          items={items}
+          placement="top-start"
+        />
+        <Dropdown
+          trigger="Top End"
+          items={items}
+          placement="top-end"
+        />
+      </div>
+    </div>
+  ),
+  parameters: {
+    docs: {
+      description: {
+        story: 'This story showcases all variants of the Dropdown component together.',
+      },
+    },
+  },
+};
+
+
 export const Default: Story = {
   args: {
     trigger: 'Menu',
@@ -173,7 +281,7 @@ export const CustomItemRenderer: Story = {
         renderItem: () => (
           <div className="flex items-center justify-between w-full">
             <span className="text-gray-900 dark:text-white">With Badge</span>
-            <span className="px-2 py-1 text-xs bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400 rounded-full">
+            <span className="px-2 py-1 text-xs text-green-800 bg-green-100 rounded-full dark:bg-green-900/30 dark:text-green-400">
               New
             </span>
           </div>
@@ -184,109 +292,3 @@ export const CustomItemRenderer: Story = {
   },
 };
 
-export const AllVariants: Story = {
-  render: () => (
-    <div className="flex flex-wrap gap-4">
-      {/* Default */}
-      <Dropdown trigger="Default" items={items} />
-
-      {/* With Start Icon */}
-      <Dropdown
-        trigger="With Start Icon"
-        items={items}
-        startIcon={mdiMenu}
-      />
-
-      {/* Without End Icon */}
-      <Dropdown
-        trigger="No End Icon"
-        items={items}
-        endIcon={undefined}
-      />
-
-      {/* With End Icon */}
-      <Dropdown
-        trigger="With End Icon"
-        items={items}
-        endIcon={mdiMenu}
-      />
-
-      {/* Custom Icon Combo */}
-      <Dropdown
-        trigger="Custom Icons"
-        items={items}
-        startIcon={mdiFilter}
-        endIcon={mdiChevronDown}
-      />
-
-      {/* Icon Only */}
-      <Dropdown
-        trigger={<Icon path={mdiDotsVertical} size={1} />}
-        items={items}
-        endIcon={undefined}
-      />
-
-      {/* Disabled */}
-      <Dropdown
-        trigger="Disabled"
-        items={items}
-        disabled
-      />
-
-      {/* Custom Styles */}
-      <Dropdown
-        trigger="Custom Style"
-        items={items}
-        menuButtonClassName="bg-blue-500 text-white hover:bg-blue-600 dark:bg-blue-600 dark:hover:bg-blue-700"
-        menuItemClassName="hover:bg-blue-50 dark:hover:bg-blue-900/50"
-      />
-
-      {/* With Custom Children */}
-      <Dropdown trigger="Custom Children">
-        <MenuItem>
-          {({ active }) => (
-            <button
-              className={`${customItemStyles.base} ${
-                active ? customItemStyles.active : customItemStyles.inactive
-              }`}
-            >
-              <Icon path={mdiAccount} size={0.9} className="text-gray-500" />
-              <span>Custom Child Item</span>
-            </button>
-          )}
-        </MenuItem>
-      </Dropdown>
-
-      {/* Different Placements */}
-      <div className="flex gap-4">
-        <Dropdown
-          trigger="Bottom Start"
-          items={items}
-          placement="bottom-start"
-        />
-        <Dropdown
-          trigger="Bottom End"
-          items={items}
-          placement="bottom-end"
-        />
-        <Dropdown
-          trigger="Top Start"
-          items={items}
-          placement="top-start"
-        />
-        <Dropdown
-          trigger="Top End"
-          items={items}
-          placement="top-end"
-        />
-      </div>
-    </div>
-  ),
-  parameters: {
-    docs: {
-      description: {
-        story: 'This story showcases all variants of the Dropdown component together.',
-      },
-    },
-  },
-};
