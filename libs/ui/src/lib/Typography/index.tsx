@@ -1,6 +1,7 @@
+import { TypographyProps, Variant } from './Typography.types';
+
 import React from 'react';
 import { clsx } from 'clsx';
-import { TypographyProps, Variant } from './Typography.types';
 
 const variantClasses: Record<Variant, string> = {
   h1: 'text-4xl font-bold',
@@ -21,6 +22,7 @@ const Typography: React.FC<TypographyProps> = ({
   className,
   color,
   children,
+  ...rest
 }) => {
   const classes = clsx(
     'text-slate-950 dark:text-slate-100 font-inter',
@@ -29,7 +31,7 @@ const Typography: React.FC<TypographyProps> = ({
   );
 
   return (
-    <Component className={classes} style={{ color }}>
+    <Component className={classes} style={{ color }} {...rest}>
       {children}
     </Component>
   );

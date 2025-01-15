@@ -6,6 +6,11 @@ export { default as CamBtn } from './lib/CamBtn';
 export { default as Typography } from './lib/Typography';
 export { default as Box } from './lib/Box';
 export { default as Input } from './lib/Input';
+export { default as AccessOption } from './lib/AccessOption';
+export { default as Dropdown } from './lib/Dropdown';
+export { default as CamBadge } from './lib/CamBadge';
+export { default as PlatformSwitcher } from './lib/PlatformSwitcher';
+export { default as LanguageSwitcher } from './lib/LanguageSwitcher';
 
 //layout components
 export { default as Layout } from './lib/Layout';

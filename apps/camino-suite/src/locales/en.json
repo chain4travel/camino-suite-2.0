@@ -5,10 +5,37 @@
     "about": "About",
     "settings": "Settings"
   },
+  "auth": {
+    "savedWallets": "Saved Camino Wallets",
+    "accessWallets": "Access Your Camino Wallets",
+    "noWallet": "Don't Have a Wallet Yet?",
+    "createWallet": "Create A Wallet",
+    "privateKey": "Private Key",
+    "mnemonicPhrase": "Mnemonic Key Phrase",
+    "keystoreFile": "Keystore File",
+    "ledger": "Ledger",
+    "termsNotice": "By using this application, you agree to the",
+    "termsOfUse": "Terms of Use",
+    "privacyPolicy": "Privacy Policy",
+    "privateKeyInstructions": "Enter your private key to access your wallet",
+    "enterPrivateKey": "Enter your private key",
+    "accessWallet": "Access Wallet",
+    "invalidPrivateKey": "Invalid private key format",
+    "keystoreInstructions": "Select your keystore file and enter password",
+    "selectKeystoreFile": "SELECT FILE",
+    "selectFileFirst": "Please select a keystore file",
+    "enterPassword": "Enter password",
+    "invalidKeystoreFile": "Invalid keystore file format",
+    "fileReadError": "Error reading file"
+  },
   "common": {
     "loading": "Loading...",
     "error": "Error",
     "save": "Save",
-    "cancel": "Cancel"
+    "cancel": "Cancel",
+    "access": "Access",
+    "and": "and",
+    "showPassword": "Show password",
+    "hidePassword": "Hide password"
   }
 }

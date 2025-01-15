@@ -4,14 +4,14 @@ import { AccessOptionProps } from './AccessOption.types';
 import { Icon } from '@mdi/react';
 import {forwardRef} from 'react';
 
-export const AccessOption = forwardRef<HTMLButtonElement, AccessOptionProps>(
+const AccessOption = forwardRef<HTMLButtonElement, AccessOptionProps>(
   ({ icon, text, className = '', ...props }, ref) => {
     return (
       <button
         ref={ref}
         className={`
           group
-          flex items-center gap-4 p-6 rounded-xl w-full
+          flex items-center gap-4 px-6 py-4 rounded-xl w-full
           transition-colors duration-200
           bg-white dark:bg-slate-950
           enabled:hover:bg-slate-950 enabled:hover:text-white
@@ -25,10 +25,10 @@ export const AccessOption = forwardRef<HTMLButtonElement, AccessOptionProps>(
       >
         <Icon
           path={icon}
-          size={1.5}
+          size={1.2}
           className="text-gray-700 dark:text-slate-300 group-enabled:group-hover:text-white dark:group-enabled:group-hover:text-slate-950"
         />
-        <span className="text-lg font-medium text-gray-900 dark:text-white group-enabled:group-hover:text-white dark:group-enabled:group-hover:text-slate-950">
+        <span className="font-medium text-gray-900 md:text-lg font-inter dark:text-white group-enabled:group-hover:text-white dark:group-enabled:group-hover:text-slate-950">
           {text}
         </span>
       </button>
@@ -37,3 +37,5 @@ export const AccessOption = forwardRef<HTMLButtonElement, AccessOptionProps>(
 );
 
 AccessOption.displayName = 'AccessOption';
+
+export default AccessOption;
