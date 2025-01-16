@@ -1,2 +1,1 @@
-export * from './components';
-export * from './apps-auth';
+export * from './login';

@@ -1,11 +1,10 @@
 'use client';
 
-import { CamBtn, Input, Typography } from '@camino/ui';
+import { CamBtn, FileInput, Input, Typography } from '@camino/ui';
 import { mdiEye, mdiEyeOff } from '@mdi/js';
 import { useCallback, useState } from 'react';
 
 import { AccessMethodProps } from './types';
-import Icon from '@mdi/react';
 import { useTranslation } from 'react-i18next';
 
 export const KeystoreAccess = ({ onBack }: AccessMethodProps) => {
@@ -16,33 +15,30 @@ export const KeystoreAccess = ({ onBack }: AccessMethodProps) => {
   const [error, setError] = useState('');
   const [showPassword, setShowPassword] = useState(false);
 
-  const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const selectedFile = e.target.files?.[0];
-    if (selectedFile) {
-      console.log("selectedFile", selectedFile)
-      setFile(selectedFile);
-      setError('');
+  const handleFileSelect = (file: File) => {
+    console.log("selectedFile", file)
+    setFile(file);
+    setError('');
 
-      const reader = new FileReader();
-      reader.onload = async (event) => {
-        try {
-          const content = event.target?.result as string;
-          setFileContent(content);
-        } catch (err) {
-          setError(t('auth.invalidKeystoreFile') + ' ' + err);
-          setFile(null);
-          setFileContent('');
-        }
-      };
-
-      reader.onerror = () => {
-        setError(t('auth.fileReadError'));
+    const reader = new FileReader();
+    reader.onload = async (event) => {
+      try {
+        const content = event.target?.result as string;
+        setFileContent(content);
+      } catch (err) {
+        setError(t('auth.invalidKeystoreFile') + ' ' + err);
         setFile(null);
         setFileContent('');
-      };
+      }
+    };
 
-      reader.readAsText(selectedFile);
-    }
+    reader.onerror = () => {
+      setError(t('auth.fileReadError'));
+      setFile(null);
+      setFileContent('');
+    };
+
+    reader.readAsText(file);
   };
 
   const handleAccess = useCallback(() => {
@@ -59,7 +55,8 @@ export const KeystoreAccess = ({ onBack }: AccessMethodProps) => {
       // Here you would validate the keystore file content
       const keystoreData = JSON.parse(fileContent);
       console.log('Accessing with keystore:', { keystoreData, password });
-    } catch (err) {
+    } catch (error) {
+      console.error(error)
       setError(t('auth.invalidKeystoreFile'));
     }
   }, [file, fileContent, password, t]);
@@ -72,29 +69,14 @@ export const KeystoreAccess = ({ onBack }: AccessMethodProps) => {
         {t('auth.keystoreInstructions')}
       </Typography>
 
-      <div className="w-full">
-        <input
-          type="file"
-          accept=".json,.keystore"
-          onChange={handleFileSelect}
-          className="hidden"
-          id="keystore-file"
-        />
-        <label
-          htmlFor="keystore-file"
-          className={`
-            block w-full px-4 py-2.5 rounded-lg font-normal text-sm transition-colors
-            bg-white dark:bg-gray-900
-            border border-gray-200 dark:border-gray-700
-            text-gray-900 dark:text-white text-center
-            hover:border-blue-500 dark:hover:border-blue-500
-            cursor-pointer
-          `}
-        >
-          {file ? file.name : t('auth.selectKeystoreFile')}
-
-        </label>
-      </div>
+      <FileInput
+        className="w-full"
+        accept=".json,.keystore"
+        onChange={handleFileSelect}
+        value={file}
+        error={error}
+        placeholder={t('auth.selectKeystoreFile')}
+      />
 
       {file && (
         <Input

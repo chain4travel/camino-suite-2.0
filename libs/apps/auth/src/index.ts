@@ -1,1 +1,1 @@
-export { Login } from './lib/components';
+export { Login } from './lib';

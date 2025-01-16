@@ -26,7 +26,9 @@
     "selectFileFirst": "Please select a keystore file",
     "enterPassword": "Enter password",
     "invalidKeystoreFile": "Invalid keystore file format",
-    "fileReadError": "Error reading file"
+    "fileReadError": "Error reading file",
+    "mnemonicInstructions": "Enter your key phrase",
+    "mnemonicInstructionsinfo": "Your key phrase consists of 24 words separated by an empty space"
   },
   "common": {
     "loading": "Loading...",
@@ -36,6 +38,8 @@
     "access": "Access",
     "and": "and",
     "showPassword": "Show password",
-    "hidePassword": "Hide password"
+    "hidePassword": "Hide password",
+    "showPhrase": "Show Key Phrase",
+    "hidePhrase": "Hide Key Phrase"
   }
 }

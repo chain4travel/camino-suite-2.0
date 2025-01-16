@@ -1,5 +1,3 @@
-import { ReactNode } from 'react';
-
 export interface SavedWallet {
   id: string;
   name: string;
@@ -18,4 +16,8 @@ export enum ACCESS_METHOD_IDS {
   MNEMONIC = 'MNEMONIC',
   KEYSTORE = 'KEYSTORE',
   LEDGER = 'LEDGER'
+}
+
+export interface WalletLoginProps {
+  handleAccessMethod: (method: AccessMethod) => void;
 }

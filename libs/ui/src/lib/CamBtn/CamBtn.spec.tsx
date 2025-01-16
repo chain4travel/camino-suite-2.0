@@ -63,9 +63,8 @@ describe('CamBtn', () => {
   });
 
   it('renders with icons', () => {
-    const icon = <Icon path={mdiAccount} size={1} />;
     render(
-      <CamBtn leftIcon={icon} rightIcon={icon}>
+      <CamBtn leftIcon={mdiAccount} rightIcon={mdiAccount}>
         With Icons
       </CamBtn>
     );

@@ -30,3 +30,9 @@ export * from './lib/LanguageSwitcher';
 export * from './context/I18nContext';
 
 export type { TranslationType } from './context/I18nContext';
+
+export { default as FileInput } from './lib/FileInput';
+export * from './lib/FileInput/FileInput.types';
+
+export { default as MnemonicInput } from './lib/MnemonicInput';
+export * from './lib/MnemonicInput/MnemonicInput.types';
