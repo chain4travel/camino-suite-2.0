@@ -2,7 +2,8 @@ import '@testing-library/jest-dom';
 
 import { fireEvent, render, screen } from '@testing-library/react';
 
-import { AccessOption } from './index';
+import AccessOption  from '.';
+import React from 'react'
 import { mdiKey } from '@mdi/js';
 
 describe('AccessOption', () => {

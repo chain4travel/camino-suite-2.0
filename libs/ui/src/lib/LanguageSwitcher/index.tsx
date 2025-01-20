@@ -11,7 +11,7 @@ const languages = [
   // Add more languages as needed
 ];
 
-export const LanguageSwitcher = () => {
+const LanguageSwitcher = () => {
   const { i18n } = useTranslation();
 
   const handleLanguageChange = (item: { value: string }) => {

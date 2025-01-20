@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react';
 
 import { I18nProvider } from '../../context/I18nContext';
-import { LanguageSwitcher } from './LanguageSwitcher';
+import  LanguageSwitcher  from '.';
 
 const mockResources = {
   en: {

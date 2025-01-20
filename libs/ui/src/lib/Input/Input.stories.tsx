@@ -26,16 +26,33 @@ export const AllVariant: Story = {
     <div className="grid grid-cols-3 gap-4 max-w-[1200px]">
       <Input label="Default" placeholder="Enter value" />
       <Input label="With Label" placeholder="Enter value" />
-      <Input label="With Help Text" placeholder="Enter value" helpText="This is a help text" />
-      <Input label="With Error" placeholder="Enter value" error="This field is required" />
-      <Input label="With Success" placeholder="Enter value" isSuccess value="Correct value" />
-      <Input label="With Right Icon" placeholder="Enter value" rightIcon={<Icon path={mdiAccount} size={1} />} />
+      <Input
+        label="With Help Text"
+        placeholder="Enter value"
+        helpText="This is a help text"
+      />
+      <Input
+        label="With Error"
+        placeholder="Enter value"
+        error="This field is required"
+      />
+      <Input
+        label="With Success"
+        placeholder="Enter value"
+        isSuccess
+        value="Correct value"
+      />
+      <Input
+        label="With Right Icon"
+        placeholder="Enter value"
+        rightIcon={mdiAccount}
+      />
       <Input label="Disabled" placeholder="Enter value" disabled />
       <Input
         label="With Clickable Icon"
         placeholder="Enter value"
         value="Text to copy"
-        rightIcon={<Icon path={mdiContentCopy} size={1} />}
+        rightIcon={mdiContentCopy}
         onIconClick={() => alert('Icon clicked!')}
         iconAriaLabel="Copy to clipboard"
       />
@@ -43,16 +60,20 @@ export const AllVariant: Story = {
         label="With Disabled Icon"
         placeholder="Enter value"
         value="Text to copy"
-        rightIcon={<Icon path={mdiContentCopy} size={1} />}
+        rightIcon={mdiContentCopy}
         iconDisabled
       />
       <Input label="Text Area" placeholder="Enter value" variant="textarea" />
-      <Input label="Validation Code" placeholder="000-000-000" variant="validation-code" helpText="You can find this code on your phone" />
+      <Input
+        label="Validation Code"
+        placeholder="000-000-000"
+        variant="validation-code"
+        helpText="You can find this code on your phone"
+      />
       <Input label="Required Field" placeholder="Enter value" required />
     </div>
   ),
 };
-
 
 export const Default: Story = {
   args: {
@@ -96,21 +117,7 @@ export const WithRightIcon: Story = {
   args: {
     label: 'Label',
     placeholder: 'Placeholder text',
-    rightIcon: (
-      <svg
-        className="w-4 h-4 text-gray-500 dark:text-gray-400"
-        fill="none"
-        stroke="currentColor"
-        viewBox="0 0 24 24"
-      >
-        <path
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          strokeWidth={2}
-          d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"
-        />
-      </svg>
-    ),
+    rightIcon: mdiContentCopy,
   },
 };
 
@@ -127,21 +134,7 @@ export const WithClickableIcon: Story = {
     label: 'Copy Text',
     placeholder: 'Click the copy icon',
     value: 'Text to copy',
-    rightIcon: (
-      <svg
-        className="w-4 h-4 text-gray-500 dark:text-gray-400"
-        fill="none"
-        stroke="currentColor"
-        viewBox="0 0 24 24"
-      >
-        <path
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          strokeWidth={2}
-          d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"
-        />
-      </svg>
-    ),
+    rightIcon: mdiContentCopy,
     onIconClick: () => alert('Icon clicked!'),
     iconAriaLabel: 'Copy to clipboard',
   },
@@ -196,4 +189,3 @@ export const RequiredField: Story = {
     required: true,
   },
 };
-

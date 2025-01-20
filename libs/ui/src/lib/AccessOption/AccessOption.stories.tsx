@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { mdiKey, mdiTextBoxOutline, mdiWallet } from '@mdi/js';
 
-import { AccessOption } from './index';
+import AccessOption  from '.';
 
 const meta: Meta<typeof AccessOption> = {
   component: AccessOption,

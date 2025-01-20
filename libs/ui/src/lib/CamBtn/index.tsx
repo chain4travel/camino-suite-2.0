@@ -1,18 +1,7 @@
-import { ButtonHTMLAttributes, forwardRef } from 'react';
-
+import { CamBtnProps } from './CamBtn.types';
+import Icon from '@mdi/react';
 import clsx from 'clsx';
-
-export type Variant = 'primary' | 'secondary' | 'positive' | 'negative' | 'accent' | 'transparent';
-export type Size = 'sm' | 'md' | 'lg';
-
-export interface CamBtnProps extends ButtonHTMLAttributes<HTMLButtonElement> {
-  variant?: Variant;
-  size?: Size;
-  isLoading?: boolean;
-  leftIcon?: React.ReactNode;
-  rightIcon?: React.ReactNode;
-  fullWidth?: boolean;
-}
+import { forwardRef } from 'react';
 
 const CamBtn = forwardRef<HTMLButtonElement, CamBtnProps>((props, ref) => {
   const {
@@ -28,14 +17,17 @@ const CamBtn = forwardRef<HTMLButtonElement, CamBtnProps>((props, ref) => {
     ...rest
   } = props;
 
-  const baseStyles = 'h-fit inline-flex items-center justify-center font-inter rounded-lg capitalize font-medium transition-colors focus:outline-none';
+  const baseStyles =
+    'h-fit inline-flex items-center justify-center font-inter rounded-lg capitalize font-medium transition-colors focus:outline-none';
   const variants = {
     primary: 'text-slate-100 bg-primary hover:bg-primary/90',
-    secondary: 'text-slate-700 bg-transparent border border-slate-600 hover:border-gray-300 dark:text-slate-100 dark:bg-slate-950',
+    secondary:
+      'text-slate-700 bg-transparent border border-slate-600 hover:border-gray-300 dark:text-slate-100 dark:bg-slate-950',
     positive: 'text-slate-100 bg-successLight hover:bg-successLight/90',
     negative: 'text-slate-100 bg-error hover:bg-error/90',
     accent: 'text-slate-100 bg-gradient1 hover:bg-gradient1/90',
-    transparent: 'bg-transparent text-slate-900 dark:text-slate-100 hover:bg-slate-100 dark:hover:bg-slate-800',
+    transparent:
+      'bg-transparent text-slate-900 dark:text-slate-100 hover:bg-slate-100 dark:hover:bg-slate-800',
   };
 
   const sizes = {
@@ -60,9 +52,21 @@ const CamBtn = forwardRef<HTMLButtonElement, CamBtnProps>((props, ref) => {
       disabled={disabled || isLoading}
       {...rest}
     >
-      {leftIcon && <span className="mr-2">{leftIcon}</span>}
+      {leftIcon && (
+        <Icon
+          className="mr-2 text-gray-700 dark:text-slate-300 group-enabled:group-hover:text-white dark:group-enabled:group-hover:text-slate-950"
+          size={1}
+          path={leftIcon as string}
+        />
+      )}
       {isLoading ? 'Loading...' : children}
-      {rightIcon && <span className="ml-2">{rightIcon}</span>}
+      {rightIcon && (
+        <Icon
+          className="ml-2 text-gray-700 dark:text-slate-300 group-enabled:group-hover:text-white dark:group-enabled:group-hover:text-slate-950"
+          size={1}
+          path={rightIcon as string}
+        />
+      )}
     </button>
   );
 });

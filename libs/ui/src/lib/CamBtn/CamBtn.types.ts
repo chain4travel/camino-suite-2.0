@@ -1,13 +1,19 @@
-export type CamBtnProps = {
-  variant?:
-    | 'primary'
-    | 'secondary'
-    | 'positive'
-    | 'negative'
-    | 'accent'
-    | 'transparent';
-  size?: 'sm' | 'md' | 'lg';
-  children: React.ReactNode;
-  onClick?: () => void;
-  [key: string]: unknown; // Additional props that might be passed
-};
+import { ButtonHTMLAttributes } from "react";
+
+export type Variant =
+  | 'primary'
+  | 'secondary'
+  | 'positive'
+  | 'negative'
+  | 'accent'
+  | 'transparent';
+export type Size = 'sm' | 'md' | 'lg';
+
+export interface CamBtnProps extends ButtonHTMLAttributes<HTMLButtonElement> {
+  variant?: Variant;
+  size?: Size;
+  isLoading?: boolean;
+  leftIcon?: React.ReactNode;
+  rightIcon?: React.ReactNode;
+  fullWidth?: boolean;
+}

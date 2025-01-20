@@ -6,6 +6,11 @@ export { default as CamBtn } from './lib/CamBtn';
 export { default as Typography } from './lib/Typography';
 export { default as Box } from './lib/Box';
 export { default as Input } from './lib/Input';
+export { default as AccessOption } from './lib/AccessOption';
+export { default as Dropdown } from './lib/Dropdown';
+export { default as CamBadge } from './lib/CamBadge';
+export { default as PlatformSwitcher } from './lib/PlatformSwitcher';
+export { default as LanguageSwitcher } from './lib/LanguageSwitcher';
 
 //layout components
 export { default as Layout } from './lib/Layout';
@@ -25,3 +30,9 @@ export * from './lib/LanguageSwitcher';
 export * from './context/I18nContext';
 
 export type { TranslationType } from './context/I18nContext';
+
+export { default as FileInput } from './lib/FileInput';
+export * from './lib/FileInput/FileInput.types';
+
+export { default as MnemonicInput } from './lib/MnemonicInput';
+export * from './lib/MnemonicInput/MnemonicInput.types';

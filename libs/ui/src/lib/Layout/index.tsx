@@ -1,7 +1,8 @@
 'use client'
-import React from 'react';
-import Navbar from '../NavBar';
+
 import Footer from '../Footer';
+import Navbar from '../NavBar';
+import React from 'react';
 
 const Layout = ({ children }: { children: React.ReactNode }) => {
   return (

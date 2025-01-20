@@ -5,7 +5,7 @@ const Box = ({
   className,
   ...rest
 }: {
-  children: string;
+  children: React.ReactNode;
   className?: string;
 }) => {
   return (
