@@ -1,12 +1,26 @@
 export const colors = {
-  primary: '#0085FF',
+  primary: {
+    DEFAULT: '#0085FF',
+    '5': '#0085FF0D',
+    '50': '#0085FF80',
+  },
   secondary: '#B440FC',
   tertiary: '#35E9AD',
   accent: '#B5E3FD',
   accentDark: '#317CA5',
-  // status colors
-  error: '#E5431F',
-  warning: '#E5A21F',
+  // status colors #E5A21F0D
+  error: {
+    DEFAULT: '#E5431F',
+    '5': '#E5431F0D',
+    '30': '#E5431F4D',
+    '50': '#E5431F80',
+  },
+  warning: {
+    DEFAULT: '#E5A21F',
+    '5': '#E5A21F0D',
+    '30': '#E5A21F4D',
+    '50': '#E5A21F80',
+  },
   //lights colors
   primaryLight: '#B3DAFF',
   secondaryLight: '#E9C6FE',
@@ -14,7 +28,11 @@ export const colors = {
   // dark colors
   primaryDark: '#012C5D',
   secondaryDark: '#37175C',
-  successDark: '#09DE6B',
+  successDark: {
+    DEFAULT: '#09DE6B',
+    '5': '#09DE6B0D',
+    '50': '#09DE6B80',
+  },
 };
 
 export const gradients = {
