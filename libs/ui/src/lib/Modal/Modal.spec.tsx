@@ -2,7 +2,7 @@ import '@testing-library/jest-dom';
 
 import { act, fireEvent, render, screen } from '@testing-library/react';
 
-import Modal from './Modal';
+import Modal from '.';
 import React from 'react';
 
 describe('Modal', () => {

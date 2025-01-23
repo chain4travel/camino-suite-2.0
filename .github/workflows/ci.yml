@@ -51,6 +51,6 @@ jobs:
           CYPRESS_CACHE_FOLDER: /tmp/Cypress
 
       - name: build
-        run: yarn build:all
+        run: yarn build:all --verbose
         env:
           NX_NO_CLOUD: true
