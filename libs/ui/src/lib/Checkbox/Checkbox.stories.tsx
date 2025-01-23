@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react';
 
-import Checkbox from './Checkbox';
+import Checkbox from '.';
 import React from 'react';
 import Typography from '../Typography';
 

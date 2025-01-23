@@ -2,7 +2,7 @@ import '@testing-library/jest-dom';
 
 import { render, screen } from '@testing-library/react';
 
-import Alert from './Alert';
+import Alert from '.';
 import React from 'react';
 
 describe('Alert', () => {
