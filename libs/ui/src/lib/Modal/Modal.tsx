@@ -1,8 +1,11 @@
+
+'use client'
+
 import { Dialog, DialogPanel, DialogTitle, Transition, TransitionChild } from '@headlessui/react';
 import { Fragment, useEffect } from 'react';
 
 import Icon from '@mdi/react';
-import { ModalProps } from './types';
+import { ModalProps } from './Modal.types';
 import { mdiClose } from '@mdi/js';
 
 const sizeClasses = {

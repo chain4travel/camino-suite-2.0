@@ -5,7 +5,7 @@ import {
   mdiInformationOutline
 } from '@mdi/js';
 
-import { AlertProps } from './types';
+import { AlertProps } from './Alert.types';
 import Icon from '@mdi/react';
 import React from 'react';
 

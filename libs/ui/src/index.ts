@@ -11,6 +11,9 @@ export { default as Dropdown } from './lib/Dropdown';
 export { default as CamBadge } from './lib/CamBadge';
 export { default as PlatformSwitcher } from './lib/PlatformSwitcher';
 export { default as LanguageSwitcher } from './lib/LanguageSwitcher';
+export { default as Alert } from './lib/Alert';
+export { default as Modal } from './lib/Modal';
+export { default as Checkbox } from './lib/Checkbox';
 
 //layout components
 export { default as Layout } from './lib/Layout';
@@ -19,6 +22,7 @@ export { default as NavBar } from './lib/NavBar';
 
 // logos
 export { default as CaminoLogo } from './logos/CaminoLogo';
+export { default as Logo } from './logos/Logo';
 
 // context Theme configuration
 export * from './context/ThemeContext';

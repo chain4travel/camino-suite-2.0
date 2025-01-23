@@ -1,3 +1,3 @@
 export * from './Alert';
-export * from './types';
+export * from './Alert.types';
 export { default } from './Alert';

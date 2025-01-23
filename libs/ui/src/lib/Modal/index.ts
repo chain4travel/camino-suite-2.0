@@ -1,3 +1,3 @@
 export * from './Modal';
-export * from './types';
+export * from './Modal.types';
 export { default } from './Modal';
