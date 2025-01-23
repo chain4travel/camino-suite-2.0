@@ -20,6 +20,7 @@
     "@mdi/react": "^1.6.1",
     "@next/font": "^14.2.15",
     "@reduxjs/toolkit": "^2.2.7",
+    "@scure/bip39": "^1.5.4",
     "@tailwindcss/typography": "^0.5.15",
     "clsx": "^2.0.0",
     "i18next": "^23.10.1",
