@@ -1,18 +1,26 @@
-import { configureStore } from '@reduxjs/toolkit';
-import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux';
-import exampleReducer from './slices/exampleSlice';
+import { configureStore, createSlice, PayloadAction } from '@reduxjs/toolkit';
+import networkReducer from './slices/networkSlice';
+// Example slice: Counter
+const counterSlice = createSlice({
+  name: 'counter',
+  initialState: 0,
+  reducers: {
+    increment: (state) => state + 1,
+    decrement: (state) => state - 1,
+    addBy: (state, action: PayloadAction<number>) => state + action.payload,
+  },
+});
 
-export const makeStore = () => {
-  return configureStore({
-    reducer: {
-      example: exampleReducer,
-    },
-  });
-};
+export const { increment, decrement, addBy } = counterSlice.actions;
 
-export type AppStore = ReturnType<typeof makeStore>;
-export type RootState = ReturnType<AppStore['getState']>;
-export type AppDispatch = AppStore['dispatch'];
+// Configure the store
+export const store = configureStore({
+  reducer: {
+    counter: counterSlice.reducer, // Add more reducers here as needed
+    network: networkReducer,
+  },
+});
 
-export const useAppDispatch: () => AppDispatch = useDispatch;
-export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector;
+// Types for TypeScript
+export type RootState = ReturnType<typeof store.getState>;
+export type AppDispatch = typeof store.dispatch;
