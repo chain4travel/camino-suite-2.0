@@ -17,13 +17,12 @@
     "paths": {
       "@camino/data": ["libs/data/src/index.ts"],
       "@camino/logic": ["libs/logic/src/index.ts"],
+      "@camino/login": ["libs/apps/login/src/index.ts"],
       "@camino/store": ["libs/store/src/index.ts"],
       "@camino/style": ["libs/style/src/index.ts"],
       "@camino/styles": ["libs/styles/src/index.ts"],
       "@camino/test": ["libs/test/src/index.ts"],
-      "@camino/ui": ["libs/ui/src/index.ts"],
-      // apps
-      "@camino/login": ["libs/apps/login/src/index.ts"],
+      "@camino/ui": ["libs/ui/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

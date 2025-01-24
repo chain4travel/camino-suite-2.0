@@ -1,5 +1,5 @@
-// Use this file to export React client components (e.g. those with 'use client' directive) or other non-server utilities
-
 export * from './lib/store';
-export * from './lib/slices/exampleSlice';
-export * from './lib/StoreProvider'
+export * from './lib/slices/networkSlice';
+export * from './lib/types/network.types';
+export * from './lib/hooks/hooks';
+// export * from './lib/counterSlice';
