@@ -54,7 +54,7 @@ const CamBtn = forwardRef<HTMLButtonElement, CamBtnProps>((props, ref) => {
     >
       {leftIcon && (
         <Icon
-          className="mr-2 text-gray-700 dark:text-slate-300 group-enabled:group-hover:text-white dark:group-enabled:group-hover:text-slate-950"
+          className="mr-2"
           size={1}
           path={leftIcon as string}
         />
@@ -62,7 +62,7 @@ const CamBtn = forwardRef<HTMLButtonElement, CamBtnProps>((props, ref) => {
       {isLoading ? 'Loading...' : children}
       {rightIcon && (
         <Icon
-          className="ml-2 text-gray-700 dark:text-slate-300 group-enabled:group-hover:text-white dark:group-enabled:group-hover:text-slate-950"
+          className="ml-2"
           size={1}
           path={rightIcon as string}
         />

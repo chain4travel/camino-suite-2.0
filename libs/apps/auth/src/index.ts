@@ -1,1 +1,1 @@
-export { Login } from './lib';
+export { Login, CreateWallet } from './lib';

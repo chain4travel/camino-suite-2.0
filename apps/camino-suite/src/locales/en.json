@@ -28,7 +28,17 @@
     "invalidKeystoreFile": "Invalid keystore file format",
     "fileReadError": "Error reading file",
     "mnemonicInstructions": "Enter your key phrase",
-    "mnemonicInstructionsinfo": "Your key phrase consists of 24 words separated by an empty space"
+    "mnemonicInstructionsinfo": "Your key phrase consists of 24 words separated by an empty space",
+    "generateKeyPhrase": "Generate a new key phrase to setup your Camino Wallet.",
+    "alreadyHaveWallet": "Already have a wallet?",
+    "regenerate": "Regenerate",
+    "keyPhrase": "This is your key phrase.",
+    "keyPhraseDescription": "Use these 24 words in sequential order to recover your Camino Wallet.",
+    "keyPhraseWarning": "Store this key phrase in a secure location. Anyone with this key phrase can access your Camino Wallet. There is no way to recover lost key phrases.",
+    "confirmWrittenPhrase": "I have written down my key phrase.",
+    "termsPrefix": "By using this application you agree to the",
+    "confirmKeyPhrase": "Confirm Key Phrase",
+    "confirmKeyPhraseDescription": "Please enter the following words from your key phrase to confirm you have saved it."
   },
   "common": {
     "loading": "Loading...",
@@ -40,6 +50,10 @@
     "showPassword": "Show password",
     "hidePassword": "Hide password",
     "showPhrase": "Show Key Phrase",
-    "hidePhrase": "Hide Key Phrase"
+    "hidePhrase": "Hide Key Phrase",
+    "generateKeyPhrase": "Generate Key Phrase",
+    "confirm": "Confirm",
+    "word": "Word",
+    "enterWord": "Enter word"
   }
 }

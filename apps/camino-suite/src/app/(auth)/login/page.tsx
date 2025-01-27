@@ -1,4 +1,4 @@
-import LoginView from '../../views/auth/LoginView';
+import LoginView from '../../../views/auth/LoginView';
 
 const LoginPage = () => {
   return <LoginView />;

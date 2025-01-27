@@ -1,14 +1,15 @@
-import { ACCESS_METHOD_IDS, AccessMethod, SavedWallet, WalletLoginProps } from './types';
+import { ACCESS_METHOD_IDS, AccessMethod, WalletLoginProps } from './types';
 import { AccessOption, CamBtn, Typography } from '@camino/ui';
 import { mdiKey, mdiShieldKey, mdiTableLarge, mdiUsbFlashDrive } from '@mdi/js';
 
-import { useCallback } from 'react';
+import { useRouter } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
 
 const WalletLogin = ({
   handleAccessMethod,
 }: WalletLoginProps) => {
   const { t } = useTranslation();
+  const router = useRouter();
 
 
   const accessMethods: AccessMethod[] = [
@@ -35,10 +36,9 @@ const WalletLogin = ({
     },
   ];
 
-  const handleCreateWallet = useCallback(() => {
-    // Handle create wallet navigation
-    console.log('Creating new wallet');
-  }, []);
+  const handleCreateWallet = () => {
+    router.push('/create');
+  };
 
   return (
     <div className="max-w-2xl p-6 mx-auto space-y-8">
