@@ -80,7 +80,7 @@ const Dropdown = forwardRef<HTMLDivElement, DropdownProps>((props, ref) => {
             <Icon
               path={startIcon}
               size={0.9}
-              className="text-gray-500 dark:text-gray-400"
+              className="text-gray-500 dark:text-slate-400"
             />
           )}
           {trigger}
@@ -88,7 +88,7 @@ const Dropdown = forwardRef<HTMLDivElement, DropdownProps>((props, ref) => {
             <Icon
               path={endIcon}
               size={0.9}
-              className="text-gray-500 dark:text-gray-400"
+              className="text-gray-500 dark:text-slate-400"
             />
           )}
         </MenuButton>
@@ -113,7 +113,7 @@ const Dropdown = forwardRef<HTMLDivElement, DropdownProps>((props, ref) => {
                           <Icon
                             path={item.startIcon}
                             size={0.9}
-                            className="text-gray-500 dark:text-gray-400"
+                            className="text-gray-500 dark:text-slate-400"
                           />
                         )}
                         {item.label}
@@ -121,7 +121,7 @@ const Dropdown = forwardRef<HTMLDivElement, DropdownProps>((props, ref) => {
                           <Icon
                             path={item.endIcon}
                             size={0.9}
-                            className="text-gray-500 dark:text-gray-400"
+                            className="text-gray-500 dark:text-slate-400"
                           />
                         )}
                       </>

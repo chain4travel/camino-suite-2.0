@@ -61,7 +61,7 @@ const MnemonicInput = forwardRef<HTMLDivElement, MnemonicInputProps>(
         {phrases.map((phrase, index) => (
           <div key={index} className="flex">
             <div className="relative w-full">
-              <div className="absolute text-sm text-gray-500 -translate-y-1/2 left-4 top-1/2 dark:text-gray-400">
+              <div className="absolute text-sm text-gray-500 -translate-y-1/2 left-4 top-1/2 dark:text-slate-400">
                 {index + 1}.
               </div>
               <input
@@ -77,7 +77,7 @@ const MnemonicInput = forwardRef<HTMLDivElement, MnemonicInputProps>(
                   'text-sm font-normal',
                   'border border-gray-200 dark:border-gray-700/50 rounded-lg',
                   'focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500',
-                  'placeholder:text-gray-400 dark:placeholder:text-gray-600',
+                  'placeholder:text-slate-400 dark:placeholder:text-gray-600',
                   {
                     'border-red-500 focus:ring-red-500': error,
                     'opacity-50 cursor-not-allowed': disabled,

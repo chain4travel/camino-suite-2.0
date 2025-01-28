@@ -14,7 +14,7 @@ export const LedgerAccess = () => {
 
   return (
     <Box className="space-y-4">
-      <Typography variant="body2" className="text-gray-400">
+      <Typography variant="body2" className="text-slate-400">
         {t('auth.ledgerInstructions')}
       </Typography>
 
