@@ -54,6 +54,9 @@
     "generateKeyPhrase": "Generate Key Phrase",
     "confirm": "Confirm",
     "word": "Word",
-    "enterWord": "Enter word"
+    "enterWord": "Enter word",
+    "menu": "Menu",
+    "add": "Add",
+    "edit": "Edit"
   }
 }

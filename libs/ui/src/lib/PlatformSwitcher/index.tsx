@@ -5,6 +5,7 @@ import React, { useEffect, useState } from 'react';
 
 import CaminoLogo from '../../logos/CaminoLogo';
 import Dropdown from '../Dropdown';
+import Logo from '../../logos/Logo';
 import { MenuItem } from '@headlessui/react';
 import Typography from '../Typography';
 import { mdiChevronDown } from '@mdi/js';
@@ -25,7 +26,8 @@ const PlatformSwitcher = ({
 
   const CustomTrigger = () => (
     <div className="flex items-center justify-center gap-2 [&>h3]:mt-1">
-      <CaminoLogo />
+      <Logo className="w-10 h-10 md:hidden" />
+      <CaminoLogo  className="hidden lg:block" />
       <Typography variant="h3" as="h3" color="#149EED">
         {currentOption?.name}
       </Typography>

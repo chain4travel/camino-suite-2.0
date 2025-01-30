@@ -1,8 +1,9 @@
-import CaminoLogo from '../../logos/CaminoLogo';
-import { useTheme } from '../../context/ThemeContext';
-import { clsx } from 'clsx';
-import Typography from '../Typography';
 import CamBtn from '../CamBtn';
+import CaminoLogo from '../../logos/CaminoLogo';
+import Logo from '../../logos/Logo';
+import Typography from '../Typography';
+import { clsx } from 'clsx';
+import { useTheme } from '../../context/ThemeContext';
 
 const Footer = () => {
   const { theme } = useTheme();
