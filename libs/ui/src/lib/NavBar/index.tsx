@@ -162,6 +162,7 @@ const Navbar = () => {
           <button
             className="md:hidden"
             onClick={() => setIsMobileMenuOpen(true)}
+            aria-label="menu"
           >
             <Icon
               path={mdiMenu}

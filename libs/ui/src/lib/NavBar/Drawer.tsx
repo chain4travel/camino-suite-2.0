@@ -62,6 +62,7 @@ const Drawer = ({ isOpen, onClose, theme, children }: DrawerProps) => {
                             type="button"
                             className="relative rounded-md text-slate-950 dark:text-slate-100 hover:text-gray-500"
                             onClick={onClose}
+                            aria-label="close"
                           >
                             <Icon path={mdiClose} size={1}  />
                           </button>

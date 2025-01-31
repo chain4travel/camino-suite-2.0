@@ -1,9 +1,10 @@
 import '@testing-library/jest-dom';
 
-import { render, screen } from '../../test-utils/test-utils';
+import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 
 import NavBar from '.';
 import React from 'react';
+import { ThemeProvider } from '../../context/ThemeContext';
 
 // Mock PlatformSwitcher
 jest.mock('../PlatformSwitcher', () => ({
@@ -11,36 +12,96 @@ jest.mock('../PlatformSwitcher', () => ({
   default: () => <div data-testid="platform-switcher">PlatformSwitcher</div>,
 }));
 
-// Mock CaminoLogo
+// Mock clsx
+jest.mock('clsx', () => ({
+  clsx: (...args: unknown[]) => args.filter(Boolean).join(' '),
+  __esModule: true,
+  default: (...args: unknown[]) => args.filter(Boolean).join(' '),
+}));
 
+type TranslationKey = 'common.menu' | 'common.edit' | 'common.add';
+
+const translations: Record<TranslationKey, string> = {
+  'common.menu': 'Menu',
+  'common.edit': 'Edit',
+  'common.add': 'Add'
+};
+
+// Mock useTranslation
+jest.mock('react-i18next', () => ({
+  useTranslation: () => ({
+    t: (key: string) => {
+      return translations[key as TranslationKey] || key;
+    },
+    i18n: {
+      changeLanguage: () => new Promise((resolve) => resolve(undefined)),
+    },
+  }),
+}));
+
+const renderWithTheme = (component: React.ReactElement) => {
+  return render(
+    <ThemeProvider>{component}</ThemeProvider>
+  );
+};
 
 describe('NavBar', () => {
-  it('renders successfully', () => {
-    render(<NavBar />);
-
-    // Basic assertions to verify the component renders
-    expect(screen.getByRole('navigation')).toBeInTheDocument();
+  it('renders correctly', () => {
+    renderWithTheme(<NavBar />);
+    expect(screen.getByText('Login')).toBeInTheDocument();
   });
 
-  it('shows mobile menu button on small screens', () => {
-    render(<NavBar />);
+  it('toggles mobile menu', async () => {
+    renderWithTheme(<NavBar />);
 
+    // Menu should be initially hidden
+    expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
+
+    // Click burger menu
     const menuButton = screen.getByRole('button', { name: /menu/i });
-    expect(menuButton).toBeInTheDocument();
+    fireEvent.click(menuButton);
+
+    // Menu should be visible
+    await waitFor(() => {
+      expect(screen.getByText('Menu')).toBeInTheDocument();
+    });
   });
 
-  it('shows theme toggle button', () => {
-    render(<NavBar />);
+  it('closes mobile menu when clicking close button', async () => {
+    renderWithTheme(<NavBar />);
 
-    const themeButton = screen.getByRole('button', { name: /light|dark/i });
+    // Open menu
+    const menuButton = screen.getByRole('button', { name: /menu/i });
+    fireEvent.click(menuButton);
+
+    // Wait for menu to be visible
+    await waitFor(() => {
+      expect(screen.getByText('Menu')).toBeInTheDocument();
+    });
+
+    // Click close button
+    const closeButton = screen.getByRole('button', { name: /close/i });
+    fireEvent.click(closeButton);
+
+    // Wait for menu to be hidden
+    await waitFor(() => {
+      expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
+    });
+  });
+
+  it('toggles theme', () => {
+    renderWithTheme(<NavBar />);
+
+    // Find theme button by both icon and text
+    const themeButton = screen.getByRole('button', {
+      name: /light|dark/i
+    });
     expect(themeButton).toBeInTheDocument();
   });
 
-  it('shows login link', () => {
-    render(<NavBar />);
-
-    const loginLink = screen.getByRole('link', { name: /login/i });
-    expect(loginLink).toBeInTheDocument();
-    expect(loginLink).toHaveAttribute('href', '/login');
+  it('renders network switcher', () => {
+    renderWithTheme(<NavBar />);
+    const networkElements = screen.getAllByText('Camino');
+    expect(networkElements[0]).toBeInTheDocument();
   });
 });

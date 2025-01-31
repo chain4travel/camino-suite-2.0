@@ -65,6 +65,7 @@ const NetworkSwitcher = ({
             {({ active }) => (
               <div className="flex items-center w-full">
                 <button
+                  role="menuitem"
                   onClick={() => handleSelect(option)}
                   className={`
                     flex-1 px-4 py-3 flex items-center

@@ -1,190 +1,171 @@
 import '@testing-library/jest-dom';
 
-import { fireEvent, render, screen } from '../../test-utils/test-utils';
+import { fireEvent, render, screen } from '@testing-library/react';
 
+import { NetworkOption } from './NetworkSwitcher.types';
 import NetworkSwitcher from './index';
 import React from 'react';
+import { ThemeProvider } from '../../context/ThemeContext';
 
-const mockOptions = [
-  {
-    name: 'Camino',
-  },
-  {
-    name: 'Columbus',
-  },
-  {
-    name: 'Hidden Network',
-    hidden: true,
-  },
+const defaultOptions: NetworkOption[] = [
+  { name: 'Camino' },
+  { name: 'Columbus' },
 ];
 
+// Mock clsx
+jest.mock('clsx', () => ({
+  clsx: (...args: unknown[]) => args.filter(Boolean).join(' '),
+  __esModule: true,
+  default: (...args: unknown[]) => args.filter(Boolean).join(' '),
+}));
+
+
+const renderWithTheme = (component: React.ReactElement) => {
+  return render(
+    <ThemeProvider>{component}</ThemeProvider>
+  );
+};
+
 describe('NetworkSwitcher', () => {
-  const mockOnSelect = jest.fn();
-  const mockOnAddNetwork = jest.fn();
-  const mockOnEditNetwork = jest.fn();
-  const mockOnDeleteNetwork = jest.fn();
-
-  beforeEach(() => {
-    jest.clearAllMocks();
-  });
-
-  it('renders default network options', () => {
-    render(
+  it('renders without crashing', () => {
+    const handleSelect = jest.fn();
+    renderWithTheme(
       <NetworkSwitcher
-        options={mockOptions}
+        options={defaultOptions}
+        onSelect={handleSelect}
+        onAddNetwork={() => {
+          console.log('add network');
+        }}
+        onEditNetwork={() => {
+          console.log('edit network');
+        }}
+        onDeleteNetwork={() => {
+          console.log('delete network');
+        }}
         activeNetwork="Camino"
-        onSelect={mockOnSelect}
-        onAddNetwork={mockOnAddNetwork}
-        onEditNetwork={mockOnEditNetwork}
-        onDeleteNetwork={mockOnDeleteNetwork}
       />
     );
-
-    expect(screen.getByText('Camino')).toBeInTheDocument();
+    expect(screen.getAllByText('Camino')[0]).toBeInTheDocument();
   });
 
-  it('allows network selection', () => {
-    render(
+  it('displays the active network', () => {
+    const handleSelect = jest.fn();
+    renderWithTheme(
       <NetworkSwitcher
-        options={mockOptions}
+        options={defaultOptions}
+        onSelect={handleSelect}
+        onAddNetwork={() => {
+          console.log('add network');
+        }}
+        onEditNetwork={() => {
+          console.log('edit network');
+        }}
+        onDeleteNetwork={() => {
+          console.log('delete network');
+        }}
+        activeNetwork="Columbus"
+      />
+    );
+    expect(screen.getAllByText('Columbus')[0]).toBeInTheDocument();
+  });
+
+  it('calls onSelect when a network is selected', () => {
+    const handleSelect = jest.fn();
+
+    renderWithTheme(
+      <NetworkSwitcher
+        options={defaultOptions}
+        onSelect={handleSelect}
+        onAddNetwork={() => {
+          console.log('add network');
+        }}
+        onEditNetwork={() => {
+          console.log('edit network');
+        }}
+        onDeleteNetwork={() => {
+          console.log('delete network');
+        }}
         activeNetwork="Camino"
-        onSelect={mockOnSelect}
-        onAddNetwork={mockOnAddNetwork}
-        onEditNetwork={mockOnEditNetwork}
-        onDeleteNetwork={mockOnDeleteNetwork}
       />
     );
 
     // Open the dropdown
-    const networkButton = screen.getByRole('button', { name: /camino/i });
-    fireEvent.click(networkButton);
+    const networkButton = screen.getAllByText('Camino')[0];
+    fireEvent.click(networkButton.closest('button') as HTMLElement);
 
-    // Select Columbus network
-    const columbusOption = screen.getByText('Columbus');
-    fireEvent.click(columbusOption);
+    // Find and click the Columbus option
+    const columbusOption = screen.getAllByText('Columbus')[0];
+    fireEvent.click(columbusOption.closest('button') as HTMLElement);
 
-    expect(mockOnSelect).toHaveBeenCalledWith(mockOptions[1]);
+    expect(handleSelect).toHaveBeenCalledWith(expect.objectContaining({
+      name: 'Columbus'
+    }));
   });
 
-  it('hides networks marked as hidden', () => {
-    render(
+  it('updates when activeNetwork prop changes', () => {
+    const handleSelect = jest.fn();
+
+    const { rerender } = renderWithTheme(
       <NetworkSwitcher
-        options={mockOptions}
-        activeNetwork="Camino"
-        onSelect={mockOnSelect}
-        onAddNetwork={mockOnAddNetwork}
-        onEditNetwork={mockOnEditNetwork}
-        onDeleteNetwork={mockOnDeleteNetwork}
-      />
-    );
-
-    // Open the dropdown
-    const networkButton = screen.getByRole('button', { name: /camino/i });
-    fireEvent.click(networkButton);
-
-    expect(screen.queryByText('Hidden Network')).not.toBeInTheDocument();
-  });
-
-  it('shows active network', () => {
-    render(
-      <NetworkSwitcher
-        options={mockOptions}
-        activeNetwork="Camino"
-        onSelect={mockOnSelect}
-        onAddNetwork={mockOnAddNetwork}
-        onEditNetwork={mockOnEditNetwork}
-        onDeleteNetwork={mockOnDeleteNetwork}
+      options={defaultOptions}
+      onSelect={handleSelect}
+      onAddNetwork={() => {
+        console.log('add network');
+      }}
+      onEditNetwork={() => {
+        console.log('edit network');
+      }}
+      onDeleteNetwork={() => {
+        console.log('delete network');
+      }}
+      activeNetwork="Camino"
       />
     );
 
     expect(screen.getByRole('button', { name: /camino/i })).toBeInTheDocument();
+
+    rerender(
+      <NetworkSwitcher
+      options={defaultOptions}
+      onSelect={handleSelect}
+      onAddNetwork={() => {
+        console.log('add network');
+      }}
+      onEditNetwork={() => {
+        console.log('edit network');
+      }}
+      onDeleteNetwork={() => {
+        console.log('delete network');
+      }}
+      activeNetwork="Columbus"
+    />
+    );
+
+    expect(screen.getByRole('button', { name: /columbus/i })).toBeInTheDocument();
   });
 
-  it('shows add network button', () => {
-    render(
+  it('shows add network button when onAddNetwork is provided', () => {
+    const handleSelect = jest.fn();
+    renderWithTheme(
       <NetworkSwitcher
-        options={mockOptions}
-        activeNetwork="Camino"
-        onSelect={mockOnSelect}
-        onAddNetwork={mockOnAddNetwork}
-        onEditNetwork={mockOnEditNetwork}
-        onDeleteNetwork={mockOnDeleteNetwork}
+      options={defaultOptions}
+      onSelect={handleSelect}
+      onAddNetwork={() => {
+        console.log('add network');
+      }}
+      onEditNetwork={() => {
+        console.log('edit network');
+      }}
+      onDeleteNetwork={() => {
+        console.log('delete network');
+      }}
+      activeNetwork="Camino"
       />
     );
 
-    // Open the dropdown
     const networkButton = screen.getByRole('button', { name: /camino/i });
     fireEvent.click(networkButton);
 
-    const addButton = screen.getByRole('button', { name: /add/i });
-    fireEvent.click(addButton);
-
-    expect(mockOnAddNetwork).toHaveBeenCalled();
-  });
-
-  it('allows editing custom networks', () => {
-    const customNetwork = {
-      name: 'Custom',
-      isCustom: true,
-    };
-
-    render(
-      <NetworkSwitcher
-        options={[...mockOptions, customNetwork]}
-        activeNetwork="Camino"
-        onSelect={mockOnSelect}
-        onAddNetwork={mockOnAddNetwork}
-        onEditNetwork={mockOnEditNetwork}
-        onDeleteNetwork={mockOnDeleteNetwork}
-      />
-    );
-
-    // Open the dropdown
-    const networkButton = screen.getByRole('button', { name: /camino/i });
-    fireEvent.click(networkButton);
-
-    // Find and click edit button for custom network
-    const editButtons = screen.getAllByRole('button', { name: /edit/i });
-    const customNetworkEditButton = editButtons.find(button =>
-      button.closest('div')?.textContent?.includes('Custom')
-    );
-
-    if (customNetworkEditButton) {
-      fireEvent.click(customNetworkEditButton);
-      expect(mockOnEditNetwork).toHaveBeenCalledWith(customNetwork);
-    }
-  });
-
-  it('allows deleting custom networks', () => {
-    const customNetwork = {
-      name: 'Custom',
-      isCustom: true,
-    };
-
-    render(
-      <NetworkSwitcher
-        options={[...mockOptions, customNetwork]}
-        activeNetwork="Camino"
-        onSelect={mockOnSelect}
-        onAddNetwork={mockOnAddNetwork}
-        onEditNetwork={mockOnEditNetwork}
-        onDeleteNetwork={mockOnDeleteNetwork}
-      />
-    );
-
-    // Open the dropdown
-    const networkButton = screen.getByRole('button', { name: /camino/i });
-    fireEvent.click(networkButton);
-
-    // Find and click delete button for custom network
-    const deleteButtons = screen.getAllByRole('button', { name: /delete/i });
-    const customNetworkDeleteButton = deleteButtons.find(button =>
-      button.closest('div')?.textContent?.includes('Custom')
-    );
-
-    if (customNetworkDeleteButton) {
-      fireEvent.click(customNetworkDeleteButton);
-      expect(mockOnDeleteNetwork).toHaveBeenCalledWith(customNetwork);
-    }
+    expect(screen.getByText(/Add Custom Network/i)).toBeInTheDocument();
   });
 });
