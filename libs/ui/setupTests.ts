@@ -14,6 +14,7 @@ class MockResizeObserver {
   }
 }
 
+
 global.ResizeObserver = MockResizeObserver;
 
 // Mock matchMedia

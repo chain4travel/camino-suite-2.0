@@ -1,7 +1,0 @@
-{
-  "name": "@camino/auth",
-  "version": "0.0.1",
-  "dependencies": {
-    "@scure/bip39": "^1.5.4"
-  }
-}

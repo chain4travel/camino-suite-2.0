@@ -1,50 +1,32 @@
+'use client';
+
+import {
+  FooterButtonsProps,
+  FooterDataProps,
+  FooterLinksProps,
+} from './Footer.types';
+import { fetchFooterData, getSocialMedia } from '../../utils/socialMedia';
+import { useEffect, useState } from 'react';
+
 import CamBtn from '../CamBtn';
 import CaminoLogo from '../../logos/CaminoLogo';
-import Logo from '../../logos/Logo';
 import Typography from '../Typography';
 import { clsx } from 'clsx';
 import { useTheme } from '../../context/ThemeContext';
+import { useTranslation } from 'react-i18next';
 
 const Footer = () => {
   const { theme } = useTheme();
+  const { t } = useTranslation();
+  const [footerData, setFooterData] = useState<FooterDataProps | null>(null);
 
-  // Dynamic Footer Data
-  const footerData = {
-    description:
-      'Camino is the travel industry blockchain. Fueled by the Camino token, it offers a versatile network to expand business models and create new touristic products.',
-    links: [
-      {
-        title: 'Camino Network',
-        items: [
-          'The Network',
-          'Use Cases',
-          'Validators',
-          'Web3 Travel',
-          'Camino Messenger',
-        ],
-      },
-      {
-        title: 'Discover',
-        items: ['Community', 'Blog', 'News', 'Entities'],
-      },
-      {
-        title: 'Organizational',
-        items: [
-          'Foundation',
-          'Imprint',
-          'Privacy Policy',
-          'Terms of Use',
-          'Code of Conduct',
-        ],
-      },
-    ],
-    buttons: [
-      { label: 'Camino Website', href: '#' },
-      { label: 'Documentation', href: '#' },
-      { label: 'Whitepaper', href: '#' },
-    ],
-    socialMedia: ['✈️', '🔗', '🎮', '▶️', '🐱', '✉️'], // Replace with real icons later
-  };
+  useEffect(() => {
+    fetchFooterData().then(setFooterData);
+  }, []);
+
+  const socialMedia = footerData
+    ? getSocialMedia(footerData.SocialMediaLinks)
+    : [];
 
   return (
     <footer
@@ -57,68 +39,87 @@ const Footer = () => {
         {/* Top Section */}
         <div className="flex flex-col justify-between gap-8 mb-10 lg:flex-row">
           {/* Logo and Description */}
-          <div className="max-w-sm">
+          <div className="flex-1 max-w-2xl">
             <div className="flex items-center gap-2 mb-4">
               <CaminoLogo />
             </div>
-            <Typography variant="caption" as="p">
-              {footerData.description}
+            <Typography variant="h6" as="p" className="!text-slate-400">
+              {t('footer.description')}
             </Typography>
             {/* Social Icons */}
             <div className="flex gap-4 mt-6">
-              {footerData.socialMedia.map((icon, index) => (
-                <button
-                  key={index}
+              {socialMedia?.map(({ name, url, icon }) => (
+                <a
+                  href={url}
+                  rel="noopener noreferrer"
+                  target="_blank"
+                  key={name}
+                  aria-label={name}
                   className={clsx(
-                    'text-2xl transition-all bg-transparent border-none cursor-pointer',
+                    'cursor-pointer hover:scale-110 transition-all duration-300 [&>svg]:w-8 [&>svg]:h-8',
                     theme === 'light'
-                      ? 'text-gray-500 hover:text-black'
-                      : 'text-gray-400 hover:text-white'
+                      ? 'text-slate-950 hover:text-black'
+                      : 'text-slate-100 hover:text-white'
                   )}
                 >
                   {icon}
-                </button>
+                </a>
               ))}
             </div>
           </div>
 
           {/* Navigation Links */}
           <div className="flex flex-wrap gap-8 text-sm lg:gap-16">
-            {footerData.links.map((section, index) => (
-              <div key={index}>
-                <Typography variant="h4" as="h4" className="mb-3">
-                  {section.title}
-                </Typography>
-                <ul className="space-y-2">
-                  {section.items.map((item, idx) => (
-                    <li key={idx}>
-                      <button
-                        className={clsx(
-                          'hover:underline bg-transparent border-none cursor-pointer',
-                          theme === 'light'
-                            ? 'text-slate-950'
-                            : 'text-slate-100 hover:text-white'
-                        )}
-                      >
-                        <Typography variant="caption" as="p">
-                          {item}
-                        </Typography>
-                      </button>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            ))}
+            {footerData?.FooterLinks.map(
+              (section: FooterLinksProps, index: number) => (
+                <div key={index}>
+                  <Typography variant="h4" as="h4" className="mb-3">
+                    {section.name}
+                  </Typography>
+                  <ul className="space-y-2">
+                    {section.links.map((link, idx) => (
+                      <li key={idx}>
+                        <a
+                          href={link.url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className={clsx(
+                            'hover:underline bg-transparent border-none cursor-pointer',
+                            theme === 'light'
+                              ? 'text-slate-950'
+                              : 'text-slate-100 hover:text-white'
+                          )}
+                        >
+                          <Typography
+                            variant="h6"
+                            as="p"
+                            className="!text-slate-400"
+                          >
+                            {link.text}
+                          </Typography>
+                        </a>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )
+            )}
           </div>
         </div>
 
         {/* Buttons */}
         <div className="flex flex-wrap w-full gap-4 mb-10">
-          {footerData.buttons.map((button, index) => (
-            <CamBtn key={index} variant="secondary">
-              {button.label}
-            </CamBtn>
-          ))}
+          {footerData?.FooterButtons.map(
+            (button: FooterButtonsProps, index: number) => (
+              <CamBtn
+                key={index}
+                variant="secondary"
+                onClick={() => window.open(button.url, '_blank')}
+              >
+                {button.name}
+              </CamBtn>
+            )
+          )}
         </div>
 
         {/* Bottom Section */}
@@ -128,18 +129,18 @@ const Footer = () => {
           )}
         >
           <Typography
-            variant="caption"
+            variant="body2"
             as="p"
             color={theme === 'light' ? '#666' : '#BBB'}
           >
-            &copy; 2024 Camino Network Foundation. All rights reserved.
+            &copy; {new Date().getFullYear()} {t('common.copyright')}
           </Typography>
           <Typography
             variant="caption"
-            as="p"
+            as="span"
             color={theme === 'light' ? '#666' : '#BBB'}
           >
-            v1.5.0-rc-194-ga6e5eb8
+            version
           </Typography>
         </div>
       </div>

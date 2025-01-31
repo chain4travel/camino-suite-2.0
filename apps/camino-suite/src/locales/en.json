@@ -5,6 +5,9 @@
     "about": "About",
     "settings": "Settings"
   },
+  "footer": {
+    "description": "Camino is the travel industry blockchain. Fueled by the Camino token, it is offering a versatile network to expand current business models and to create new touristic products to delight travelers and business partners."
+  },
   "auth": {
     "savedWallets": "Saved Camino Wallets",
     "accessWallets": "Access Your Camino Wallets",
@@ -57,6 +60,7 @@
     "enterWord": "Enter word",
     "menu": "Menu",
     "add": "Add",
-    "edit": "Edit"
+    "edit": "Edit",
+    "copyright": "Camino Network Foundation. All rights reserved."
   }
 }

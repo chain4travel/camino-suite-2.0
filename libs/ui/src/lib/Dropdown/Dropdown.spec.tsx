@@ -2,7 +2,7 @@ import '@testing-library/jest-dom';
 
 import { fireEvent, render, screen } from '@testing-library/react';
 
-import Dropdown from '.';
+import Dropdown from './index';
 import React from 'react';
 
 // Mock clsx
@@ -27,7 +27,7 @@ jest.mock('@headlessui/react', () => ({
       {children}
     </div>
   ),
-  MenuItem: ({ children }: { children: ({ active }: { active: boolean }) => React.ReactNode }) => 
+  MenuItem: ({ children }: { children: ({ active }: { active: boolean }) => React.ReactNode }) =>
     children({ active: false }),
 }));
 
@@ -40,13 +40,12 @@ jest.mock('@mdi/js', () => ({
 let iconCounter = 0;
 jest.mock('@mdi/react', () => ({
   Icon: ({ path, className }: { path: string; className?: string }) => {
-    iconCounter += 1;
     return (
-      <span 
-        data-testid={`icon-${iconCounter}`} 
-        data-icon={path} 
+      <span
+        data-testid={`icon-${iconCounter}`}
+        data-icon={path}
         className={className}
-        role="img" 
+        role="img"
       />
     );
   },
@@ -92,7 +91,7 @@ describe('Dropdown', () => {
     it('handles item selection', () => {
       const onSelect = jest.fn();
       render(<Dropdown trigger="Menu" items={mockItems} onSelect={onSelect} />);
-      
+
       fireEvent.click(screen.getByText('Item 1'));
       expect(onSelect).toHaveBeenCalledWith(mockItems[0]);
     });
@@ -100,7 +99,7 @@ describe('Dropdown', () => {
     it('does not call onSelect for disabled items', () => {
       const onSelect = jest.fn();
       render(<Dropdown trigger="Menu" items={mockItems} onSelect={onSelect} />);
-      
+
       fireEvent.click(screen.getByText('Item 2'));
       expect(onSelect).not.toHaveBeenCalled();
     });
@@ -131,9 +130,9 @@ describe('Dropdown', () => {
         value: 'custom',
         renderItem: () => <div data-testid="custom-item">Custom Item</div>
       }];
-      
+
       render(<Dropdown trigger="Menu" items={customItems} />);
       expect(screen.getByTestId('custom-item')).toBeInTheDocument();
     });
   });
-}); 
+});
