@@ -58,6 +58,9 @@
     "confirm": "Confirm",
     "word": "Word",
     "enterWord": "Enter word",
+    "menu": "Menu",
+    "add": "Add",
+    "edit": "Edit",
     "copyright": "Camino Network Foundation. All rights reserved."
   }
 }
