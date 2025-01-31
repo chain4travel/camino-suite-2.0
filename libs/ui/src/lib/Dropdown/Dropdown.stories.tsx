@@ -269,7 +269,7 @@ export const CustomItemRenderer: Story = {
         renderItem: () => (
           <div className="flex flex-col gap-1">
             <span className="font-medium text-blue-500">Primary Text</span>
-            <span className="text-xs text-gray-500 dark:text-gray-400">
+            <span className="text-xs text-gray-500 dark:text-slate-400">
               Secondary description
             </span>
           </div>

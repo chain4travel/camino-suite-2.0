@@ -22,6 +22,13 @@ jest.mock('react-i18next', () => ({
   }),
 }));
 
+// Mock fetch
+global.fetch = jest.fn(() =>
+  Promise.resolve({
+    json: () => Promise.resolve({}),
+  })
+) as jest.Mock;
+
 describe('Footer', () => {
   it('renders successfully', () => {
     render(<Footer />);
@@ -30,7 +37,8 @@ describe('Footer', () => {
 
   it('displays copyright text', () => {
     render(<Footer />);
-    expect(screen.getByText(/© \d{4} Camino/)).toBeInTheDocument();
+    const currentYear = new Date().getFullYear();
+    expect(screen.getByText(new RegExp(`© ${currentYear}`))).toBeInTheDocument();
   });
 
 

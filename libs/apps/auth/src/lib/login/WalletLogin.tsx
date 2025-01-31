@@ -71,7 +71,7 @@ const WalletLogin = ({
         </CamBtn>
       </div>
 
-      <p className="text-sm text-center text-gray-400">
+      <p className="text-sm text-center text-slate-400">
         {t('auth.termsNotice')}
         <a href="/terms" className="ml-1 text-blue-500 hover:text-blue-400">
           {t('auth.termsOfUse')}

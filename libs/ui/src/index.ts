@@ -40,3 +40,6 @@ export * from './lib/FileInput/FileInput.types';
 
 export { default as MnemonicInput } from './lib/MnemonicInput';
 export * from './lib/MnemonicInput/MnemonicInput.types';
+
+// icons
+export * from './lib/Icons';
