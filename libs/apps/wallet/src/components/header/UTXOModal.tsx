@@ -1,14 +1,7 @@
-import { Modal, CamBtn, Typography } from '@camino/ui';
+import { Modal, CamBtn } from '@camino/ui';
 import { useState } from 'react';
 import clsx from 'clsx';
-
-interface UTXO {
-  id: string;
-  type: string;
-  threshold: number;
-  owners: string;
-  balance: string;
-}
+import { UTXO } from './header.types';
 
 const CHAIN_UTXOS: Record<'X' | 'P', UTXO[]> = {
   X: [
@@ -43,7 +36,7 @@ const TABLE_HEADERS = [
   { key: 'type', label: 'Type' },
   { key: 'threshold', label: 'Threshold' },
   { key: 'owners', label: 'Owners' },
-  { key: 'balance', label: 'Balance', align: 'right' as const }
+  { key: 'balance', label: 'Balance', align: 'right' as const },
 ];
 
 interface UTXOModalProps {
@@ -123,4 +116,4 @@ export const UTXOModal = ({ isOpen, onClose }: UTXOModalProps) => {
       </div>
     </Modal>
   );
-}; 
+};

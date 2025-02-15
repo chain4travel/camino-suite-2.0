@@ -1,4 +1,4 @@
-import { Typography, Modal, CamBtn } from '@camino/ui';
+import { Typography } from '@camino/ui';
 import { mdiRefresh, mdiEyeOutline, mdiEyeOffOutline } from '@mdi/js';
 import Icon from '@mdi/react';
 import clsx from 'clsx';
@@ -38,50 +38,6 @@ const AmountInfo = ({
     </div>
   );
 };
-
-interface UTXO {
-  id: string;
-  type: string;
-  threshold: number;
-  owners: string;
-  balance: string;
-}
-
-const CHAIN_UTXOS: Record<'X' | 'P', UTXO[]> = {
-  X: [
-    {
-      id: '2CffgzgLcXqAv3hPKQCjMtQbm2BGceLgcXFDq7gVoL8i2U3od1',
-      type: 'SECP Transfer Output',
-      threshold: 1,
-      owners: 'X-kopernikus1g65uqn6t77p656w64023nh8nd9updzmxh8ttv3',
-      balance: '199 999.976 CAM',
-    },
-  ],
-  P: [
-    {
-      id: '2CffgzgLcXqAv3hPKQCjMtQbm2BGceLgcXFDq7gVoL8i2U3od1',
-      type: 'SECP Transfer Output',
-      threshold: 1,
-      owners: 'P-kopernikus1g65uqn6t77p656w64023nh8nd9updzmxh8ttv3',
-      balance: '199 999.976 CAM',
-    },
-    {
-      id: '6wSuYBDbuEeb39Vz9ghCNUBmiqxJ6rBpzMF34UDWdJga66wVR',
-      type: 'Locked Output',
-      threshold: 1,
-      owners: 'P-kopernikus1g65uqn6t77p656w64023nh8nd9updzmxh8ttv3',
-      balance: '100 CAM',
-    },
-  ],
-};
-
-const TABLE_HEADERS = [
-  { key: 'id', label: 'ID' },
-  { key: 'type', label: 'Type' },
-  { key: 'threshold', label: 'Threshold' },
-  { key: 'owners', label: 'Owners' },
-  { key: 'balance', label: 'Balance', align: 'right' as const },
-];
 
 const BalanceCard = () => {
   const [showBreakdown, setShowBreakdown] = useState(false);
