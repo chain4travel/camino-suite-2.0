@@ -2,7 +2,7 @@ import { Box } from '@camino/ui';
 
 export const Sidebar = () => {
   return (
-    <Box className="w-72 min-h-[70vh]">
+    <Box className="w-full lg:w-72 min-h-[70vh]">
       <div className="p-4">
         {/* Wallet Balance */}
         <div className="mb-6">

@@ -60,10 +60,10 @@ export const UTXOModal = ({ isOpen, onClose }: UTXOModalProps) => {
       onClose={onClose}
       title="Wallet UTXO Breakdown"
       size="full"
-      className="!h-[calc(100vh-150px)] !w-fit"
+      className="!h-[calc(100vh-150px)] !w-full md:!w-fit max-w-[95vw]"
     >
       <div className="flex flex-col h-full">
-        <div className="flex gap-2 mb-4">
+        <div className="flex gap-2 mb-4 overflow-x-auto">
           <CamBtn
             variant={activeChain === 'X' ? 'primary' : 'secondary'}
             onClick={() => setActiveChain('X')}
@@ -79,34 +79,46 @@ export const UTXOModal = ({ isOpen, onClose }: UTXOModalProps) => {
         </div>
 
         <div className="flex-1 overflow-auto">
-          <table className="w-full">
-            <thead>
-              <tr className="text-left border-b border-slate-700">
-                {TABLE_HEADERS.map((header) => (
-                  <th
-                    key={header.key}
-                    className={clsx(
-                      'py-2 px-4 text-slate-400 font-inter',
-                      header.align === 'right' && 'text-right'
-                    )}
-                  >
-                    {header.label}
-                  </th>
-                ))}
-              </tr>
-            </thead>
-            <tbody>
-              {CHAIN_UTXOS[activeChain].map((utxo) => (
-                <tr key={utxo.id} className="border-b border-slate-700/50">
-                  <td className="py-2 px-4 text-sm font-inter">{utxo.id}</td>
-                  <td className="py-2 px-4 font-inter">{utxo.type}</td>
-                  <td className="py-2 px-4 font-inter">{utxo.threshold}</td>
-                  <td className="py-2 px-4 text-sm font-inter">{utxo.owners}</td>
-                  <td className="py-2 px-4 text-right">{utxo.balance}</td>
+          <div className="min-w-[800px]">
+            <table className="w-full">
+              <thead>
+                <tr className="text-left border-b border-slate-700">
+                  {TABLE_HEADERS.map((header) => (
+                    <th
+                      key={header.key}
+                      className={clsx(
+                        'py-2 px-4 text-slate-400 font-inter whitespace-nowrap',
+                        header.align === 'right' && 'text-right'
+                      )}
+                    >
+                      {header.label}
+                    </th>
+                  ))}
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {CHAIN_UTXOS[activeChain].map((utxo) => (
+                  <tr key={utxo.id} className="border-b border-slate-700/50">
+                    <td className="py-2 px-4 text-sm font-inter break-all">
+                      {utxo.id}
+                    </td>
+                    <td className="py-2 px-4 font-inter whitespace-nowrap">
+                      {utxo.type}
+                    </td>
+                    <td className="py-2 px-4 font-inter whitespace-nowrap">
+                      {utxo.threshold}
+                    </td>
+                    <td className="py-2 px-4 text-sm font-inter break-all">
+                      {utxo.owners}
+                    </td>
+                    <td className="py-2 px-4 text-right whitespace-nowrap">
+                      {utxo.balance}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
     </Modal>

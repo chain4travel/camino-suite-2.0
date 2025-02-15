@@ -33,13 +33,13 @@ export const AddressCard = () => {
     setActiveChain(chain);
   };
   return (
-    <div className="flex flex-col gap-4 w-1/3 h-full items-start pt-4">
+    <div className="flex flex-col gap-4 w-full lg:w-1/3 h-full items-start pt-4">
       <div className="mx-4 flex rounded-xl p-4 bg-gray-200/50 dark:bg-slate-800/50">
         <Typography variant="body2" className="text-center">
           {CHAIN_DESCRIPTIONS[activeChain]}
         </Typography>
       </div>
-      <div className="px-4 flex-1 flex items-start justify-start gap-4">
+      <div className="px-4 flex-1 flex flex-col items-center justify-center lg:flex-row lg:items-start lg:justify-start gap-4">
         <QRCode size={110} value={CHAIN_ADDRESSES[activeChain]} />
         <div className="flex-1 flex flex-col gap-1">
           <Typography variant="caption" className="!text-slate-400">

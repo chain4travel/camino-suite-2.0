@@ -17,19 +17,17 @@ const WalletLayout = ({ children }: { children: React.ReactNode }) => {
     >
       {/* Navigation stays at top */}
       <Navigation />
-      
+
       {/* Main container takes remaining height */}
-      <div className="flex-1 flex flex-col">
+      <div className="flex-1 flex flex-col px-4 lg:px-0">
         <div className="flex-1 container mx-auto max-w-container py-8">
-          <div className="flex gap-4 min-h-full">
+          <div className="flex flex-col lg:flex-row gap-4 min-h-full">
             {/* Left column */}
             <div className="flex-1 flex flex-col gap-4">
               <Header />
-              
+
               {/* Main content area */}
-              <Box className="flex-1">
-                {children}
-              </Box>
+              <Box className="flex-1">{children}</Box>
             </div>
 
             {/* Right sidebar */}

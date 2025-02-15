@@ -80,7 +80,7 @@ const TABLE_HEADERS = [
   { key: 'type', label: 'Type' },
   { key: 'threshold', label: 'Threshold' },
   { key: 'owners', label: 'Owners' },
-  { key: 'balance', label: 'Balance', align: 'right' as const }
+  { key: 'balance', label: 'Balance', align: 'right' as const },
 ];
 
 const BalanceCard = () => {
@@ -91,7 +91,7 @@ const BalanceCard = () => {
     <>
       <div className="flex-1 flex flex-col gap-4">
         {/* Header */}
-        <div className="flex items-center justify-between px-4 pt-3">
+        <div className="flex flex-wrap gap-2 items-center justify-between px-4 pt-3">
           <div className="flex items-center gap-2">
             <Icon
               path={mdiRefresh}
@@ -104,7 +104,7 @@ const BalanceCard = () => {
           </div>
           <div className="flex items-center gap-4">
             <button
-              className="flex items-center gap-1 text-sm text-slate-950 dark:text-slate-100"
+              className="flex items-center gap-2 text-sm text-slate-950 dark:text-slate-100"
               onClick={() => setShowBreakdown(!showBreakdown)}
             >
               <Icon
@@ -126,13 +126,13 @@ const BalanceCard = () => {
         <div className="px-4">
           <Typography
             variant="h1"
-            className="font-extralight text-slate-950 dark:text-slate-100 flex items-baseline"
+            className="!font-extralight text-lg text-slate-950 dark:text-slate-100 flex items-baseline"
           >
             {formatNumber('997193999.03745945').whole}
-            <span className="text-2xl">
-              .{formatNumber('1307.03745945').decimal}
+            <span className="text-sm lg:text-2xl mr-2">
+              .{formatNumber('997193999.03745945').decimal}
             </span>
-            <span className="ml-2">CAM</span>
+            CAM
           </Typography>
         </div>
 

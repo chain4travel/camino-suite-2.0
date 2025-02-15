@@ -47,7 +47,7 @@ const Footer = () => {
               {t('footer.description')}
             </Typography>
             {/* Social Icons */}
-            <div className="flex gap-4 mt-6">
+            <div className="flex flex-wrap gap-4 mt-6">
               {socialMedia?.map(({ name, url, icon }) => (
                 <a
                   href={url}

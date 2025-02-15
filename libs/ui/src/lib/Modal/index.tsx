@@ -40,7 +40,7 @@ export const Modal = ({
     <Transition appear show={isOpen} as={Fragment}>
       <Dialog
         as="div"
-        className="relative z-50"
+        className="relative z-50 overflow-hidden"
         onClose={closeOnOutsideClick ? onClose : () => void 0}
         {...props}
       >
@@ -56,7 +56,7 @@ export const Modal = ({
           <div className="fixed inset-0 bg-slate-900/50 backdrop-blur-sm" />
         </TransitionChild>
 
-        <div className="fixed inset-0 overflow-y-auto">
+        <div className="fixed inset-0 overflow-y-auto overflow-x-hidden">
           <div className="flex items-center justify-center min-h-full p-4">
             <TransitionChild
               as={Fragment}
@@ -68,7 +68,7 @@ export const Modal = ({
               leaveTo="opacity-0 scale-95"
             >
               <DialogPanel
-                className={`relative w-full ${sizeClasses[size]} bg-white dark:bg-slate-950 rounded-lg shadow-xl ${className}`}
+                className={`relative overflow-hidden w-full ${sizeClasses[size]} bg-white dark:bg-slate-950 rounded-lg shadow-xl ${className}`}
               >
                 {/* Header - Only show if there's a title */}
                 {title && (
