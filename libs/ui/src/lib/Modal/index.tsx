@@ -13,7 +13,7 @@ const sizeClasses = {
   md: 'max-w-md',
   lg: 'max-w-lg',
   xl: 'max-w-xl',
-  full: 'max-w-full m-4'
+  full: 'max-w-full max-h-full m-4'
 };
 
 export const Modal = ({
