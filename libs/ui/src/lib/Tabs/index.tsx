@@ -24,12 +24,12 @@ export const Tabs = ({
 
   const containerClasses = clsx(
     'flex gap-1 border-b border-slate-700',
-    fullWidth && 'w-full',
+    !fullWidth && 'w-fit',
     className
   );
 
   const tabClasses = (tab: TabsProps['tabs'][number]) => clsx(
-    'rounded-t-lg transition-colors relative hover:bg-gray-200/50 dark:hover:bg-slate-800/50',
+    'rounded-t-lg transition-colors relative hover:bg-gray-200/50 dark:hover:bg-slate-800/50 whitespace-nowrap',
     tabSizes[size],
     'focus:outline-none',
     tab.disabled && 'opacity-50 cursor-not-allowed',
@@ -65,7 +65,7 @@ export const Tabs = ({
           <Typography
             variant={size === 'sm' ? 'body2' : 'body1'}
             className={clsx(
-              'transition-colors capitalize w-max',
+              'transition-colors capitalize',
               tab.id === activeTab
                 ? isDarkMode
                   ? '!text-white'

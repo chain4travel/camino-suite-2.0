@@ -16,8 +16,8 @@ export const Navigation = () => {
     )?.id || WALLET_NAV_ITEMS[0].id;
 
   return (
-    <div className="w-full border-b border-slate-700 dark:bg-slate-950 bg-white pt-2">
-      <div className="container mx-auto max-w-container">
+    <div className="w-full border-b border-slate-700 dark:bg-slate-950 bg-white px-4 pt-2">
+      <div className="container mx-auto max-w-container overflow-x-auto">
         <Tabs
           tabs={WALLET_NAV_ITEMS}
           activeTab={activeTab}
@@ -27,7 +27,7 @@ export const Navigation = () => {
               router.push(tab.href);
             }
           }}
-          className="border-b-0"
+          className="border-b-0 min-w-fit"
         />
       </div>
     </div>

@@ -121,7 +121,7 @@ const Dropdown = forwardRef<HTMLDivElement, DropdownProps>((props, ref) => {
                           <Icon
                             path={item.endIcon}
                             size={0.9}
-                            className="text-gray-500 dark:text-slate-400"
+                            className="text-gray-500 dark:text-slate-400 self-center"
                           />
                         )}
                       </>

@@ -141,7 +141,7 @@ const Navbar = () => {
     <>
       <nav
         className={clsx(
-          'w-full px-6 py-4 border-b border-slate-700 relative z-50',
+          'w-full px-4 py-4 border-b border-slate-700 relative z-50',
           theme === 'light' ? 'bg-white' : 'bg-slate-950'
         )}
       >
