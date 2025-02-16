@@ -48,3 +48,5 @@ export * from './lib/Icons';
 export * from './lib/Tabs';
 
 export * from './lib/Loader';
+
+export * from './lib/Table';

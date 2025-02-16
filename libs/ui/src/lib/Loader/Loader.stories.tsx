@@ -13,13 +13,6 @@ const meta: Meta<typeof Loader> = {
 export default meta;
 type Story = StoryObj<typeof Loader>;
 
-export const Default: Story = {
-  args: {
-    size: 'md',
-    color: 'primary',
-  },
-};
-
 export const Sizes: Story = {
   render: () => (
     <div className="flex items-center gap-4">
@@ -47,4 +40,4 @@ export const CustomClassName: Story = {
   args: {
     className: 'border-red-500',
   },
-}; 
+};

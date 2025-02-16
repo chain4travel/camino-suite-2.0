@@ -1,5 +1,7 @@
+import { PortfolioView } from '@camino/wallet';
+
 const PortfolioPage = () => {
-  return <div className="w-full text-slate-100">PortfolioPage</div>;
+  return <PortfolioView />;
 };
 
 export default PortfolioPage;
