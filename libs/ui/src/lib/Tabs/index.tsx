@@ -24,7 +24,7 @@ export const Tabs = ({
 
   const containerClasses = clsx(
     'flex gap-1 border-b border-slate-700',
-    !fullWidth && 'w-fit',
+    fullWidth && 'w-full',
     className
   );
 

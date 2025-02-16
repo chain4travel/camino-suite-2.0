@@ -46,3 +46,5 @@ export * from './lib/MnemonicInput/MnemonicInput.types';
 export * from './lib/Icons';
 
 export * from './lib/Tabs';
+
+export * from './lib/Loader';

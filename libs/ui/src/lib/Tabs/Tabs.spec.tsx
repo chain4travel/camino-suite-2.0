@@ -139,9 +139,9 @@ describe('Tabs', () => {
     const container = screen.getByRole('tablist');
     const tabs = container.querySelectorAll('button');
     
-    expect(container).toHaveClass('w-full');
+    expect(container.className).toContain('w-full');
     tabs.forEach(tab => {
-      expect(tab).toHaveClass('flex-1');
+      expect(tab.className).toContain('flex-1');
     });
   });
 
