@@ -1,9 +1,9 @@
 'use client';
 
 import { Box, useTheme } from '@camino/ui';
-import { Navigation } from '../navigation';
-import { Sidebar } from '../sidebar';
-import { Header } from '../header';
+import { Navigation } from './navigation';
+import { Sidebar } from './sidebar';
+import { Header } from './header';
 import clsx from 'clsx';
 
 const WalletLayout = ({ children }: { children: React.ReactNode }) => {
@@ -25,7 +25,6 @@ const WalletLayout = ({ children }: { children: React.ReactNode }) => {
             {/* Left column */}
             <div className="flex-1 flex flex-col gap-4">
               <Header />
-
               {/* Main content area */}
               <Box className="flex-1">{children}</Box>
             </div>
