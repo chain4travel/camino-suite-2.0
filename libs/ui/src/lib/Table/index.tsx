@@ -48,74 +48,74 @@ export const Table = <T extends Record<string, unknown>>({
   return (
     <div
       className={clsx(
-        'w-full overflow-x-auto rounded-lg',
+        'w-full rounded-lg',
         variant === 'default' && 'bg-gray-200/50 dark:bg-slate-800/50',
         className
       )}
     >
-      <table className="w-full">
-        {showHeader && (
-          <thead className={clsx(showDividers && 'border-b border-slate-700')}>
-            <tr
-              className={clsx(
-                layout === 'spaceBetween' && 'flex justify-between'
-              )}
-            >
-              {columns.map((column: Column<T>) => (
-                <th
-                  key={column.key as string}
-                  className={clsx(
-                    padding,
-                    getColumnClass(column),
-                    column.align === 'right' && 'text-right',
-                    column.align === 'center' && 'text-center',
-                    !column.align && 'text-left'
-                  )}
-                >
-                  {column.header && (
-                    <Typography variant="body2" className="!text-slate-400">
-                      {column.header}
-                    </Typography>
-                  )}
-                </th>
-              ))}
-            </tr>
-          </thead>
-        )}
-        <tbody className={clsx(
-          showDividers && 'divide-y divide-slate-700'
-        )}>
-          {data.map((row: T, index: number) => (
-            <tr
-              key={index}
-              onClick={() => onRowClick?.(row)}
-              className={clsx(
-                'transition-colors',
-                layout === 'spaceBetween' && 'flex justify-between',
-                showHover && 'hover:bg-slate-800/50',
-                onRowClick && 'cursor-pointer'
-              )}
-            >
-              {columns.map((column: Column<T>) => (
-                <td
-                  key={column.key as string}
-                  className={clsx(
-                    padding,
-                    getColumnClass(column),
-                    column.align === 'right' && 'text-right',
-                    column.align === 'center' && 'text-center',
-                    !column.align && 'text-left'
-                  )}
-                >
-                  {column.render
-                    ? column.render(row)
-                    : renderCell(row[column.key])}
-                </td>
-              ))}
-            </tr>
-          ))}
-        </tbody>
-      </table>
+      <div className="w-full overflow-x-auto">
+        <table className="w-full min-w-[640px]">
+          {showHeader && (
+            <thead className={clsx(showDividers && 'border-b border-slate-700')}>
+              <tr
+                className={clsx(
+                  layout === 'spaceBetween' && 'flex justify-between'
+                )}
+              >
+                {columns.map((column: Column<T>) => (
+                  <th
+                    key={column.key as string}
+                    className={clsx(
+                      padding,
+                      getColumnClass(column),
+                      column.align === 'right' && 'text-right',
+                      column.align === 'center' && 'text-center',
+                      !column.align && 'text-left'
+                    )}
+                  >
+                    {column.header && (
+                      <Typography variant="body2" className="!text-slate-400">
+                        {column.header}
+                      </Typography>
+                    )}
+                  </th>
+                ))}
+              </tr>
+            </thead>
+          )}
+          <tbody className={clsx(showDividers && 'divide-y divide-slate-700')}>
+            {data.map((row: T, index: number) => (
+              <tr
+                key={index}
+                onClick={() => onRowClick?.(row)}
+                className={clsx(
+                  'transition-colors',
+                  layout === 'spaceBetween' && 'flex justify-between',
+                  showHover && 'hover:bg-gray-300/50 dark:hover:bg-slate-800/50',
+                  onRowClick && 'cursor-pointer'
+                )}
+              >
+                {columns.map((column: Column<T>) => (
+                  <td
+                    key={column.key as string}
+                    className={clsx(
+                      padding,
+                      getColumnClass(column),
+                      column.align === 'right' && 'text-right',
+                      column.align === 'center' && 'text-center',
+                      !column.align && 'text-left'
+                    )}
+                  >
+                    {column.render
+                      ? column.render(row)
+                      : renderCell(row[column.key])}
+                  </td>
+                ))}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
 
       {data.length === 0 && (
         <div className={clsx('text-center', padding)}>

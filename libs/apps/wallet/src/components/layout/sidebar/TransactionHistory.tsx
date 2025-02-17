@@ -1,4 +1,5 @@
 'use client';
+import { Typography } from '@camino/ui';
 import { mdiMagnify } from '@mdi/js';
 import Icon from '@mdi/react';
 interface Transaction {
@@ -42,41 +43,34 @@ export const TransactionHistory = () => {
         {transactions.map((transaction, index) => (
           <div
             key={index}
-            className="flex items-center justify-between p-2 hover:bg-neutral-800/50 rounded-lg cursor-pointer"
+            className="flex items-center justify-between p-2 hover:bg-gray-300/50 dark:hover:bg-slate-800/50 rounded-lg cursor-pointer"
           >
             <div className="flex-1">
               <div className="flex items-center justify-between">
-                <span className="text-sm text-neutral-400">
-                  {transaction.date}
-                </span>
-                <Icon
-                  path={mdiMagnify}
-                  size={0.9}
-                  className="text-neutral-400"
-                />
+                <Typography variant="body2">{transaction.date}</Typography>
+                <Icon path={mdiMagnify} size={0.9} className="text-slate-400" />
               </div>
               <div className="flex items-center justify-between">
                 <div>
-                  <span className="text-sm text-neutral-300">
+                  <Typography variant="body2" className="!text-slate-400">
                     {transaction.type}
-                  </span>
+                  </Typography>
                   {(transaction.to || transaction.from) && (
-                    <div className="text-xs text-neutral-500">
+                    <div className="text-xs text-slate-400">
                       {transaction.to
                         ? `to ${transaction.to}`
                         : `from ${transaction.from}`}
                     </div>
                   )}
                 </div>
-                <span
-                  className={`text-sm ${
+                <Typography variant="body2" className={`text-sm ${
                     transaction.type === 'Receive'
                       ? 'text-green-500'
                       : 'text-red-500'
                   }`}
                 >
                   {transaction.amount} CAM
-                </span>
+                </Typography>
               </div>
             </div>
           </div>

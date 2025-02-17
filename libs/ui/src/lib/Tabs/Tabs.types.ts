@@ -2,7 +2,7 @@ import { ReactNode } from "react";
 
 export interface Tab {
   id: string;
-  label: ReactNode;
+  label: string;
   icon?: string;
   disabled?: boolean;
 }

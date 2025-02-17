@@ -43,6 +43,15 @@
     "confirmKeyPhrase": "Confirm Key Phrase",
     "confirmKeyPhraseDescription": "Please enter the following words from your key phrase to confirm you have saved it."
   },
+  "wallet": {
+    "tokenListURL": "Token List URL",
+    "addToken": "Add Token",
+    "addTokenList": "Add Token List",
+    "tokenContractAddress": "Token Contract Address",
+    "tokenName": "Token Name",
+    "tokenSymbol": "Token Symbol",
+    "decimalsOfPrecision": "Decimals of Precision"
+  },
   "common": {
     "loading": "Loading...",
     "error": "Error",
@@ -61,6 +70,22 @@
     "menu": "Menu",
     "add": "Add",
     "edit": "Edit",
-    "copyright": "Camino Network Foundation. All rights reserved."
+    "copyright": "Camino Network Foundation. All rights reserved.",
+    "assets": "Assets",
+    "name": "Name",
+    "send": "Send",
+    "balance": "Balance",
+    "or": "Or",
+    "thisListMightBeIncompleteAndNotInTheRightOrder": "This list might be incomplete and not in the right order",
+    "transactions": "Transactions",
+    "addCollectible": "Add Collectible",
+    "mint": "Mint",
+    "noCollectibles": "No collectibles found",
+    "noTransactions": "No transactions found",
+    "mintInStudio": "Mint more of this collectible family in the Studio.",
+    "noAssets": "No assets found",
+    "ercNftContractAddress": "ERC-NFT Contract Address",
+    "collectibleName": "Collectible Name",
+    "collectibleSymbol": "Collectible Symbol"
   }
 }
