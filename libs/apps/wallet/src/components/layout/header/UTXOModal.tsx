@@ -1,6 +1,5 @@
-import { Modal, CamBtn } from '@camino/ui';
+import { Modal, Table, Tabs, Typography } from '@camino/ui';
 import { useState } from 'react';
-import clsx from 'clsx';
 import { UTXO } from './header.types';
 
 const CHAIN_UTXOS: Record<'X' | 'P', UTXO[]> = {
@@ -31,12 +30,56 @@ const CHAIN_UTXOS: Record<'X' | 'P', UTXO[]> = {
   ],
 };
 
-const TABLE_HEADERS = [
-  { key: 'id', label: 'ID' },
-  { key: 'type', label: 'Type' },
-  { key: 'threshold', label: 'Threshold' },
-  { key: 'owners', label: 'Owners' },
-  { key: 'balance', label: 'Balance', align: 'right' as const },
+const TABS = [
+  { id: 'X', label: 'X Chain' },
+  { id: 'P', label: 'P Chain' },
+];
+
+const columns = [
+  {
+    key: 'id',
+    header: 'ID',
+    render: (utxo: UTXO) => (
+      <Typography variant="body2" className="font-mono break-all">
+        {utxo.id}
+      </Typography>
+    ),
+  },
+  {
+    key: 'type',
+    header: 'Type',
+    render: (utxo: UTXO) => (
+      <Typography variant="body2" className="whitespace-nowrap">
+        {utxo.type}
+      </Typography>
+    ),
+  },
+  {
+    key: 'threshold',
+    header: 'Threshold',
+    render: (utxo: UTXO) => (
+      <Typography variant="body2">{utxo.threshold}</Typography>
+    ),
+  },
+  {
+    key: 'owners',
+    header: 'Owners',
+    render: (utxo: UTXO) => (
+      <Typography variant="body2" className="font-mono break-all">
+        {utxo.owners}
+      </Typography>
+    ),
+  },
+  {
+    key: 'balance',
+    header: 'Balance',
+    align: 'right' as const,
+    render: (utxo: UTXO) => (
+      <Typography variant="body2" className="whitespace-nowrap">
+        {utxo.balance}
+      </Typography>
+    ),
+  },
 ];
 
 interface UTXOModalProps {
@@ -56,62 +99,21 @@ export const UTXOModal = ({ isOpen, onClose }: UTXOModalProps) => {
       className="!h-[calc(100vh-150px)] !w-full md:!w-fit max-w-[95vw]"
     >
       <div className="flex flex-col h-full">
-        <div className="flex gap-2 mb-4 overflow-x-auto">
-          <CamBtn
-            variant={activeChain === 'X' ? 'primary' : 'secondary'}
-            onClick={() => setActiveChain('X')}
-          >
-            X Chain
-          </CamBtn>
-          <CamBtn
-            variant={activeChain === 'P' ? 'primary' : 'secondary'}
-            onClick={() => setActiveChain('P')}
-          >
-            P Chain
-          </CamBtn>
-        </div>
+        <Tabs
+          tabs={TABS}
+          activeTab={activeChain}
+          onChange={setActiveChain}
+          className="mb-4"
+        />
 
         <div className="flex-1 overflow-auto">
-          <div className="min-w-[800px]">
-            <table className="w-full">
-              <thead>
-                <tr className="text-left border-b border-slate-700">
-                  {TABLE_HEADERS.map((header) => (
-                    <th
-                      key={header.key}
-                      className={clsx(
-                        'py-2 px-4 text-slate-400 font-inter whitespace-nowrap',
-                        header.align === 'right' && 'text-right'
-                      )}
-                    >
-                      {header.label}
-                    </th>
-                  ))}
-                </tr>
-              </thead>
-              <tbody>
-                {CHAIN_UTXOS[activeChain].map((utxo) => (
-                  <tr key={utxo.id} className="border-b border-slate-700/50">
-                    <td className="py-2 px-4 text-sm font-inter break-all">
-                      {utxo.id}
-                    </td>
-                    <td className="py-2 px-4 font-inter whitespace-nowrap">
-                      {utxo.type}
-                    </td>
-                    <td className="py-2 px-4 font-inter whitespace-nowrap">
-                      {utxo.threshold}
-                    </td>
-                    <td className="py-2 px-4 text-sm font-inter break-all">
-                      {utxo.owners}
-                    </td>
-                    <td className="py-2 px-4 text-right whitespace-nowrap">
-                      {utxo.balance}
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+          <Table
+            columns={columns}
+            data={CHAIN_UTXOS[activeChain]}
+            className="min-w-[800px]"
+            size="sm"
+            showDividers
+          />
         </div>
       </div>
     </Modal>
