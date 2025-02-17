@@ -70,7 +70,7 @@ export const TokensTab = ({ assets }: TokensTabProps) => {
   ];
 
   return (
-    <div className="w-full h-full flex flex-col items-center justify-start gap-4 container mx-auto max-w-container py-6">
+    <div className="w-full h-full flex flex-col items-center justify-start gap-4 container mx-auto max-w-container">
       <Table<Asset>
         columns={columns}
         data={assets}

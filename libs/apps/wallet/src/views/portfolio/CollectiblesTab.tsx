@@ -52,7 +52,9 @@ const MOCK_COLLECTIBLES: Collectible[] = [
 export const CollectiblesTab = () => {
   const { t } = useTranslation();
   const router = useRouter();
-  const [selectedImage, setSelectedImage] = useState<string | null>(null);
+  const [selectedImage, setSelectedImage] = useState<string | undefined>(
+    undefined
+  );
   const [showAddCollectible, setShowAddCollectible] = useState(false);
 
   const handleTransfer = (txId: string) => {
@@ -100,10 +102,7 @@ export const CollectiblesTab = () => {
                       )}
                     </div>
                     <div className="px-3 py-2">
-                      <Typography
-                        variant="body2"
-                        className="font-medium capitalize"
-                      >
+                      <Typography variant="body2" className="capitalize">
                         {group.name}
                       </Typography>
                     </div>
@@ -201,7 +200,7 @@ export const CollectiblesTab = () => {
             <Input placeholder="-" className="w-full" disabled />
           </div>
           <CamBtn variant="primary" className="w-full">
-            {t('common.addCollectible')}
+            ADD COLLECTIBLE
           </CamBtn>
         </div>
       </Modal>

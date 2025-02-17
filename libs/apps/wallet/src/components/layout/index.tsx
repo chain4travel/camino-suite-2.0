@@ -12,7 +12,7 @@ const WalletLayout = ({ children }: { children: React.ReactNode }) => {
     <div
       className={clsx(
         'flex flex-col min-h-[70vh] w-full',
-        theme === 'light' ? 'bg-white text-black' : 'bg-slate-950'
+        theme === 'light' ? 'bg-gray-100' : 'bg-slate-950'
       )}
     >
       {/* Navigation stays at top */}
@@ -26,7 +26,7 @@ const WalletLayout = ({ children }: { children: React.ReactNode }) => {
             <div className="flex-1 flex flex-col gap-4">
               <Header />
               {/* Main content area */}
-              <Box className="flex-1">{children}</Box>
+              <Box className="flex-1 bg-white dark:bg-slate-950">{children}</Box>
             </div>
 
             {/* Right sidebar */}

@@ -34,7 +34,7 @@ export const AddressCard = () => {
   };
   return (
     <div className="flex flex-col gap-4 w-full lg:w-1/3 h-full items-start pt-4">
-      <div className="mx-4 flex rounded-xl p-4 bg-gray-200/50 dark:bg-slate-800/50">
+      <div className="mx-4 flex rounded-lg p-4 bg-gray-200/50 dark:bg-slate-800/50">
         <Typography variant="body2" className="text-center">
           {CHAIN_DESCRIPTIONS[activeChain]}
         </Typography>
