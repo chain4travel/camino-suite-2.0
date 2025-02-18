@@ -5,3 +5,4 @@ export { default as WalletLayout } from './components/layout';
 
 // views
 export { PortfolioView } from './views/portfolio';
+export { SendView } from './views/send';

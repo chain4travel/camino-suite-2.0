@@ -1,5 +1,7 @@
+import { SendView } from '@camino/wallet';
+
 const PortfolioPage = () => {
-  return <div className="w-full text-slate-100">Send Page</div>;
+  return <SendView />;
 };
 
 export default PortfolioPage;

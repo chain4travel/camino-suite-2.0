@@ -2,8 +2,8 @@
 import { Tabs, Typography, Input } from '@camino/ui';
 import { mdiMagnify } from '@mdi/js';
 import { useState } from 'react';
-import { TokensTab } from './TokensTab';
-import { CollectiblesTab } from './CollectiblesTab';
+import { TokensTab } from '../../components/portfolio/TokensTab';
+import { CollectiblesTab } from '../../components/portfolio/CollectiblesTab';
 import { Asset } from './types';
 import { useTranslation } from 'react-i18next';
 

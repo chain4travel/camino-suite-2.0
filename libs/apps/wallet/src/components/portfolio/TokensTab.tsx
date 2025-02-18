@@ -1,6 +1,6 @@
 import { CamBtn, Table, Typography, Modal, Input } from '@camino/ui';
 import Image from 'next/image';
-import { Asset } from './types';
+import { Asset } from '../../views/portfolio/types';
 import { mdiPlus, mdiSwapHorizontal, mdiClose } from '@mdi/js';
 import Icon from '@mdi/react';
 import { useState } from 'react';
@@ -70,7 +70,7 @@ export const TokensTab = ({ assets }: TokensTabProps) => {
   ];
 
   return (
-    <div className="w-full h-full flex flex-col items-center justify-start gap-4 container mx-auto max-w-container">
+    <div className="w-full h-full border-t border-slate-700 rounded-lg flex flex-col items-center justify-start gap-4 container mx-auto max-w-container">
       <Table<Asset>
         columns={columns}
         data={assets}

@@ -3,7 +3,7 @@ import { mdiFullscreen, mdiShare } from '@mdi/js';
 import { useTranslation } from 'react-i18next';
 import Icon from '@mdi/react';
 import Image from 'next/image';
-import { Collectible } from './types';
+import { Collectible } from '../../views/portfolio/types';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 
@@ -62,7 +62,7 @@ export const CollectiblesTab = () => {
   };
 
   return (
-    <div className="w-full flex flex-col gap-4">
+    <div className="w-full flex flex-col gap-4 border-t border-slate-700 rounded-lg">
       <div className="w-full bg-gray-200/50 dark:bg-slate-800/50 rounded-lg">
         {MOCK_COLLECTIBLES.length > 0 ? (
           MOCK_COLLECTIBLES.map((collectible) => (
@@ -85,7 +85,7 @@ export const CollectiblesTab = () => {
                 </Typography>
               </div>
 
-              <div className="flex flex-wrap  justify-center lg:justify-start gap-4 mt-4 px-4">
+              <div className="flex flex-wrap justify-center lg:justify-start gap-4 mt-4 px-4">
                 {collectible.mintedGroups.map((group) => (
                   <Box
                     key={group.id}
@@ -200,7 +200,7 @@ export const CollectiblesTab = () => {
             <Input placeholder="-" className="w-full" disabled />
           </div>
           <CamBtn variant="primary" className="w-full">
-            ADD COLLECTIBLE
+            {t('common.addCollectible')}
           </CamBtn>
         </div>
       </Modal>
@@ -208,7 +208,7 @@ export const CollectiblesTab = () => {
       {/* Image Preview Modal */}
       <Modal
         isOpen={!!selectedImage}
-        onClose={() => setSelectedImage(null)}
+        onClose={() => setSelectedImage(undefined)}
         title="NFT Preview"
         size="xl"
       >
