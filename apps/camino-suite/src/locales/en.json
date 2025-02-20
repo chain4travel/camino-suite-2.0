@@ -50,7 +50,17 @@
     "tokenContractAddress": "Token Contract Address",
     "tokenName": "Token Name",
     "tokenSymbol": "Token Symbol",
-    "decimalsOfPrecision": "Decimals of Precision"
+    "decimalsOfPrecision": "Decimals of Precision",
+    "crossChain": "Cross Chain",
+    "crossChainDescription": "Transfer assets between Camino chains",
+    "validator": {
+      "setupRequirements": "In order to set up your validator node you have to:",
+      "kyc_verification": "KYC or KYB verified",
+      "consortium_description": "Accepted to be a member of the consortium",
+      "amount_description": "{{amount}} CAM are available on your P-chain address",
+      "address_description": "Consortium member address needs to be linked to your NodeID",
+      "rewards_description": "You are currently not eligible for any validation rewards."
+    }
   },
   "common": {
     "loading": "Loading...",
@@ -110,6 +120,9 @@
     "airdropSuccess": "Airdrop Success",
     "airdropFailed": "Airdrop Failed",
     "airdropPending": "Airdrop Pending",
-    "airdropCompleted": "Airdrop Completed"
+    "airdropCompleted": "Airdrop Completed",
+    "validator": "Validator",
+    "node": "Node",
+    "rewards": "Rewards"
   }
 }
