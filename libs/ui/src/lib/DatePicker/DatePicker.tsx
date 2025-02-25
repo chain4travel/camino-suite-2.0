@@ -29,6 +29,7 @@ export interface DatePickerProps {
   variant?: 'single' | 'double';
   maxEndDate?: Date;
   minStartDate?: Date;
+  showMaxOption?: boolean;
 }
 
 export const DatePicker = ({
@@ -51,6 +52,7 @@ export const DatePicker = ({
   variant = 'single',
   maxEndDate,
   minStartDate,
+  showMaxOption,
 }: DatePickerProps) => {
   const { t } = useTranslation();
   const [isOpen, setIsOpen] = useState(false);
@@ -161,6 +163,22 @@ export const DatePicker = ({
     setIsOpen(false);
   };
 
+  const handleMaxClick = () => {
+    if (maxEndDate) {
+      if (showRange) {
+        setRangeStart(maxEndDate);
+        setRangeEnd(maxEndDate);
+        onRangeChange?.(maxEndDate, maxEndDate);
+      } else {
+        setSelectedDate(maxEndDate);
+        onChange?.(maxEndDate);
+      }
+      if (!showApply) {
+        setIsOpen(false);
+      }
+    }
+  };
+
   return (
     <div className={`relative ${className}`} data-testid="datepicker">
       {label && (
@@ -176,18 +194,32 @@ export const DatePicker = ({
       <div
         role="button"
         className={clsx(
-          'w-full bg-white dark:bg-gray-900 border rounded-xl px-2 lg:px-4 py-2 cursor-pointer',
+          'w-full bg-white dark:bg-gray-900 border rounded-xl px-2 lg:px-4 py-2',
           'border-gray-200 dark:border-gray-700',
           'focus:outline-none focus:ring-2 focus:ring-blue-500/20 dark:focus:ring-blue-500/20',
           'focus:border-blue-500 dark:focus:border-blue-500',
           {
-            'opacity-50 cursor-not-allowed': disabled
+            'opacity-50 cursor-not-allowed': disabled,
+            'cursor-pointer': !disabled
           }
         )}
         onClick={() => !disabled && setIsOpen(!isOpen)}
         data-testid="datepicker-input"
       >
-        <Typography>{displayValue}</Typography>
+        <div className="flex justify-between items-center">
+          <Typography>{displayValue}</Typography>
+          {showMaxOption && (
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                handleMaxClick();
+              }}
+              className="text-blue-500 hover:text-blue-600 dark:text-blue-400 dark:hover:text-blue-300 font-medium"
+            >
+              Max
+            </button>
+          )}
+        </div>
       </div>
 
       {isOpen && !disabled && (

@@ -156,4 +156,13 @@ export const FullFeatured: Story = {
     startDate: addDays(today, 7),
     endDate: addDays(today, 14),
   },
+};
+
+export const WithMaxOption: Story = {
+  args: {
+    label: 'Validation End Date',
+    description: 'Your CAM tokens will be bonded until this date.',
+    maxEndDate: addDays(today, 30),
+    showMaxOption: true,
+  },
 }; 
