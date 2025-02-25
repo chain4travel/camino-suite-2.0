@@ -1,4 +1,4 @@
-import { Typography, Input, Alert, CamBtn } from '@camino/ui';
+import { Typography, Input, Alert, CamBtn, Loader } from '@camino/ui';
 import {
   mdiCheckCircle,
   mdiCloseCircle,
@@ -8,7 +8,9 @@ import {
 import Icon from '@mdi/react';
 import { useTranslation } from 'react-i18next';
 import { useState } from 'react';
-import { DatePicker } from '@camino/ui';
+import { ValidatorRegistration } from './ValidatorRegistration';
+import { ValidatorConfirmation } from './ValidatorConfirmation';
+import { ValidatorStatus } from './ValidatorStatus';
 
 interface ValidatorRequirement {
   id: string;
@@ -22,6 +24,9 @@ export const NodeTab = () => {
   const [nodePrivateKey, setNodePrivateKey] = useState('');
   const [showRegistration, setShowRegistration] = useState(false);
   const [showConfirmation, setShowConfirmation] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isValidatorActive, setIsValidatorActive] = useState(false);
+  const [selectedEndDate, setSelectedEndDate] = useState<Date | null>(null);
 
   const VALIDATOR_REQUIREMENTS: ValidatorRequirement[] = [
     {
@@ -65,110 +70,48 @@ export const NodeTab = () => {
     }
   };
 
+  const handleSubmit = () => {
+    setIsSubmitting(true);
+    setTimeout(() => {
+      setIsSubmitting(false);
+      setIsValidatorActive(true);
+    }, 5000);
+  };
+
+  if (isValidatorActive) {
+    return <ValidatorStatus />;
+  }
+
+  if (isSubmitting) {
+    return (
+      <div className="bg-gray-200/50 dark:bg-slate-800/50 flex flex-col items-center justify-center gap-6 rounded-lg p-6 border-t border-slate-700 min-h-[400px]">
+        <Loader size="lg" />
+        <Typography>{t('wallet.validator.waitingTransaction')}</Typography>
+        <Typography variant="caption" className="text-slate-400">
+          {t('wallet.validator.transactionCommitted')}
+        </Typography>
+      </div>
+    );
+  }
+
   if (showConfirmation) {
     return (
-      <div className="bg-gray-200/50 dark:bg-slate-800/50 flex flex-col gap-6 rounded-lg p-6 border-t border-slate-700">
-        <Input
-          value="NodeID-D1LbWvUf9iaeEyUbTYYtYq4b7GaYR5tnJ"
-          label={t('wallet.validator.nodeId')}
-          disabled
-        />
-
-        <Input
-          value="2 000 CAM"
-          label={t('wallet.validator.bondedAmount')}
-          disabled
-        />
-
-        <div className="flex flex-col gap-2">
-          <Typography variant="h6">
-            {t('wallet.validator.validationPeriodStart')}
-          </Typography>
-          <Typography variant="body2" className="!text-slate-400 mb-2">
-            {t('wallet.validator.validationStartDescription')}
-          </Typography>
-        </div>
-
-        <Input
-          value="2/20/2025, 6:28:00 PM"
-          label={t('wallet.validator.validationPeriodEnd')}
-          disabled
-        />
-
-        <div className="flex items-center justify-between mt-4">
-          <div className="flex flex-col gap-2">
-            <Typography variant="caption" className="!text-slate-400 block">
-              {t('wallet.validator.duration')}
-            </Typography>
-            <Typography variant="h6">0 days 0 hours 5 minutes</Typography>
-          </div>
-
-          <div className="flex gap-2">
-            <CamBtn
-              variant="secondary"
-              onClick={() => setShowRegistration(false)}
-            >
-              {t('common.cancel')}
-            </CamBtn>
-            <CamBtn variant="primary" onClick={() => setShowConfirmation(true)}>
-              {t('common.submit')}
-            </CamBtn>
-          </div>
-        </div>
-      </div>
+      <ValidatorConfirmation
+        onCancel={() => setShowConfirmation(false)}
+        onSubmit={handleSubmit}
+        endDate={selectedEndDate!}
+      />
     );
   }
 
   if (showRegistration) {
     return (
-      <div className="bg-gray-200/50 dark:bg-slate-800/50 flex flex-col gap-6 rounded-lg p-6 border-t border-slate-700">
-        <Input
-          value="NodeID-D1LbWvUf9iaeEyUbTYYtYq4b7GaYR5tnJ"
-          label={t('wallet.validator.nodeId')}
-          disabled
-        />
-
-        <DatePicker
-          label={t('wallet.validator.validationEndDate')}
-          description={t('wallet.validator.bondingDescription')}
-          maxEndDate={new Date('2025-02-20T18:28:00')}
-          showMaxOption
-          onChange={(date) => {
-            // Handle date change
-            console.log(date);
-          }}
-          placeholder={t('wallet.validator.maxDate')}
-        />
-
-        <div>
-          <Typography variant="h6" className="mb-4">
-            {t('wallet.validator.bondedAmount')}
-          </Typography>
-          <Typography variant="caption" className="!text-slate-400 mb-2 block">
-            {t('wallet.validator.bondedAmountDescription', { amount: '2 000' })}
-          </Typography>
-
-          <div className="flex gap-2">
-            <Input value="2000" disabled placeholder="MAX" className="flex-1" />
-            <div className="rounded-lg px-4 py-2 flex items-center">
-              <Typography>CAM</Typography>
-            </div>
-          </div>
-        </div>
-
-        <div className="flex items-center justify-between mt-4">
-          <div>
-            <Typography variant="caption" className="!text-slate-400 block">
-              {t('wallet.validator.duration')}
-            </Typography>
-            <Typography variant="h6">0 days 0 hours 5 minutes</Typography>
-          </div>
-
-          <CamBtn variant="primary" onClick={() => setShowConfirmation(true)}>
-            {t('wallet.validator.confirm')}
-          </CamBtn>
-        </div>
-      </div>
+      <ValidatorRegistration
+        onConfirm={(date) => {
+          setSelectedEndDate(date);
+          setShowConfirmation(true);
+        }}
+      />
     );
   }
 
@@ -213,6 +156,7 @@ export const NodeTab = () => {
             onChange={(e) => setNodePrivateKey(e.target.value)}
             label={t('wallet.validator.nodePrivateKey')}
           />
+
           <Alert
             variant="warning"
             description={t('wallet.validator.registrationFeeDescription')}

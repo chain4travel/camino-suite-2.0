@@ -59,7 +59,24 @@
       "consortium_description": "Accepted to be a member of the consortium",
       "amount_description": "{{amount}} CAM are available on your P-chain address",
       "address_description": "Consortium member address needs to be linked to your NodeID",
-      "rewards_description": "You are currently not eligible for any validation rewards."
+      "rewards_description": "You are currently not eligible for any validation rewards.",
+      "validationPeriodStart": "Validation Period Start",
+      "validationPeriodEnd": "Validation Period End",
+      "remainingValidationPeriod": "Remaining Validation Period",
+      "uptime": "Uptime",
+      "bondedAmount": "Bonded Amount",
+      "nodeId": "Node ID",
+      "txId": "TX ID",
+      "duration": {
+        "label": "Duration",
+        "empty": "No duration selected",
+        "days": "{{count}} day",
+        "days_plural": "{{count}} days",
+        "hours": "{{count}} hour",
+        "hours_plural": "{{count}} hours",
+        "minutes": "{{count}} minute",
+        "minutes_plural": "{{count}} minutes"
+      }
     }
   },
   "common": {
