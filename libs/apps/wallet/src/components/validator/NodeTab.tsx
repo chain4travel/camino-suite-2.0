@@ -1,5 +1,10 @@
 import { Typography, Input, Alert, CamBtn } from '@camino/ui';
-import { mdiCheckCircle, mdiCloseCircle, mdiOpenInNew, mdiInformation } from '@mdi/js';
+import {
+  mdiCheckCircle,
+  mdiCloseCircle,
+  mdiOpenInNew,
+  mdiInformation,
+} from '@mdi/js';
 import Icon from '@mdi/react';
 import { useTranslation } from 'react-i18next';
 import { useState } from 'react';
@@ -63,28 +68,20 @@ export const NodeTab = () => {
   if (showConfirmation) {
     return (
       <div className="bg-gray-200/50 dark:bg-slate-800/50 flex flex-col gap-6 rounded-lg p-6 border-t border-slate-700">
-        <div>
-          <Typography variant="h6" className="mb-4">
-            {t('wallet.validator.nodeId')}
-          </Typography>
-          <Input
-            value="NodeID-D1LbWvUf9iaeEyUbTYYtYq4b7GaYR5tnJ"
-            disabled
-          />
-        </div>
+        <Input
+          value="NodeID-D1LbWvUf9iaeEyUbTYYtYq4b7GaYR5tnJ"
+          label={t('wallet.validator.nodeId')}
+          disabled
+        />
 
-        <div>
-          <Typography variant="h6" className="mb-4">
-            {t('wallet.validator.bondedAmount')}
-          </Typography>
-          <Input
-            value="2 000 CAM"
-            disabled
-          />
-        </div>
+        <Input
+          value="2 000 CAM"
+          label={t('wallet.validator.bondedAmount')}
+          disabled
+        />
 
-        <div>
-          <Typography variant="h6" className="mb-4">
+        <div className="flex flex-col gap-2">
+          <Typography variant="h6">
             {t('wallet.validator.validationPeriodStart')}
           </Typography>
           <Typography variant="body2" className="!text-slate-400 mb-2">
@@ -92,28 +89,25 @@ export const NodeTab = () => {
           </Typography>
         </div>
 
-        <div>
-          <Typography variant="h6" className="mb-4">
-            {t('wallet.validator.validationPeriodEnd')}
-          </Typography>
-          <Input
-            value="2/20/2025, 6:28:00 PM"
-            disabled
-          />
-        </div>
+        <Input
+          value="2/20/2025, 6:28:00 PM"
+          label={t('wallet.validator.validationPeriodEnd')}
+          disabled
+        />
 
         <div className="flex items-center justify-between mt-4">
-          <div>
+          <div className="flex flex-col gap-2">
             <Typography variant="caption" className="!text-slate-400 block">
               {t('wallet.validator.duration')}
             </Typography>
-            <Typography variant="h6">
-              0 days 0 hours 5 minutes
-            </Typography>
+            <Typography variant="h6">0 days 0 hours 5 minutes</Typography>
           </div>
 
           <div className="flex gap-2">
-            <CamBtn variant="secondary" onClick={() => setShowRegistration(false)}>
+            <CamBtn
+              variant="secondary"
+              onClick={() => setShowRegistration(false)}
+            >
               {t('common.cancel')}
             </CamBtn>
             <CamBtn variant="primary" onClick={() => setShowConfirmation(true)}>
@@ -128,26 +122,23 @@ export const NodeTab = () => {
   if (showRegistration) {
     return (
       <div className="bg-gray-200/50 dark:bg-slate-800/50 flex flex-col gap-6 rounded-lg p-6 border-t border-slate-700">
-        <div>
-          <Typography variant="h6" className="mb-4">
-            {t('wallet.validator.nodeId')}
-          </Typography>
+        <Input
+          value="NodeID-D1LbWvUf9iaeEyUbTYYtYq4b7GaYR5tnJ"
+          label={t('wallet.validator.nodeId')}
+          disabled
+        />
 
-          <Input
-            value="NodeID-D1LbWvUf9iaeEyUbTYYtYq4b7GaYR5tnJ"
-            disabled
-          />
-        </div>
-
-        <div>
-          <DatePicker
-            label={t('wallet.validator.validationEndDate')}
-            description={t('wallet.validator.bondingDescription')}
-            value={new Date('2025-02-20T18:28:00')}
-            disabled
-            placeholder="Max"
-          />
-        </div>
+        <DatePicker
+          label={t('wallet.validator.validationEndDate')}
+          description={t('wallet.validator.bondingDescription')}
+          maxEndDate={new Date('2025-02-20T18:28:00')}
+          showMaxOption
+          onChange={(date) => {
+            // Handle date change
+            console.log(date);
+          }}
+          placeholder={t('wallet.validator.maxDate')}
+        />
 
         <div>
           <Typography variant="h6" className="mb-4">
@@ -158,12 +149,7 @@ export const NodeTab = () => {
           </Typography>
 
           <div className="flex gap-2">
-            <Input
-              value="2000"
-              disabled
-              placeholder="MAX"
-              className="flex-1"
-            />
+            <Input value="2000" disabled placeholder="MAX" className="flex-1" />
             <div className="rounded-lg px-4 py-2 flex items-center">
               <Typography>CAM</Typography>
             </div>
@@ -175,9 +161,7 @@ export const NodeTab = () => {
             <Typography variant="caption" className="!text-slate-400 block">
               {t('wallet.validator.duration')}
             </Typography>
-            <Typography variant="h6">
-              0 days 0 hours 5 minutes
-            </Typography>
+            <Typography variant="h6">0 days 0 hours 5 minutes</Typography>
           </div>
 
           <CamBtn variant="primary" onClick={() => setShowConfirmation(true)}>
@@ -217,23 +201,17 @@ export const NodeTab = () => {
 
       {allRequirementsCompleted && (
         <>
-          <Typography variant="h6" className="!mt-8 !mb-4">
-            {t('wallet.validator.nodeAddress')}
-          </Typography>
-
           <Input
             value="P-kopernikus1v8weslt4jr4n0m0jseupz9frk9rt83u6x9rsyj"
             disabled
+            label={t('wallet.validator.nodeAddress')}
           />
-
-          <Typography variant="h6" className="!mt-8 !mb-4">
-            {t('wallet.validator.nodePrivateKey')}
-          </Typography>
 
           <Input
             value={nodePrivateKey}
             placeholder={t('wallet.validator.nodePrivateKeyPlaceholder')}
             onChange={(e) => setNodePrivateKey(e.target.value)}
+            label={t('wallet.validator.nodePrivateKey')}
           />
           <Alert
             variant="warning"
@@ -252,4 +230,4 @@ export const NodeTab = () => {
       )}
     </div>
   );
-}; 
+};
