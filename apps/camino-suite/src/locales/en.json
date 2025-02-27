@@ -141,5 +141,13 @@
     "validator": "Validator",
     "node": "Node",
     "rewards": "Rewards"
+  },
+  "earn": {
+    "savingPools": "SAVING POOLS",
+    "myRewards": "MY REWARDS",
+    "availableForDeposit": "Available for Deposit:",
+    "depositNow": "Deposit Now",
+    "title": "Earn",
+    "claimRewards": "Claim Rewards"
   }
 }
