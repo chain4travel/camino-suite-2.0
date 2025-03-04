@@ -6,7 +6,7 @@ interface ExportInfoProps {
 }
 
 export const ExportInfo = ({ amount, chain }: ExportInfoProps) => (
-  <div className="flex flex-col lg:flex-row justify-between items-start lg:items-end gap-4 lg:gap-8 w-full lg:w-auto">
+  <div className="w-full lg:w-1/3 flex justify-between items-end gap-8 self-end">
     <Typography variant="caption" className="!text-slate-400">
       Export ({chain})
     </Typography>

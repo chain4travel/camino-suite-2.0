@@ -77,7 +77,20 @@
         "minutes": "{{count}} minute",
         "minutes_plural": "{{count}} minutes"
       }
-    }
+    },
+    "exportRewardsModal": {
+      "description": "Export your validation rewards to a CSV file.",
+      "validationRewards": "Only rewarded transactions will be shown.",
+      "download": "Download CSV File"
+    },
+    "exportTransfersModal": {
+      "description": "Export your native asset transfers to a CSV file.",
+      "download": "Download CSV File"
+    },
+    "exportCsv": "Export CSV",
+    "exportRewards": "Export Rewards",
+    "exportTransfers": "Export Transfers",
+    "transactionsFound": "{{count}} transactions found"
   },
   "common": {
     "loading": "Loading...",

@@ -7,6 +7,8 @@ import { ActivityList } from './ActivityList';
 import { format, addMonths, subMonths, isSameMonth } from 'date-fns';
 import Icon from '@mdi/react';
 import { mdiChevronLeft, mdiChevronRight, mdiRefresh } from '@mdi/js';
+import { ExportRewardsModal } from './modals/ExportRewardsModal';
+import { ExportTransfersModal } from './modals/ExportTransfersModal';
 
 type ActivityType = 'all' | 'transfer' | 'export_import' | 'validation';
 
@@ -14,6 +16,8 @@ export const ActivityView = () => {
   const { t } = useTranslation();
   const [selectedType, setSelectedType] = useState<ActivityType>('all');
   const [currentMonth, setCurrentMonth] = useState(new Date());
+  const [isExportRewardsOpen, setIsExportRewardsOpen] = useState(false);
+  const [isExportTransfersOpen, setIsExportTransfersOpen] = useState(false);
 
   const handlePreviousMonth = () => {
     setCurrentMonth((prev) => subMonths(prev, 1));
@@ -30,11 +34,23 @@ export const ActivityView = () => {
       <div className="flex flex-col gap-6">
         <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4">
           <Typography variant="h2" className="font-light">
-            Export CSV File (BETA)
+            {t('wallet.exportCsv')}
           </Typography>
           <div className="flex flex-col sm:flex-row w-full lg:w-auto gap-2">
-            <CamBtn variant="primary" className="w-full sm:w-auto">Export Rewards</CamBtn>
-            <CamBtn variant="primary" className="w-full sm:w-auto">Export Native asset Transfers</CamBtn>
+            <CamBtn 
+              variant="primary" 
+              className="w-full sm:w-auto"
+              onClick={() => setIsExportRewardsOpen(true)}
+            >
+              {t('wallet.exportRewards')}
+            </CamBtn>
+            <CamBtn 
+              variant="primary" 
+              className="w-full sm:w-auto"
+              onClick={() => setIsExportTransfersOpen(true)}
+            >
+              {t('wallet.exportTransfers')}
+            </CamBtn>
           </div>
         </div>
 
@@ -43,7 +59,7 @@ export const ActivityView = () => {
           onTypeChange={setSelectedType}
         />
 
-        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+        <div className="flex flex-wrap items-start sm:items-center justify-between gap-4">
           <div className="flex gap-2 items-center">
             <Typography variant="h4">
               {format(currentMonth, 'MMMM yyyy')}
@@ -59,7 +75,7 @@ export const ActivityView = () => {
           </div>
           <div className="flex items-center gap-2">
             <Typography variant="body2" className="!text-slate-400">
-              21 transactions found
+              {t('wallet.transactionsFound', { count: 21 })}
             </Typography>
             <Icon
               path={mdiRefresh}
@@ -73,6 +89,16 @@ export const ActivityView = () => {
           <ActivityList type={selectedType} currentMonth={currentMonth} />
         </div>
       </div>
+
+      <ExportRewardsModal 
+        isOpen={isExportRewardsOpen}
+        onClose={() => setIsExportRewardsOpen(false)}
+      />
+      
+      <ExportTransfersModal
+        isOpen={isExportTransfersOpen}
+        onClose={() => setIsExportTransfersOpen(false)}
+      />
     </Container>
   );
 };

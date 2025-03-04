@@ -20,11 +20,11 @@ export const ActivityCard = ({ activity }: ActivityCardProps) => {
       }}
     >
       <div className="flex items-start gap-4">
-        <button className="mt-1">
+        <button className="mt-1 hidden lg:block">
           <Icon path={mdiMagnify} size={0.8} className="text-slate-400" />
         </button>
 
-        <div className="flex-1 flex flex-col gap-1">
+        <div className="flex-1 flex justify-between lg:flex-col gap-1">
           <Typography variant="caption" className="!text-slate-400">
             Date
           </Typography>
