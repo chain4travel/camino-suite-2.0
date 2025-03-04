@@ -28,7 +28,7 @@ export const SavingPoolsTab = () => {
           noRewardDuration="No"
         />
         <PoolCard
-          title="Test Deposit"
+          title="Test Deposit I"
           poolSize="0%(1 000CAM)"
           startDate={new Date('2025-02-20T15:55:19')}
           endDate={new Date('2025-02-27T14:55:19')}
@@ -40,10 +40,10 @@ export const SavingPoolsTab = () => {
           noRewardDuration="No"
         />
         <PoolCard
-          title="Test Deposit"
+          title="Test Deposit II"
           poolSize="0%(1 000CAM)"
-          startDate={new Date('2025-02-20T15:55:19')}
-          endDate={new Date('2025-02-27T14:55:19')}
+          startDate={new Date('2025-03-20T15:55:19')}
+          endDate={new Date('2025-03-27T14:55:19')}
           minDuration="1 Min 26 Secs"
           maxDuration="2 Days"
           minDeposit="0.001 CAM"
@@ -52,7 +52,7 @@ export const SavingPoolsTab = () => {
           noRewardDuration="No"
         />
         <PoolCard
-          title="Test Deposit"
+          title="Test Deposit III"
           poolSize="0%(1 000CAM)"
           startDate={new Date('2025-02-20T15:55:19')}
           endDate={new Date('2025-02-27T14:55:19')}

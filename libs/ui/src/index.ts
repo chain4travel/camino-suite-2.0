@@ -52,3 +52,5 @@ export * from './lib/Loader';
 export * from './lib/Table';
 
 export * from './lib/DatePicker';
+
+export * from './lib/Container';

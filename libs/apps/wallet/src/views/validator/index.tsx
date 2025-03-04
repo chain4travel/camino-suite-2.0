@@ -1,5 +1,5 @@
 'use client';
-import { Tabs, Typography, CamBtn } from '@camino/ui';
+import { Tabs, Typography, CamBtn, Container } from '@camino/ui';
 import { mdiRefresh } from '@mdi/js';
 import Icon from '@mdi/react';
 import { useTranslation } from 'react-i18next';
@@ -17,7 +17,7 @@ export const ValidatorView = () => {
   const [activeTab, setActiveTab] = useState<'node' | 'rewards'>('node');
 
   return (
-    <div className="w-full h-full container mx-auto max-w-container gap-4 lg:px-4 py-6">
+    <Container>
       <div className="flex items-center justify-between mb-6">
         <Typography variant="h2" className="font-light">
           {t('common.validator')}
@@ -43,6 +43,6 @@ export const ValidatorView = () => {
       </div>
 
       {activeTab === 'node' ? <NodeTab /> : <RewardsTab />}
-    </div>
+    </Container>
   );
 };
