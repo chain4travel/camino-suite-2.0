@@ -90,7 +90,31 @@
     "exportCsv": "Export CSV",
     "exportRewards": "Export Rewards",
     "exportTransfers": "Export Transfers",
-    "transactionsFound": "{{count}} transactions found"
+    "transactionsFound": "{{count}} transactions found",
+    "manageKeys": {
+      "title": "My Keys",
+      "importKeys": "IMPORT KEYS",
+      "exportKeys": "EXPORT KEYS",
+      "activeKey": "Active Key",
+      "viewPrivateKey": "View Private Key",
+      "viewStaticKeys": "View Static Keys",
+      "multisigAvailable": "You have {{count}} multisignature wallets available.",
+      "importQuestion": "Would you like to import these wallets ?",
+      "dismiss": "Dismiss",
+      "importWallets": "Import wallets",
+      "editWalletName": "Edit wallet name",
+      "forgetKey": "This key will be forgotten when you refresh the page",
+      "activateKey": "Activate Key",
+      "deleteWallet": "Delete Wallet",
+      "multisigOwners": "Multisig Owners",
+      "otherKeys": {
+        "importPrompt": {
+          "title": "You have {{count}} multisignature wallets available.",
+          "description": "Would you like to import these wallets ?"
+        },
+        "editWalletName": "Edit wallet name"
+      }
+    }
   },
   "common": {
     "loading": "Loading...",
@@ -157,7 +181,17 @@
     "validationPeriodEndDate": "Validation Period End Date",
     "rewardPending": "Reward Pending",
     "addValidator": "Add Validator",
-    "export": "Export"
+    "export": "Export",
+    "activateKey": "Activate Key",
+    "forgetKey": "This key will be forgotten when you refresh the page",
+    "multisigOwners": "Multisig Owners",
+    "deleteWallet": "Delete Wallet",
+    "otherKeys": "Other Keys",
+    "editWalletName": "Edit wallet name",
+    "dismiss": "Dismiss",
+    "importWallets": "Import wallets",
+    "saveKeys": "Save Keys",
+    "activeKey": "Active Key"
   },
   "earn": {
     "savingPools": "SAVING POOLS",

@@ -9,3 +9,4 @@ export { SendView } from './views/send';
 export { ValidatorView } from './views/validator';
 export { EarnView } from './views/earn';
 export { ActivityView } from './views/activity';
+export { ManageKeys } from './views/manageKeys';
