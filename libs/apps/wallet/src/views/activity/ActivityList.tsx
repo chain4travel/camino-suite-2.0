@@ -1,15 +1,8 @@
 import { isWithinInterval, startOfMonth, endOfMonth } from 'date-fns';
-import { ActivityCard } from './components/ActivityCard';
-import { Activity } from './types';
+import { ActivityCard } from '../../components/activity/ActivityCard';
+import { ActivityListProps } from './types';
 import { MOCK_ACTIVITIES } from './mock-data';
 import { Typography } from '@camino/ui';
-
-type ActivityType = 'all' | 'transfer' | 'export_import' | 'validation';
-
-interface ActivityListProps {
-  type: ActivityType;
-  currentMonth: Date;
-}
 
 export const ActivityList = ({ type, currentMonth }: ActivityListProps) => {
   const filteredActivities = MOCK_ACTIVITIES.filter(

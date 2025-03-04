@@ -7,10 +7,11 @@ import { ActivityList } from './ActivityList';
 import { format, addMonths, subMonths, isSameMonth } from 'date-fns';
 import Icon from '@mdi/react';
 import { mdiChevronLeft, mdiChevronRight, mdiRefresh } from '@mdi/js';
-import { ExportRewardsModal } from './modals/ExportRewardsModal';
-import { ExportTransfersModal } from './modals/ExportTransfersModal';
+import { ExportRewardsModal } from '../../components/activity/modals/ExportRewardsModal';
+import { ExportTransfersModal } from '../../components/activity/modals/ExportTransfersModal';
+import { ActivityType } from './types';
 
-type ActivityType = 'all' | 'transfer' | 'export_import' | 'validation';
+
 
 export const ActivityView = () => {
   const { t } = useTranslation();

@@ -153,7 +153,11 @@
     "airdropCompleted": "Airdrop Completed",
     "validator": "Validator",
     "node": "Node",
-    "rewards": "Rewards"
+    "rewards": "Rewards",
+    "validationPeriodEndDate": "Validation Period End Date",
+    "rewardPending": "Reward Pending",
+    "addValidator": "Add Validator",
+    "export": "Export"
   },
   "earn": {
     "savingPools": "SAVING POOLS",

@@ -2,7 +2,7 @@ import { Typography } from '@camino/ui';
 import { format } from 'date-fns';
 import { mdiMagnify } from '@mdi/js';
 import Icon from '@mdi/react';
-import { Activity } from '../types';
+import { Activity } from '../../views/activity/types';
 import { ValidationInfo } from './ValidationInfo';
 import { SendInfo } from './SendInfo';
 import { ExportInfo } from './ExportInfo';
@@ -13,8 +13,8 @@ interface ActivityCardProps {
 
 export const ActivityCard = ({ activity }: ActivityCardProps) => {
   return (
-    <div 
-      className="group flex flex-col lg:flex-row lg:items-start justify-between gap-4 p-4 bg-white dark:bg-slate-800/50 rounded-lg border border-slate-700 dark:hover:bg-slate-800/50 cursor-pointer" 
+    <div
+      className="group flex flex-col lg:flex-row lg:items-start justify-between gap-4 p-4 bg-white dark:bg-slate-800/50 rounded-lg border border-slate-700 dark:hover:bg-slate-800/50 cursor-pointer"
       onClick={() => {
         console.log('clicked');
       }}
