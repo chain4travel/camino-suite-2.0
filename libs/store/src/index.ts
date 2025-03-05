@@ -1,5 +1,18 @@
-// Use this file to export React client components (e.g. those with 'use client' directive) or other non-server utilities
-
+// libs/store/src/index.ts
+// Export core store functionality
 export * from './lib/store';
-export * from './lib/slices/exampleSlice';
-export * from './lib/StoreProvider'
+export * from './lib/hooks';
+
+// Export all slice actions and reducers
+export * from './lib/slices/counterSlice';
+export * from './lib/slices/apiSlice';
+
+// Export middleware
+export * from './lib/middleware/logger';
+export * from './lib/middleware/error-tracking';
+
+// Export components
+export { StoreProvider } from './lib/providers/StoreProvider';
+
+// Export TypeScript types
+export type { RootState, AppStore, AppDispatch } from './lib/store';
