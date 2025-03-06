@@ -41,7 +41,7 @@ const TABS = [
 export const ImportKeysModal = ({ isOpen, onClose }: ImportKeysModalProps) => {
   const { t } = useTranslation();
   const [activeTab, setActiveTab] =
-    useState<(typeof TABS)[number]['id']>('multisigAlias');
+    useState<(typeof TABS)[number]['id']>('mnemonic');
   const [isLoading, setIsLoading] = useState(false);
   const [keystoreFile, setKeystoreFile] = useState<File | null>(null);
   const [error, setError] = useState<string>('');
@@ -67,7 +67,7 @@ export const ImportKeysModal = ({ isOpen, onClose }: ImportKeysModalProps) => {
       title={t('wallet.manageKeys.importKeys')}
     >
       <div className="flex flex-col gap-6">
-        <Typography variant="h4" className="text-center">
+        <Typography variant="h5" className="text-center">
           {t('wallet.manageKeys.addKeys')}
         </Typography>
 

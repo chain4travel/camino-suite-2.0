@@ -9,12 +9,15 @@ import { useState } from 'react';
 import { Key } from '../types';
 import { AccountSettingsModal } from './components/AccountSettingsModal';
 import { ImportKeysModal } from './components/ImportKeysModal';
+import { ExportKeysModal } from './components/ExportKeysModal';
 
 export const ManageKeys = () => {
   const { t } = useTranslation();
   const [hasOtherWallets, setHasOtherWallets] = useState(true);
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const [isImportOpen, setIsImportOpen] = useState(false);
+  const [isExportOpen, setIsExportOpen] = useState(false);
+  const [selectedKeys, setSelectedKeys] = useState(2); // TODO: Get from actual selection
   const [activeWallet, setActiveWallet] = useState<Key>({
     id: '1',
     name: 'Singleton Wallet',
@@ -53,7 +56,11 @@ export const ManageKeys = () => {
               <Icon path={mdiUpload} size={1} />
               {t('wallet.manageKeys.importKeys')}
             </CamBtn>
-            <CamBtn variant="transparent" className="gap-2">
+            <CamBtn 
+              variant="transparent" 
+              className="gap-2"
+              onClick={() => setIsExportOpen(true)}
+            >
               <Icon path={mdiDownload} size={1} />
               {t('wallet.manageKeys.exportKeys')}
             </CamBtn>
@@ -85,6 +92,11 @@ export const ManageKeys = () => {
         <ImportKeysModal
           isOpen={isImportOpen}
           onClose={() => setIsImportOpen(false)}
+        />
+        <ExportKeysModal
+          isOpen={isExportOpen}
+          onClose={() => setIsExportOpen(false)}
+          selectedKeys={selectedKeys}
         />
       </div>
     </Container>
