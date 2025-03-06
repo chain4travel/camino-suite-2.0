@@ -6,6 +6,7 @@ import Icon from '@mdi/react';
 import { InputProps } from './Input.types';
 import clsx from 'clsx';
 import { useTranslation } from 'react-i18next';
+import { mdiAlertOutline } from '@mdi/js';
 
 const Input = forwardRef<HTMLInputElement, InputProps>(
   (
@@ -87,13 +88,6 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
         </div>
         {error && (
           <p className="flex items-center gap-1 mt-1 text-sm text-red-500 dark:text-red-400">
-            <span
-              role="img"
-              aria-label={t('common.warning')}
-              className="inline-block w-4 h-4"
-            >
-              ⚠️
-            </span>
             {error}
           </p>
         )}

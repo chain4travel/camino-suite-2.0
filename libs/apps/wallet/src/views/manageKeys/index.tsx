@@ -7,10 +7,12 @@ import { ActiveKey } from './components/ActiveKey';
 import { OtherKeys } from './components/OtherKeys';
 import { useState } from 'react';
 import { Key } from '../types';
+import { AccountSettingsModal } from './components/AccountSettingsModal';
 
 export const ManageKeys = () => {
   const { t } = useTranslation();
   const [hasOtherWallets, setHasOtherWallets] = useState(true);
+  const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const [activeWallet, setActiveWallet] = useState<Key>({
     id: '1',
     name: 'Singleton Wallet',
@@ -33,7 +35,11 @@ export const ManageKeys = () => {
             {t('wallet.manageKeys.title')}
           </Typography>
           <div className="flex gap-2">
-            <CamBtn variant="transparent" className="gap-2 !text-yellow-500">
+            <CamBtn 
+              variant="transparent" 
+              className="gap-2 !text-yellow-500"
+              onClick={() => setIsSettingsOpen(true)}
+            >
               <Icon path={mdiContentSaveOutline} size={1} />
               {t('common.saveKeys')}
             </CamBtn>
@@ -64,6 +70,12 @@ export const ManageKeys = () => {
             </div>
           )}
         </div>
+
+        <AccountSettingsModal
+          isOpen={isSettingsOpen}
+          onClose={() => setIsSettingsOpen(false)}
+          username="Ysrbolles"
+        />
       </div>
     </Container>
   );
