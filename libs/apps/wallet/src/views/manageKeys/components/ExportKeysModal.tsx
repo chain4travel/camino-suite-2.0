@@ -1,5 +1,5 @@
 import { Modal, Typography, CamBtn, Input } from '@camino/ui';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, ChangeEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 
 interface ExportKeysModalProps {
@@ -8,26 +8,48 @@ interface ExportKeysModalProps {
   selectedKeys: number;
 }
 
+interface PasswordForm {
+  password: string;
+  confirmPassword: string;
+}
+
+type ErrorType = 'passwordLength' | 'passwordMatch';
+
 export const ExportKeysModal = ({ isOpen, onClose, selectedKeys }: ExportKeysModalProps) => {
   const { t } = useTranslation();
-  const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
-  const [errors, setErrors] = useState<string[]>([]);
+  const [form, setForm] = useState<PasswordForm>({
+    password: '',
+    confirmPassword: '',
+  });
+  const [errors, setErrors] = useState<ErrorType[]>([]);
   const [isLoading, setIsLoading] = useState(false);
 
-  useEffect(() => {
-    const newErrors = [];
+  const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setForm((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const validateForm = () => {
+    const newErrors: ErrorType[] = [];
+    const { password, confirmPassword } = form;
+
     if (password.length < 9) {
       newErrors.push('passwordLength');
     }
     if (password && confirmPassword && password !== confirmPassword) {
       newErrors.push('passwordMatch');
     }
+
     setErrors(newErrors);
-  }, [password, confirmPassword]);
+    return newErrors.length === 0;
+  };
+
+  useEffect(() => {
+    validateForm();
+  }, [form.password, form.confirmPassword]);
 
   const handleExport = async () => {
-    if (errors.length > 0) return;
+    if (!validateForm()) return;
 
     setIsLoading(true);
     try {
@@ -39,6 +61,19 @@ export const ExportKeysModal = ({ isOpen, onClose, selectedKeys }: ExportKeysMod
       setIsLoading(false);
     }
   };
+
+  const getErrorMessage = (type: ErrorType) => {
+    if (!errors.includes(type)) return undefined;
+
+    const errorMessages = {
+      passwordLength: 'wallet.manageKeys.passwordLength',
+      passwordMatch: 'wallet.manageKeys.passwordMismatch',
+    };
+
+    return t(errorMessages[type]);
+  };
+
+  const isFormValid = form.password && form.confirmPassword && errors.length === 0;
 
   return (
     <Modal
@@ -58,25 +93,19 @@ export const ExportKeysModal = ({ isOpen, onClose, selectedKeys }: ExportKeysMod
         <div className="flex flex-col gap-4">
           <Input
             type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            name="password"
+            value={form.password}
+            onChange={handleInputChange}
             placeholder={t('wallet.manageKeys.password')}
-            error={
-              errors.includes('passwordLength')
-                ? t('wallet.manageKeys.passwordLength')
-                : undefined
-            }
+            error={getErrorMessage('passwordLength')}
           />
           <Input
             type="password"
-            value={confirmPassword}
-            onChange={(e) => setConfirmPassword(e.target.value)}
+            name="confirmPassword"
+            value={form.confirmPassword}
+            onChange={handleInputChange}
             placeholder={t('wallet.manageKeys.confirmPassword')}
-            error={
-              errors.includes('passwordMatch')
-                ? t('wallet.manageKeys.passwordMismatch')
-                : undefined
-            }
+            error={getErrorMessage('passwordMatch')}
           />
         </div>
 
@@ -84,7 +113,7 @@ export const ExportKeysModal = ({ isOpen, onClose, selectedKeys }: ExportKeysMod
           variant="primary"
           className="w-full uppercase"
           onClick={handleExport}
-          disabled={!password || !confirmPassword || errors.length > 0}
+          disabled={!isFormValid}
           loading={isLoading}
         >
           {t('wallet.manageKeys.exportWallet')}

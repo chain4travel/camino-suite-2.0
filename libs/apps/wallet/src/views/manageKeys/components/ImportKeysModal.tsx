@@ -1,5 +1,5 @@
 import { Modal, Typography, CamBtn, Input, Tabs, FileInput } from '@camino/ui';
-import { useState } from 'react';
+import { useState, ChangeEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
   mdiListBox,
@@ -15,49 +15,140 @@ interface ImportKeysModalProps {
   onClose: () => void;
 }
 
+interface ImportForm {
+  mnemonic: string;
+  keystorePassword: string;
+  privateKey: string;
+  multisigAlias: string;
+}
+
 const TABS = [
-  {
-    id: 'mnemonic',
-    label: '',
-    icon: mdiListBox,
-  },
-  {
-    id: 'keystore',
-    label: '',
-    icon: mdiFileKey,
-  },
-  {
-    id: 'privateKey',
-    label: '',
-    icon: mdiShieldKey,
-  },
-  {
-    id: 'multisigAlias',
-    label: '',
-    icon: mdiAccountGroup,
-  },
-];
+  { id: 'mnemonic', icon: mdiListBox },
+  { id: 'keystore', icon: mdiFileKey },
+  { id: 'privateKey', icon: mdiShieldKey },
+  { id: 'multisigAlias', icon: mdiAccountGroup },
+] as const;
+
+type TabId = (typeof TABS)[number]['id'];
 
 export const ImportKeysModal = ({ isOpen, onClose }: ImportKeysModalProps) => {
   const { t } = useTranslation();
-  const [activeTab, setActiveTab] =
-    useState<(typeof TABS)[number]['id']>('mnemonic');
+  const [activeTab, setActiveTab] = useState<TabId>('mnemonic');
   const [isLoading, setIsLoading] = useState(false);
   const [keystoreFile, setKeystoreFile] = useState<File | null>(null);
-  const [error, setError] = useState<string>('');
+  const [form, setForm] = useState<ImportForm>({
+    mnemonic: '',
+    keystorePassword: '',
+    privateKey: '',
+    multisigAlias: '',
+  });
+
+  const handleInputChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value } = e.target;
+    setForm((prev) => ({ ...prev, [name]: value }));
+  };
 
   const handleFileChange = (file: File | null) => {
     setKeystoreFile(file);
-    setError('');
+  };
+
+  const handleImport = async () => {
+    setIsLoading(true);
+    try {
+      switch (activeTab) {
+        case 'mnemonic':
+          // Handle mnemonic import
+          break;
+        case 'keystore':
+          // Handle keystore import
+          break;
+        case 'privateKey':
+          // Handle private key import
+          break;
+        case 'multisigAlias':
+          // Handle multisig alias import
+          break;
+      }
+      onClose();
+    } catch (error) {
+      console.error('Error importing keys:', error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const renderTabContent = () => {
+    switch (activeTab) {
+      case 'mnemonic':
+        return (
+          <Input
+            variant="textarea"
+            name="mnemonic"
+            value={form.mnemonic}
+            onChange={handleInputChange}
+            placeholder={t('wallet.manageKeys.enterMnemonic')}
+            className="h-32"
+          />
+        );
+
+      case 'keystore':
+        return (
+          <>
+            <FileInput
+              className="w-full"
+              accept=".json,.keystore"
+              onChange={handleFileChange}
+              value={keystoreFile}
+              placeholder={t('auth.selectKeystoreFile')}
+              label={t('common.keystore')}
+            />
+            <Input
+              type="password"
+              name="keystorePassword"
+              value={form.keystorePassword}
+              onChange={handleInputChange}
+              label={t('common.password')}
+              placeholder={t('wallet.manageKeys.keystorePassword')}
+            />
+          </>
+        );
+
+      case 'privateKey':
+        return (
+          <Input
+            type="password"
+            name="privateKey"
+            value={form.privateKey}
+            onChange={handleInputChange}
+            placeholder={t('wallet.manageKeys.enterPrivateKey')}
+          />
+        );
+
+      case 'multisigAlias':
+        return (
+          <div className="relative">
+            <Input
+              type="text"
+              name="multisigAlias"
+              value={form.multisigAlias}
+              onChange={handleInputChange}
+              placeholder={t('wallet.manageKeys.multisigAlias')}
+              className="pl-10"
+            />
+            <Icon
+              path={mdiMagnify}
+              size={1}
+              className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"
+            />
+          </div>
+        );
+    }
   };
 
   const getButtonText = () => {
-    switch (activeTab) {
-      case 'multisigAlias':
-        return t('wallet.manageKeys.addMultisigAlias');
-      default:
-        return t('wallet.manageKeys.importKey');
-    }
+    return activeTab === 'multisigAlias'
+      ? t('wallet.manageKeys.addMultisigAlias')
+      : t('wallet.manageKeys.importKey');
   };
 
   return (
@@ -74,64 +165,18 @@ export const ImportKeysModal = ({ isOpen, onClose }: ImportKeysModalProps) => {
         <Tabs
           tabs={TABS}
           activeTab={activeTab}
-          onChange={(tab) => setActiveTab(tab as typeof activeTab)}
+          onChange={(tab) => setActiveTab(tab as TabId)}
           className="w-full"
         />
 
         <div className="flex flex-col gap-4">
-          {activeTab === 'mnemonic' && (
-            <Input
-              variant="textarea"
-              placeholder={t('wallet.manageKeys.enterMnemonic')}
-              className="h-32"
-            />
-          )}
-
-          {activeTab === 'keystore' && (
-            <>
-              <FileInput
-                className="w-full"
-                accept=".json,.keystore"
-                onChange={handleFileChange}
-                value={keystoreFile}
-                placeholder={t('auth.selectKeystoreFile')}
-                label={t('common.keystore')}
-              />
-              <Input
-                type="password"
-                label={t('common.password')}
-                placeholder={t('wallet.manageKeys.keystorePassword')}
-              />
-            </>
-          )}
-
-          {activeTab === 'privateKey' && (
-            <Input
-              type="password"
-              placeholder={t('wallet.manageKeys.enterPrivateKey')}
-            />
-          )}
-
-          {activeTab === 'multisigAlias' && (
-            <div className="relative">
-              <Input
-                type="text"
-                placeholder={t('wallet.manageKeys.multisigAlias')}
-                className="pl-10"
-              />
-              <Icon
-                path={mdiMagnify}
-                size={1}
-                className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"
-              />
-            </div>
-          )}
+          {renderTabContent()}
         </div>
 
         <CamBtn
           variant="primary"
           className="w-full uppercase"
-          onClick={() => {}}
+          onClick={handleImport}
           loading={isLoading}
         >
           {getButtonText()}
