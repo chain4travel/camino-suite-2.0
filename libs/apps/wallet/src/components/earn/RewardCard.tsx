@@ -28,7 +28,7 @@ export const RewardCard = ({
   const { t } = useTranslation();
 
   return (
-    <div className="bg-white dark:bg-slate-800/50 rounded-lg p-6 border border-slate-700 w-[calc(50%-8px)]">
+    <div className="bg-white dark:bg-slate-950 rounded-lg p-6 border border-slate-700 w-[calc(50%-8px)]">
       <div className="flex flex-col gap-6">
         <Typography variant="h4">{title}</Typography>
 

@@ -34,7 +34,7 @@ export const PoolCard = ({
 
   return (
     <>
-      <div className="bg-white dark:bg-slate-800/50 rounded-lg p-4 border border-slate-700 w-full md:w-[calc(50%-8px)]">
+      <div className="bg-white dark:bg-slate-950 rounded-lg p-4 border border-slate-700 w-full md:w-[calc(50%-8px)]">
         <div className="flex flex-col gap-6">
           <div className="flex flex-col gap-2 items-start justify-between">
             <Typography variant="h4">{title}</Typography>

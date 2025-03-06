@@ -137,6 +137,28 @@
       "selectedKeys": "Selected {{count}} keys.",
       "exportDescription": "Enter a password to encode your private keys into a file. You can later use this file and your password to access your wallet.",
       "exportWallet": "EXPORT WALLET"
+    },
+    "advanced": {
+      "title": "Advanced",
+      "chainImport": {
+        "title": "Chain Import",
+        "description": "If you have funds stuck in a failed chain transfer, you can finish importing them here."
+      },
+      "signMessage": {
+        "title": "Sign Message",
+        "description": "Sign a message with your private key and prove ownership of an address.",
+        "placeholder": "Message",
+        "warning": "Do not sign messages you don't trust.",
+        "button": "Sign Message",
+        "signature": "Signature"
+      },
+      "checkSource": {
+        "title": "Check Message Source",
+        "description": "Given a message and its signature, retrieve the address that signed it.",
+        "messagePlaceholder": "Message",
+        "signaturePlaceholder": "Signature",
+        "button": "Check Source"
+      }
     }
   },
   "common": {

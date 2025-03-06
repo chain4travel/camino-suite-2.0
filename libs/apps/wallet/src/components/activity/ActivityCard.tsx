@@ -14,7 +14,7 @@ interface ActivityCardProps {
 export const ActivityCard = ({ activity }: ActivityCardProps) => {
   return (
     <div
-      className="group flex flex-col lg:flex-row lg:items-start justify-between gap-4 p-4 bg-white dark:bg-slate-800/50 rounded-lg border border-slate-700 dark:hover:bg-slate-800/50 cursor-pointer"
+      className="group flex flex-col lg:flex-row lg:items-start justify-between gap-4 p-4 bg-white dark:bg-slate-950 rounded-lg border border-slate-700 dark:hover:bg-slate-800/50 cursor-pointer"
       onClick={() => {
         console.log('clicked');
       }}
