@@ -1,6 +1,6 @@
 import React, { InputHTMLAttributes, MouseEvent } from 'react';
 
-export interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
+export interface InputProps extends React.InputHTMLAttributes<HTMLInputElement | HTMLTextAreaElement> {
   label?: string;
   error?: string;
   helpText?: string;
@@ -9,6 +9,7 @@ export interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   onIconClick?: (e: MouseEvent<HTMLButtonElement>) => void;
   iconAriaLabel?: string;
   iconDisabled?: boolean;
-  variant?: 'default' | 'validation-code' | 'textarea';
+  variant?: 'input' | 'textarea';
+  rows?: number;
   required?: boolean;
 }

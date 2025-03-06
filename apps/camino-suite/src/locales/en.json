@@ -125,7 +125,15 @@
           "description": "Would you like to import these wallets ?"
         },
         "editWalletName": "Edit wallet name"
-      }
+      },
+      "addKeys": "Add additional keys to use with your wallet.",
+      "enterMnemonic": "Enter your mnemonic phrase",
+      "dropKeystore": "Drop your keystore file here or click to browse",
+      "keystorePassword": "Keystore Password",
+      "enterPrivateKey": "Enter your private key",
+      "multisigAlias": "Enter multisig alias",
+      "addMultisigAlias": "ADD MULTISIG ALIAS",
+      "importKey": "Import Key"
     }
   },
   "common": {
