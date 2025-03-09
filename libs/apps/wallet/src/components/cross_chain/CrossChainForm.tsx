@@ -62,11 +62,9 @@ export const CrossChainForm = () => {
           <Dropdown
             items={CHAINS.map((chain) => ({
               value: chain.id,
-              label: chain.name,
+              label: chain.id,
             }))}
-            trigger={
-              CHAINS.find((chain) => chain.id === sourceChain)?.name || ''
-            }
+            trigger={CHAINS.find((chain) => chain.id === sourceChain)?.id || ''}
             onSelect={(value) => setSourceChain(value.value as ChainType)}
             menuButtonClassName="w-full"
             menuItemsClassName="w-full"
@@ -76,12 +74,12 @@ export const CrossChainForm = () => {
           <Typography variant="h6">Destination Chain</Typography>
           <Dropdown
             trigger={
-              CHAINS.find((chain) => chain.id === destinationChain)?.name || ''
+              CHAINS.find((chain) => chain.id === destinationChain)?.id || ''
             }
             onSelect={(value) => setDestinationChain(value.value as ChainType)}
             items={availableDestinationChains.map((chain) => ({
               value: chain.id,
-              label: chain.name,
+              label: chain.id,
             }))}
             menuButtonClassName="w-full"
             menuItemsClassName="w-full"
