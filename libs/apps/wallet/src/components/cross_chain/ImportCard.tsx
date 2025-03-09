@@ -22,4 +22,4 @@ export const ImportCard = () => {
       </div>
     </Box>
   );
-}; 
+};

@@ -17,7 +17,7 @@ export const Navigation = () => {
 
   return (
     <div className="w-full border-b border-slate-700 dark:bg-slate-950 bg-white px-4 pt-2">
-      <div className=" overflow-x-auto">
+      <div className="container mx-auto max-w-container overflow-x-auto">
         <Tabs
           tabs={WALLET_NAV_ITEMS}
           activeTab={activeTab}

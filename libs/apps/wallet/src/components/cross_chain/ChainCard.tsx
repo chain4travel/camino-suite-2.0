@@ -1,5 +1,5 @@
 import { Box, Typography } from '@camino/ui';
-import { Chain } from '../types';
+import { Chain } from '../../views/cross_chain/types';
 
 interface ChainCardProps {
   chain: Chain;

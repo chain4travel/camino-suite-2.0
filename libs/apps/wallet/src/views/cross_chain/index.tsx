@@ -2,7 +2,7 @@
 
 import { Container, Typography } from '@camino/ui';
 import { useTranslation } from 'react-i18next';
-import { CrossChainForm } from './components/CrossChainForm';
+import { CrossChainForm } from '../../components/cross_chain/CrossChainForm';
 
 export const CrossChainView = () => {
   const { t } = useTranslation();

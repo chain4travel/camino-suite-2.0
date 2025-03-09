@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { Typography, Dropdown, Input, CamBtn } from '@camino/ui';
 import { useTranslation } from 'react-i18next';
 import { ChainCard } from './ChainCard';
-import { Chain, ChainType } from '../types';
+import { Chain, ChainType } from '../../views/cross_chain/types';
 import { ExportCard } from './ExportCard';
 import { ImportCard } from './ImportCard';
 
@@ -91,24 +91,27 @@ export const CrossChainForm = () => {
         <div className="flex flex-col gap-4">
           <Typography variant="h6">Transfer Amount</Typography>
           <div className="flex gap-2">
-            <div className="relative flex-1">
+            <div className="w-full relative h-fit">
               <Input
                 value={amount}
                 onChange={(e) => setAmount(e.target.value)}
-                placeholder="MAX"
-                className="pr-16"
+                className="w-full !pr-16"
+                label={t('common.amount')}
               />
               <button
                 onClick={handleMaxAmount}
-                className="absolute right-4 top-1/2 -translate-y-1/2"
+                className="absolute right-4 top-2/3 mt-1 -translate-y-1/2 text-xs disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                <Typography variant="caption" className="text-slate-400">
-                  CAM
+                <Typography
+                  variant="caption"
+                  className="!text-slate-400 hover:!text-slate-200"
+                >
+                  MAX
                 </Typography>
               </button>
             </div>
           </div>
-          <Typography variant="caption" className="text-slate-400">
+          <Typography variant="caption" className="!text-slate-400">
             Balance: {sourceChainData?.balance || '0'}
           </Typography>
         </div>
@@ -116,13 +119,21 @@ export const CrossChainForm = () => {
           <div className="flex flex-col justify-between">
             <Typography variant="body1">Fee</Typography>
             <div className="flex flex-col start">
-              <Typography variant="body2" className='!text-slate-400'>Export Fee: 0.001 CAM</Typography>
-              <Typography variant="body2" className='!text-slate-400'>Import Fee: 0.001 CAM</Typography>
+              <Typography variant="body2" className="!text-slate-400">
+                Export Fee: 0.001 CAM
+              </Typography>
+              <Typography variant="body2" className="!text-slate-400">
+                Import Fee: 0.001 CAM
+              </Typography>
             </div>
           </div>
         </div>
 
-        <CamBtn variant="primary" onClick={handleConfirm} disabled={!amount}>
+        <CamBtn
+          variant="primary"
+          onClick={handleConfirm}
+          disabled={!amount || +amount <= 0}
+        >
           Confirm
         </CamBtn>
       </div>
@@ -135,7 +146,7 @@ export const CrossChainForm = () => {
             type="destination"
           />
         </div>
-        <div className='w-full flex flex-col lg:flex-row gap-2'>
+        <div className="w-full flex flex-col lg:flex-row gap-2">
           <ExportCard />
           <ImportCard />
         </div>
