@@ -1,5 +1,7 @@
+import { CrossChainView } from "@camino/wallet";
+
 const CrossChainPage = () => {
-  return <div>CrossChain</div>;
+  return <CrossChainView />
 };
 
 export default CrossChainPage;

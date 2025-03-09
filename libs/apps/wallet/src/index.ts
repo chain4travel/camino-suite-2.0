@@ -10,3 +10,4 @@ export { EarnView } from './views/earn';
 export { ActivityView } from './views/activity';
 export { ManageKeys } from './views/manageKeys';
 export { AdvancedView } from './views/advanced';
+export { CrossChainView } from './views/cross_chain'
