@@ -38,20 +38,21 @@ export const Tabs = ({
     className
   );
 
-  const tabClasses = (tab: TabsProps['tabs'][number]) => clsx(
-    'rounded-t-lg transition-colors relative hover:bg-gray-200/50 dark:hover:bg-slate-800/50 whitespace-nowrap',
-    tabSizes[size],
-    'focus:outline-none',
-    tab.disabled && 'opacity-50 cursor-not-allowed',
-    tab.id === activeTab &&
-      'after:absolute after:bottom-0 after:left-0 after:w-full after:h-1 after:bg-blue-500 after:rounded-t-full',
-    variant === 'icon' && 'flex items-center justify-center gap-2',
-    fullWidth && 'flex-1 flex items-center justify-center '
-  );
+  const tabClasses = (tab: TabsProps['tabs'][number]) =>
+    clsx(
+      'rounded-t-lg transition-colors relative hover:bg-gray-200/50 dark:hover:bg-slate-800/50 whitespace-nowrap',
+      tabSizes[size],
+      'focus:outline-none',
+      tab.disabled && 'opacity-50 cursor-not-allowed',
+      tab.id === activeTab &&
+        'after:absolute after:bottom-0 after:left-0 after:w-full after:h-1 after:bg-blue-500 after:rounded-t-full',
+      variant === 'icon' && 'flex items-center justify-center gap-2',
+      fullWidth && 'flex-1 flex items-center justify-center '
+    );
 
   return (
-    <div 
-      className={containerClasses} 
+    <div
+      className={containerClasses}
       data-testid="tabs-container"
       role="tablist"
     >
@@ -72,21 +73,23 @@ export const Tabs = ({
               className="text-slate-950 dark:text-slate-100"
             />
           )}
-          <Typography
-            variant={size === 'sm' ? 'body2' : 'body1'}
-            className={clsx(
-              'transition-colors capitalize',
-              tab.id === activeTab
-                ? isDarkMode
-                  ? '!text-white'
-                  : '!text-slate-900'
-                : isDarkMode
-                ? '!text-neutral-400 hover:!text-white'
-                : '!text-slate-500 hover:!text-slate-900'
-            )}
-          >
-            {tab.label}
-          </Typography>
+          {tab.label && (
+            <Typography
+              variant={size === 'sm' ? 'body2' : 'body1'}
+              className={clsx(
+                'transition-colors capitalize',
+                tab.id === activeTab
+                  ? isDarkMode
+                    ? '!text-white'
+                    : '!text-slate-900'
+                  : isDarkMode
+                  ? '!text-neutral-400 hover:!text-white'
+                  : '!text-slate-500 hover:!text-slate-900'
+              )}
+            >
+              {tab.label}
+            </Typography>
+          )}
         </button>
       ))}
     </div>

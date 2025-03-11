@@ -1,9 +1,6 @@
-import { Typography } from '@camino/ui';
-import { useTranslation } from 'react-i18next';
 import { RewardCard } from '../../components/earn/RewardCard';
 
 export const MyRewardsTab = () => {
-  const { t } = useTranslation();
 
   return (
     <div className="bg-gray-200/50 dark:bg-slate-800/50 flex flex-col gap-6 rounded-lg p-6 border-t border-slate-700">

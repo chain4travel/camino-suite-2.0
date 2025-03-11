@@ -1,7 +1,6 @@
 import { Modal, Table, Tabs, Typography } from '@camino/ui';
 import { useState } from 'react';
-import { UTXO } from './header.types';
-import { Column } from 'libs/ui/src/lib/Table/Table.types';
+import { Column, UTXO } from './header.types';
 
 const CHAIN_UTXOS: Record<'X' | 'P', UTXO[]> = {
   X: [

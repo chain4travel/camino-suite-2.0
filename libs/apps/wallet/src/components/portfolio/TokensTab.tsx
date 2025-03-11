@@ -1,7 +1,7 @@
 import { CamBtn, Table, Typography, Modal, Input } from '@camino/ui';
 import Image from 'next/image';
 import { Asset } from '../../views/portfolio/types';
-import { mdiPlus, mdiSwapHorizontal, mdiClose } from '@mdi/js';
+import { mdiSwapHorizontal } from '@mdi/js';
 import Icon from '@mdi/react';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -79,19 +79,13 @@ export const TokensTab = ({ assets }: TokensTabProps) => {
         layout="spaceBetween"
       />
       <div className="w-fit flex flex-col lg:flex-row items-center gap-4 justify-between mt-4">
-        <CamBtn
-          variant="secondary"
-          onClick={() => setShowAddToken(true)}
-        >
+        <CamBtn variant="secondary" onClick={() => setShowAddToken(true)}>
           {t('wallet.addToken')}
         </CamBtn>
         <Typography variant="body1" className="!text-slate-400">
           {t('common.or')}
         </Typography>
-        <CamBtn
-          variant="secondary"
-          onClick={() => setShowAddTokenList(true)}
-        >
+        <CamBtn variant="secondary" onClick={() => setShowAddTokenList(true)}>
           {t('wallet.addTokenList')}
         </CamBtn>
       </div>

@@ -49,11 +49,6 @@ export const AccountSettingsModal = ({
 
     setIsLoading(true);
     try {
-      const input: SaveAccountInput = {
-        accountName,
-        password,
-      };
-
       // TODO: Replace with actual store dispatch
       // await store.dispatch('Accounts/saveAccount', input);
       // const account = store.getters['Accounts/account'];

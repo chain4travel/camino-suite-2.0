@@ -23,10 +23,10 @@ interface ImportForm {
 }
 
 const TABS = [
-  { id: 'mnemonic', icon: mdiListBox, label: '' },
-  { id: 'keystore', icon: mdiFileKey, label: '' },
-  { id: 'privateKey', icon: mdiShieldKey, label: '' },
-  { id: 'multisigAlias', icon: mdiAccountGroup, label: '' },
+  { id: 'mnemonic', icon: mdiListBox },
+  { id: 'keystore', icon: mdiFileKey },
+  { id: 'privateKey', icon: mdiShieldKey },
+  { id: 'multisigAlias', icon: mdiAccountGroup },
 ] as const;
 
 type TabId = (typeof TABS)[number]['id'];
@@ -43,7 +43,9 @@ export const ImportKeysModal = ({ isOpen, onClose }: ImportKeysModalProps) => {
     multisigAlias: '',
   });
 
-  const handleInputChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleInputChange = (
+    e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
     const { name, value } = e.target;
     setForm((prev) => ({ ...prev, [name]: value }));
   };
@@ -170,9 +172,7 @@ export const ImportKeysModal = ({ isOpen, onClose }: ImportKeysModalProps) => {
           fullWidth
         />
 
-        <div className="flex flex-col gap-4">
-          {renderTabContent()}
-        </div>
+        <div className="flex flex-col gap-4">{renderTabContent()}</div>
 
         <CamBtn
           variant="primary"

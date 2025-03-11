@@ -15,9 +15,9 @@ export const ValidatorConfirmation = ({
   endDate,
 }: ValidatorConfirmationProps) => {
   const { t } = useTranslation();
-  const now = new Date();
 
   const duration = useMemo(() => {
+    const now = new Date();
     const days = differenceInDays(endDate, now);
     const remainingHours = differenceInHours(endDate, now) % 24;
     const remainingMinutes = differenceInMinutes(endDate, now) % 60;

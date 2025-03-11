@@ -78,6 +78,8 @@ export const NodeTab = () => {
     }, 5000);
   };
 
+  const endDate = selectedEndDate ?? new Date();
+
   if (isValidatorActive) {
     return <ValidatorStatus />;
   }
@@ -99,7 +101,7 @@ export const NodeTab = () => {
       <ValidatorConfirmation
         onCancel={() => setShowConfirmation(false)}
         onSubmit={handleSubmit}
-        endDate={selectedEndDate!}
+        endDate={endDate}
       />
     );
   }

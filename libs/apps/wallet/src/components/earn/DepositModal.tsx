@@ -9,7 +9,6 @@ import {
 import { useTranslation } from 'react-i18next';
 import { useState } from 'react';
 import { PoolInfo } from './PoolInfo';
-import { format } from 'date-fns';
 
 interface DepositModalProps {
   isOpen: boolean;
