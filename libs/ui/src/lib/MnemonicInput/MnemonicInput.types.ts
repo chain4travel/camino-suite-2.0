@@ -1,4 +1,3 @@
-import { HTMLAttributes } from 'react';
 
 export interface MnemonicInputProps {
   className?: string;

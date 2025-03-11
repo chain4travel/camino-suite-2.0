@@ -1,6 +1,7 @@
-import React, { InputHTMLAttributes, MouseEvent } from 'react';
+import React, { MouseEvent } from 'react';
 
-export interface InputProps extends React.InputHTMLAttributes<HTMLInputElement | HTMLTextAreaElement> {
+export interface InputProps
+  extends React.InputHTMLAttributes<HTMLInputElement | HTMLTextAreaElement> {
   label?: string;
   error?: string;
   helpText?: string;

@@ -1,5 +1,3 @@
-import { ReactNode } from 'react';
-
 export interface LoaderProps {
   /**
    * The size of the loader

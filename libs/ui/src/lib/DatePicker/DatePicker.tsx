@@ -180,7 +180,7 @@ export const DatePicker = ({
   };
 
   return (
-    <div className={`relative ${className}`} data-testid="datepicker">
+    <div className={`relative ${className}`} data-testid="datepicker" >
       {label && (
         <Typography variant="caption" className="mb-2">
           {label}

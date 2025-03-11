@@ -3,7 +3,6 @@ import { Table } from './index';
 import { Typography, CamBadge } from '../..';
 import { Icon } from '@mdi/react';
 import { mdiCube, mdiArrowRight } from '@mdi/js';
-import clsx from 'clsx';
 
 const meta = {
   title: 'Components/Table',

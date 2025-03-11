@@ -4,7 +4,6 @@ import React, { forwardRef } from 'react';
 import Icon from '@mdi/react';
 import { InputProps } from './Input.types';
 import clsx from 'clsx';
-import { useTranslation } from 'react-i18next';
 
 const Input = forwardRef<HTMLInputElement | HTMLTextAreaElement, InputProps>(
   ({
@@ -22,7 +21,6 @@ const Input = forwardRef<HTMLInputElement | HTMLTextAreaElement, InputProps>(
     required,
     ...props
   }, ref) => {
-    const { t } = useTranslation();
 
     const inputClasses = clsx(
       'w-full px-4 py-2.5 rounded-lg font-normal text-sm transition-colors disabled:opacity-50 disabled:cursor-not-allowed dark:disabled:opacity-20',
@@ -54,12 +52,20 @@ const Input = forwardRef<HTMLInputElement | HTMLTextAreaElement, InputProps>(
           </label>
         )}
         <div className="relative">
-          <InputElement
-            ref={ref}
-            rows={variant === 'textarea' ? rows : undefined}
-            className={inputClasses}
-            {...props}
-          />
+          {variant === 'textarea' ? (
+            <textarea
+              ref={ref as React.Ref<HTMLTextAreaElement>}
+              rows={rows}
+              className={inputClasses}
+              {...props}
+            />
+          ) : (
+            <input
+              ref={ref as React.Ref<HTMLInputElement>}
+              className={inputClasses}
+              {...props}
+            />
+          )}
           {rightIcon && variant === 'input' && (
             <button
               type="button"
