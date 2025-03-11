@@ -164,7 +164,7 @@ export const AccountSettingsModal = ({
           disabled={
             !accountName || !password || !confirmPassword || errors.length > 0
           }
-          loading={isLoading}
+          isLoading={isLoading}
         >
           {t('common.save')}
         </CamBtn>

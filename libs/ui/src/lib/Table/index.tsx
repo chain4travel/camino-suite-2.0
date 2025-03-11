@@ -13,7 +13,7 @@ const tableSizes: Record<
   lg: { padding: 'px-8 py-6', typography: 'h6' },
 };
 
-export const Table = <T extends Record<string, unknown>>({
+export const Table = <T extends object>({
   columns,
   data,
   className,

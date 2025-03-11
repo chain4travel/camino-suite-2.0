@@ -5,7 +5,11 @@ import { useTranslation } from 'react-i18next';
 interface Token {
   symbol: string;
   name: string;
-  balances: Record<string, string>;
+  balances: {
+    P: string;
+    X: string;
+    C: string;
+  };
   icon: string;
 }
 
@@ -13,7 +17,7 @@ interface TokenSelectorModalProps {
   isOpen: boolean;
   onClose: () => void;
   onSelect: (token: Token) => void;
-  selectedChain: string;
+  selectedChain: 'P' | 'X' | 'C';
 }
 
 const MOCK_TOKENS: Token[] = [

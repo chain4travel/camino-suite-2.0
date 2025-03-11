@@ -114,7 +114,7 @@ export const ExportKeysModal = ({ isOpen, onClose, selectedKeys }: ExportKeysMod
           className="w-full uppercase"
           onClick={handleExport}
           disabled={!isFormValid}
-          loading={isLoading}
+          isLoading={isLoading}
         >
           {t('wallet.manageKeys.exportWallet')}
         </CamBtn>

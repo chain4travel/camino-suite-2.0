@@ -1,6 +1,7 @@
 import { Modal, Table, Tabs, Typography } from '@camino/ui';
 import { useState } from 'react';
 import { UTXO } from './header.types';
+import { Column } from 'libs/ui/src/lib/Table/Table.types';
 
 const CHAIN_UTXOS: Record<'X' | 'P', UTXO[]> = {
   X: [
@@ -35,9 +36,9 @@ const TABS = [
   { id: 'P', label: 'P Chain' },
 ];
 
-const columns = [
+const columns: Column<UTXO>[] = [
   {
-    key: 'id',
+    key: 'id' as keyof UTXO,
     header: 'ID',
     render: (utxo: UTXO) => (
       <Typography variant="body2" className="font-mono break-all">
@@ -46,7 +47,7 @@ const columns = [
     ),
   },
   {
-    key: 'type',
+    key: 'type' as keyof UTXO,
     header: 'Type',
     render: (utxo: UTXO) => (
       <Typography variant="body2" className="whitespace-nowrap">
@@ -55,14 +56,14 @@ const columns = [
     ),
   },
   {
-    key: 'threshold',
+    key: 'threshold' as keyof UTXO,
     header: 'Threshold',
     render: (utxo: UTXO) => (
       <Typography variant="body2">{utxo.threshold}</Typography>
     ),
   },
   {
-    key: 'owners',
+    key: 'owners' as keyof UTXO,
     header: 'Owners',
     render: (utxo: UTXO) => (
       <Typography variant="body2" className="font-mono break-all">
@@ -71,7 +72,7 @@ const columns = [
     ),
   },
   {
-    key: 'balance',
+    key: 'balance' as keyof UTXO,
     header: 'Balance',
     align: 'right' as const,
     render: (utxo: UTXO) => (
@@ -90,6 +91,12 @@ interface UTXOModalProps {
 export const UTXOModal = ({ isOpen, onClose }: UTXOModalProps) => {
   const [activeChain, setActiveChain] = useState<'X' | 'P'>('X');
 
+  const handleTabChange = (tabId: string) => {
+    if (tabId === 'X' || tabId === 'P') {
+      setActiveChain(tabId);
+    }
+  };
+
   return (
     <Modal
       isOpen={isOpen}
@@ -102,7 +109,7 @@ export const UTXOModal = ({ isOpen, onClose }: UTXOModalProps) => {
         <Tabs
           tabs={TABS}
           activeTab={activeChain}
-          onChange={setActiveChain}
+          onChange={handleTabChange}
           className="mb-4"
         />
 

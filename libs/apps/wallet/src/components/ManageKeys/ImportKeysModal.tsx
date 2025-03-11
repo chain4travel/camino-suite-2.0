@@ -23,10 +23,10 @@ interface ImportForm {
 }
 
 const TABS = [
-  { id: 'mnemonic', icon: mdiListBox },
-  { id: 'keystore', icon: mdiFileKey },
-  { id: 'privateKey', icon: mdiShieldKey },
-  { id: 'multisigAlias', icon: mdiAccountGroup },
+  { id: 'mnemonic', icon: mdiListBox, label: '' },
+  { id: 'keystore', icon: mdiFileKey, label: '' },
+  { id: 'privateKey', icon: mdiShieldKey, label: '' },
+  { id: 'multisigAlias', icon: mdiAccountGroup, label: '' },
 ] as const;
 
 type TabId = (typeof TABS)[number]['id'];
@@ -167,6 +167,7 @@ export const ImportKeysModal = ({ isOpen, onClose }: ImportKeysModalProps) => {
           activeTab={activeTab}
           onChange={(tab) => setActiveTab(tab as TabId)}
           className="w-full"
+          fullWidth
         />
 
         <div className="flex flex-col gap-4">
@@ -177,7 +178,7 @@ export const ImportKeysModal = ({ isOpen, onClose }: ImportKeysModalProps) => {
           variant="primary"
           className="w-full uppercase"
           onClick={handleImport}
-          loading={isLoading}
+          isLoading={isLoading}
         >
           {getButtonText()}
         </CamBtn>

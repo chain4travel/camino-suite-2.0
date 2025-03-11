@@ -3,7 +3,7 @@ import Icon from '@mdi/react';
 import { mdiShieldKey, mdiPencil, mdiCheck, mdiClose } from '@mdi/js';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Key } from '../types';
+import { Key } from '../../views/manageKeys/types';
 
 interface ActiveKeyProps {
   wallet: Key;
@@ -42,20 +42,20 @@ export const ActiveKey = ({ wallet, onWalletNameChange }: ActiveKeyProps) => {
                 />
                 <div className="flex gap-1">
                   <Tooltip content={t('common.save')} position="bottom">
-                    <Icon
-                      path={mdiCheck}
-                      size={0.8}
+                    <button
                       className="text-green-500 cursor-pointer"
                       onClick={handleSave}
-                    />
+                    >
+                      <Icon path={mdiCheck} size={0.8} />
+                    </button>
                   </Tooltip>
                   <Tooltip content={t('common.cancel')} position="bottom">
-                    <Icon
-                      path={mdiClose}
-                      size={0.8}
+                    <button
                       className="text-red-500 cursor-pointer"
                       onClick={handleCancel}
-                    />
+                    >
+                      <Icon path={mdiClose} size={0.8} />
+                    </button>
                   </Tooltip>
                 </div>
               </div>
@@ -83,9 +83,13 @@ export const ActiveKey = ({ wallet, onWalletNameChange }: ActiveKeyProps) => {
         </div>
       </div>
       <div className="flex flex-col gap-1">
-        <CamBtn variant="transparent">{t('wallet.manageKeys.viewPrivateKey')}</CamBtn>
-        <CamBtn variant="transparent">{t('wallet.manageKeys.viewStaticKeys')}</CamBtn>
+        <CamBtn variant="transparent">
+          {t('wallet.manageKeys.viewPrivateKey')}
+        </CamBtn>
+        <CamBtn variant="transparent">
+          {t('wallet.manageKeys.viewStaticKeys')}
+        </CamBtn>
       </div>
     </div>
   );
-}; 
+};

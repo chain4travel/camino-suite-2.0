@@ -58,7 +58,7 @@ export const CrossChainForm = () => {
     <div className="flex flex-col-reverse lg:flex-row gap-6 bg-white dark:bg-slate-950 rounded-lg lg:p-6 lg:border border-slate-700">
       <div className="w-full lg:w-1/3 flex flex-col gap-4">
         <div className="w-full flex flex-col gap-4">
-          <Typography variant="h6">Source Chain</Typography>
+          <Typography variant="h6">{t('common.sourceChain')}</Typography>
           <Dropdown
             items={CHAINS.map((chain) => ({
               value: chain.id,
@@ -71,7 +71,7 @@ export const CrossChainForm = () => {
           />
         </div>
         <div className="flex flex-col gap-4">
-          <Typography variant="h6">Destination Chain</Typography>
+          <Typography variant="h6">{t('common.destinationChain')}</Typography>
           <Dropdown
             trigger={
               CHAINS.find((chain) => chain.id === destinationChain)?.id || ''

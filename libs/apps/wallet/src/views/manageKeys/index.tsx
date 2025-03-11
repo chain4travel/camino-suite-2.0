@@ -3,13 +3,13 @@ import { Container, Typography, CamBtn } from '@camino/ui';
 import { useTranslation } from 'react-i18next';
 import { mdiContentSaveOutline, mdiDownload, mdiUpload } from '@mdi/js';
 import Icon from '@mdi/react';
-import { ActiveKey } from './components/ActiveKey';
-import { OtherKeys } from './components/OtherKeys';
+import { ActiveKey } from '../../components/ManageKeys/ActiveKey';
+import { OtherKeys } from '../../components/ManageKeys/OtherKeys';
 import { useState } from 'react';
-import { Key } from '../types';
-import { AccountSettingsModal } from './components/AccountSettingsModal';
-import { ImportKeysModal } from './components/ImportKeysModal';
-import { ExportKeysModal } from './components/ExportKeysModal';
+import { Key } from './types';
+import { AccountSettingsModal } from '../../components/ManageKeys/AccountSettingsModal';
+import { ImportKeysModal } from '../../components/ManageKeys/ImportKeysModal';
+import { ExportKeysModal } from '../../components/ManageKeys/ExportKeysModal';
 
 export const ManageKeys = () => {
   const { t } = useTranslation();

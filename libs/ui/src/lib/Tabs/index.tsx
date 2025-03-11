@@ -2,7 +2,17 @@ import clsx from 'clsx';
 import { Icon } from '@mdi/react';
 import Typography from '../Typography';
 import { useTheme } from '../../context/ThemeContext';
-import { TabsProps } from './Tabs.types';
+import { Tab } from './Tabs.types';
+
+export interface TabsProps {
+  tabs: readonly Tab[];
+  activeTab: string;
+  onChange: (tabId: string) => void;
+  className?: string;
+  variant?: 'default' | 'icon';
+  size?: 'sm' | 'md' | 'lg';
+  fullWidth?: boolean;
+}
 
 const tabSizes = {
   sm: 'px-2 py-2',
@@ -35,8 +45,8 @@ export const Tabs = ({
     tab.disabled && 'opacity-50 cursor-not-allowed',
     tab.id === activeTab &&
       'after:absolute after:bottom-0 after:left-0 after:w-full after:h-1 after:bg-blue-500 after:rounded-t-full',
-    variant === 'icon' && 'flex items-center gap-2',
-    fullWidth && 'flex-1'
+    variant === 'icon' && 'flex items-center justify-center gap-2',
+    fullWidth && 'flex-1 flex items-center justify-center '
   );
 
   return (

@@ -10,7 +10,7 @@ import {
   mdiClose,
 } from '@mdi/js';
 import { useState } from 'react';
-import { Key } from '../types';
+import { Key } from '../../views/manageKeys/types';
 import { useTranslation } from 'react-i18next';
 
 const MOCK_WALLETS: Key[] = [
@@ -159,20 +159,20 @@ export const OtherKeys = ({ onWalletsChange }: OtherKeysProps) => {
                     />
                     <div className="flex gap-1">
                       <Tooltip content={t('common.save')} position="bottom">
-                        <Icon
-                          path={mdiCheck}
-                          size={0.8}
+                        <button
                           className="text-green-500 cursor-pointer"
                           onClick={handleEditSave}
-                        />
+                        >
+                          <Icon path={mdiCheck} size={0.8} />
+                        </button>
                       </Tooltip>
                       <Tooltip content={t('common.cancel')} position="bottom">
-                        <Icon
-                          path={mdiClose}
-                          size={0.8}
+                        <button
                           className="text-red-500 cursor-pointer"
                           onClick={handleEditCancel}
-                        />
+                        >
+                          <Icon path={mdiClose} size={0.8} />
+                        </button>
                       </Tooltip>
                     </div>
                   </div>

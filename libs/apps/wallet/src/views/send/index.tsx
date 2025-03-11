@@ -68,6 +68,12 @@ export const SendView = () => {
     setAmount(selectedToken.balances[selectedChain]);
   };
 
+  const handleChainSelect = (chain: string) => {
+    if (chain === 'X' || chain === 'P' || chain === 'C') {
+      setSelectedChain(chain);
+    }
+  };
+
   return (
     <div className="w-full h-full container mx-auto max-w-container gap-4 lg:px-4 py-6">
       <div className="mb-6">
@@ -89,7 +95,7 @@ export const SendView = () => {
         <>
           <ChainSelector
             selectedChain={selectedChain}
-            onChainSelect={setSelectedChain}
+            onChainSelect={handleChainSelect}
           />
 
           <div className="flex bg-gray-200/50 dark:bg-slate-800/50 border-t border-slate-700 mt-4 px-4 rounded-lg flex-wrap gap-6 w-full lg:flex-nowrap divide-y lg:divide-y-0 lg:divide-x divide-slate-700">
