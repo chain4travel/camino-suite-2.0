@@ -1,8 +1,7 @@
-'use client'
+'use client';
 
-import { Dialog, Transition } from '@headlessui/react';
-import { Fragment, useState } from 'react';
-import { mdiClose, mdiMenu, mdiWalletOutline, mdiWhiteBalanceSunny } from '@mdi/js';
+import { useState } from 'react';
+import { mdiMenu, mdiWalletOutline, mdiWhiteBalanceSunny } from '@mdi/js';
 
 import Drawer from './Drawer';
 import Icon from '@mdi/react';
@@ -23,9 +22,13 @@ const Navbar = () => {
   const { theme, toggleTheme } = useTheme();
   const [isNetworkModalOpen, setIsNetworkModalOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [editingNetwork, setEditingNetwork] = useState<NetworkOption | null>(null);
+  const [editingNetwork, setEditingNetwork] = useState<NetworkOption | null>(
+    null
+  );
   const [customNetworks, setCustomNetworks] = useState<NetworkOption[]>([]);
-  const [activeNetwork, setActiveNetwork] = useState<NetworkOption | null>(null);
+  const [activeNetwork, setActiveNetwork] = useState<NetworkOption | null>(
+    null
+  );
 
   const defaultNetworks: NetworkOption[] = [
     {
@@ -33,7 +36,7 @@ const Navbar = () => {
     },
     {
       name: 'Columbus',
-    }
+    },
   ];
 
   const handleAddNetwork = (network: Network) => {
@@ -41,7 +44,7 @@ const Navbar = () => {
       ...network,
       isCustom: true,
     };
-    setCustomNetworks(prev => [...prev, newNetwork]);
+    setCustomNetworks((prev) => [...prev, newNetwork]);
     // Set the new network as active
     const networkSwitcherOption = {
       name: network.name,
@@ -56,18 +59,16 @@ const Navbar = () => {
   const handleEditNetwork = (network: Network) => {
     if (!editingNetwork) return;
 
-    setCustomNetworks(prev =>
-      prev.map(n =>
-        n.name === editingNetwork.name
-          ? { ...network, isCustom: true }
-          : n
+    setCustomNetworks((prev) =>
+      prev.map((n) =>
+        n.name === editingNetwork.name ? { ...network, isCustom: true } : n
       )
     );
     setEditingNetwork(null);
   };
 
   const handleDeleteNetwork = (network: NetworkOption) => {
-    setCustomNetworks(prev => prev.filter(n => n.name !== network.name));
+    setCustomNetworks((prev) => prev.filter((n) => n.name !== network.name));
   };
 
   const handleModalClose = () => {
@@ -130,7 +131,7 @@ const Navbar = () => {
         }}
       />
       <Link href="/login" onClick={onItemClick}>
-        <Typography className='flex gap-1'>
+        <Typography className="flex gap-1">
           <Icon path={mdiWalletOutline} size={1} /> Login
         </Typography>
       </Link>
@@ -141,7 +142,7 @@ const Navbar = () => {
     <>
       <nav
         className={clsx(
-          'w-full px-6 py-4 border-b border-slate-700 relative z-50',
+          'w-full px-2 lg:px-8 py-4 border-b border-slate-700 relative z-50',
           theme === 'light' ? 'bg-white' : 'bg-slate-950'
         )}
       >
@@ -167,7 +168,11 @@ const Navbar = () => {
             <Icon
               path={mdiMenu}
               size={1}
-              className={theme === 'light' ? '[&>path]:!fill-slate-950' : '[&>path]:!fill-slate-100'}
+              className={
+                theme === 'light'
+                  ? '[&>path]:!fill-slate-950'
+                  : '[&>path]:!fill-slate-100'
+              }
             />
           </button>
         </div>
@@ -187,12 +192,16 @@ const Navbar = () => {
         isOpen={isNetworkModalOpen}
         onClose={handleModalClose}
         onSubmit={editingNetwork ? handleEditNetwork : handleAddNetwork}
-        initialValues={editingNetwork ? {
-          name: editingNetwork.name,
-          url: editingNetwork.url || '',
-          magellanAddress: editingNetwork.magellanAddress || '',
-          signavaultAddress: editingNetwork.signavaultAddress || ''
-        } : undefined}
+        initialValues={
+          editingNetwork
+            ? {
+                name: editingNetwork.name,
+                url: editingNetwork.url || '',
+                magellanAddress: editingNetwork.magellanAddress || '',
+                signavaultAddress: editingNetwork.signavaultAddress || '',
+              }
+            : undefined
+        }
         mode={editingNetwork ? t('common.edit') : t('common.add')}
       />
     </>

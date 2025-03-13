@@ -46,7 +46,7 @@ const Dropdown = forwardRef<HTMLDivElement, DropdownProps>((props, ref) => {
   );
 
   const buttonClasses = clsx(
-    'flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium',
+    'flex items-center justify-between gap-2 rounded-lg px-3 py-2 text-sm font-medium',
     'bg-white dark:bg-slate-900',
     'border border-gray-200 dark:border-slate-700',
     'text-gray-900 dark:text-white',
@@ -88,7 +88,7 @@ const Dropdown = forwardRef<HTMLDivElement, DropdownProps>((props, ref) => {
             <Icon
               path={endIcon}
               size={0.9}
-              className="text-gray-500 dark:text-slate-400"
+              className="text-gray-500 dark:text-slate-400 self-end"
             />
           )}
         </MenuButton>
@@ -121,7 +121,7 @@ const Dropdown = forwardRef<HTMLDivElement, DropdownProps>((props, ref) => {
                           <Icon
                             path={item.endIcon}
                             size={0.9}
-                            className="text-gray-500 dark:text-slate-400"
+                            className="text-gray-500 dark:text-slate-400 self-center"
                           />
                         )}
                       </>

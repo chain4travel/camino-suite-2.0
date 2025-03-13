@@ -1,6 +1,5 @@
 //@ts-check
 
- 
 const { composePlugins, withNx } = require('@nx/next');
 
 /**
@@ -14,6 +13,14 @@ const nextConfig = {
   },
   reactStrictMode: true,
   output: 'standalone',
+  images: {
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'images.unsplash.com',
+      },
+    ],
+  },
 };
 
 const plugins = [

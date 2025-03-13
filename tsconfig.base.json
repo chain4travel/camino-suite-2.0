@@ -15,6 +15,7 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
+      "@camino/wallet": ["libs/apps/wallet/src/index.ts"],
       "@camino/auth": ["libs/apps/auth/src/index.ts"],
       "@camino/data": ["libs/data/src/index.ts"],
       "@camino/logic": ["libs/logic/src/index.ts"],
