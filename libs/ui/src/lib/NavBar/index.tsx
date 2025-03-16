@@ -183,9 +183,30 @@ const Navbar = () => {
         isOpen={isMobileMenuOpen}
         onClose={() => setIsMobileMenuOpen(false)}
         theme={theme}
-      >
-        <NavItems onItemClick={() => setIsMobileMenuOpen(false)} />
-      </Drawer>
+        toggleTheme={toggleTheme}
+        networks={allNetworks}
+        activeNetwork={activeNetwork?.name || ''}
+        onNetworkSelect={handleNetworkSelect}
+        onAddNetwork={() => setIsNetworkModalOpen(true)}
+        onEditNetwork={(network) => {
+          setEditingNetwork(network);
+          setIsNetworkModalOpen(true);
+        }}
+        onDeleteNetwork={handleDeleteNetwork}
+        onVerifyWallet={() => {
+          console.log('Verify wallet');
+        }}
+        onSettings={() => {
+          console.log('Settings');
+        }}
+        onLogout={() => {
+          console.log('Logout');
+        }}
+        onLogin={() => {
+          // Use the same login logic as the main navbar
+          window.location.href = '/login';
+        }}
+      />
 
       {/* Network Modal */}
       <NetworkModal
@@ -202,7 +223,7 @@ const Navbar = () => {
               }
             : undefined
         }
-        mode={editingNetwork ? t('common.edit') : t('common.add')}
+        mode={editingNetwork}
       />
     </>
   );
