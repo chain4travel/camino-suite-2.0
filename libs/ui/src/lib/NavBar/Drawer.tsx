@@ -18,6 +18,7 @@ import {
   mdiTrashCan,
   mdiWhiteBalanceSunny,
   mdiWalletOutline,
+  mdiPlus,
 } from '@mdi/js';
 import { useTranslation } from 'react-i18next';
 import { NetworkOption } from '../NetworkSwitcher/NetworkSwitcher.types';
@@ -192,14 +193,18 @@ const Drawer = ({
                         ))}
                         {/* Add Custom Network Button */}
                         <button
-                          className="flex items-center w-full p-4 mt-2 rounded-lg hover:bg-slate-800"
+                          className="flex items-center gap-2 w-full p-2"
                           onClick={() => {
                             onAddNetwork();
                             onClose();
                           }}
                         >
                           <Typography>Add Custom Network</Typography>
-                          <Typography className="ml-2 text-2xl">+</Typography>
+                          <Icon
+                            path={mdiPlus}
+                            size={0.8}
+                            className="text-slate-950 dark:text-slate-100"
+                          />
                         </button>
                       </div>
 
