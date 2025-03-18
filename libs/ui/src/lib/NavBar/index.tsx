@@ -15,10 +15,11 @@ import PlatformSwitcher from '../PlatformSwitcher';
 import Typography from '../Typography';
 import { clsx } from 'clsx';
 import { useTheme } from '../../context/ThemeContext';
-import { useTranslation } from 'react-i18next';
+import { OptionType } from '../PlatformSwitcher/PlatformSwitcher.types';
+import { useRouter } from 'next/navigation';
 
 const Navbar = () => {
-  const { t } = useTranslation();
+  const router = useRouter();
   const { theme, toggleTheme } = useTheme();
   const [isNetworkModalOpen, setIsNetworkModalOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -85,8 +86,9 @@ const Navbar = () => {
 
   const allNetworks = [...defaultNetworks, ...customNetworks];
 
-  const handleSwitcherSelect = () => {
-    console.log('Selected option:');
+  const handleSwitcherSelect = (option: OptionType) => {
+    console.log('Selected option:', option);
+    router.push(option.url);
   };
 
   const NavItems = ({ onItemClick }: { onItemClick?: () => void }) => (
@@ -223,7 +225,7 @@ const Navbar = () => {
               }
             : undefined
         }
-        mode={editingNetwork}
+        editingNetworkmode={!!editingNetwork}
       />
     </>
   );

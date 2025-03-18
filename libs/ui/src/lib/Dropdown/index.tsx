@@ -88,7 +88,7 @@ const Dropdown = forwardRef<HTMLDivElement, DropdownProps>((props, ref) => {
             <Icon
               path={endIcon}
               size={0.9}
-              className="text-gray-500 dark:text-slate-400 self-end"
+              className="text-gray-500 dark:text-slate-400"
             />
           )}
         </MenuButton>
