@@ -1,7 +1,7 @@
 'use client';
 import { Tabs, Typography, Input } from '@camino/ui';
 import { mdiMagnify } from '@mdi/js';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { TokensTab } from '../../components/portfolio/TokensTab';
 import { CollectiblesTab } from '../../components/portfolio/CollectiblesTab';
 import { Asset } from './types';
@@ -33,6 +33,10 @@ export const PortfolioView = () => {
   const { t } = useTranslation();
   const [activeTab, setActiveTab] = useState('tokens');
   const [searchQuery, setSearchQuery] = useState('');
+
+  useEffect(() => {
+    setSearchQuery('');
+  }, [activeTab]);
 
   const filteredAssets = MOCK_ASSETS.filter(
     (asset) =>
@@ -67,7 +71,9 @@ export const PortfolioView = () => {
       </div>
 
       {activeTab === 'tokens' && <TokensTab assets={filteredAssets} />}
-      {activeTab === 'collectibles' && <CollectiblesTab />}
+      {activeTab === 'collectibles' && (
+        <CollectiblesTab searchQuery={searchQuery} />
+      )}
     </div>
   );
 };

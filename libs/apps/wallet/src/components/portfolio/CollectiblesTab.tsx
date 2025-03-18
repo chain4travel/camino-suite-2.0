@@ -49,7 +49,11 @@ const MOCK_COLLECTIBLES: Collectible[] = [
   },
 ];
 
-export const CollectiblesTab = () => {
+interface CollectiblesTabProps {
+  searchQuery: string;
+}
+
+export const CollectiblesTab = ({ searchQuery }: CollectiblesTabProps) => {
   const { t } = useTranslation();
   const router = useRouter();
   const [selectedImage, setSelectedImage] = useState<string | undefined>(
@@ -61,107 +65,100 @@ export const CollectiblesTab = () => {
     router.push(`/wallet/transfer?nft=${txId}&chain=X`);
   };
 
+  // Filter collectibles based on search query
+  const filteredCollectibles = MOCK_COLLECTIBLES.filter((collectible) =>
+    collectible.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    collectible.symbol.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
   return (
     <div className="w-full flex flex-col gap-4 border-t border-slate-700 rounded-lg">
       <div className="w-full bg-gray-200/50 dark:bg-slate-800/50 rounded-lg">
-        {MOCK_COLLECTIBLES.length > 0 ? (
-          MOCK_COLLECTIBLES.map((collectible) => (
-            <div key={collectible.id} className="mb-8 py-4">
-              <div className="px-4 py-2 w-full flex flex-wrap items-center gap-2 border-b border-slate-700">
-                <Typography variant="body1" className="font-medium capitalize">
-                  {collectible.name}
-                </Typography>
-                <Typography
-                  variant="body2"
-                  className="!text-slate-400 border-l border-slate-700 pl-2"
-                >
-                  {collectible.symbol}
-                </Typography>
-                <Typography
-                  variant="body2"
-                  className="!text-slate-400 truncate ml-auto"
-                >
-                  {collectible.txId}
-                </Typography>
-              </div>
-
-              <div className="flex flex-wrap justify-center lg:justify-start gap-4 mt-4 px-4">
-                {collectible.mintedGroups.map((group) => (
-                  <Box
-                    key={group.id}
-                    className="w-[200px] !p-0 flex flex-col cdivide-y divide-slate-700"
-                  >
-                    <div className="w-full relative aspect-[3/4]">
-                      {group.image && (
-                        <Image
-                          src={group.image}
-                          alt={group.name}
-                          fill
-                          className="object-cover bg-cover"
-                        />
-                      )}
-                    </div>
-                    <div className="px-3 py-2">
-                      <Typography variant="body2" className="capitalize">
-                        {group.name}
-                      </Typography>
-                    </div>
-                    <div className="p-3 flex items-center justify-between gap-4">
-                      <div className="flex items-center gap-2">
-                        <Typography
-                          variant="caption"
-                          className="!text-slate-400"
-                        >
-                          Group: {group.id}
-                        </Typography>
-                        <Typography
-                          variant="caption"
-                          className="!text-slate-400"
-                        >
-                          {group.type}
-                        </Typography>
-                      </div>
-                      <div className="flex items-center gap-1">
-                        <button
-                          className="text-slate-400 hover:text-slate-300"
-                          onClick={() => handleTransfer(collectible.txId)}
-                        >
-                          <Icon path={mdiShare} size={0.9} />
-                        </button>
-                        <button
-                          className="text-slate-400 hover:text-slate-300"
-                          onClick={() => setSelectedImage(group.image)}
-                        >
-                          <Icon path={mdiFullscreen} size={0.9} />
-                        </button>
-                      </div>
-                    </div>
-                  </Box>
-                ))}
-
-                {collectible.mintedGroups.length <
-                  collectible.numberOfGroups && (
-                  <div className="w-[200px]  border border-dashed border-slate-700 rounded-lg p-4 flex flex-col items-center justify-center gap-3">
+        {filteredCollectibles.length > 0 ? (
+          filteredCollectibles.map(
+            (collectible) =>
+              collectible?.mintedGroups?.length > 0 && (
+                <div key={collectible.id} className="mb-8 py-4">
+                  <div className="px-4 py-2 w-full flex flex-wrap items-center gap-2 border-b border-slate-700">
+                    <Typography
+                      variant="body1"
+                      className="font-medium capitalize"
+                    >
+                      {collectible.name}
+                    </Typography>
                     <Typography
                       variant="body2"
-                      className="!text-slate-400 text-center"
+                      className="!text-slate-400 border-l border-slate-700 pl-2"
                     >
-                      {t('common.mintInStudio')}
+                      {collectible.symbol}
                     </Typography>
-                    <CamBtn
-                      variant="primary"
-                      size="sm"
-                      className="bg-blue-500/10 hover:bg-blue-500/20 !uppercase"
+                    <Typography
+                      variant="body2"
+                      className="!text-slate-400 truncate ml-auto"
                     >
-                      {t('common.mint')}
-                    </CamBtn>
+                      {collectible.txId}
+                    </Typography>
                   </div>
-                )}
-              </div>
-            </div>
-          ))
+
+                  <div className="flex flex-wrap justify-center lg:justify-start gap-4 mt-4 px-4">
+                    {collectible.mintedGroups.map((group) => (
+                      <Box
+                        key={group.id}
+                        className="w-[200px] !p-0 flex flex-col cdivide-y divide-slate-700"
+                      >
+                        <div className="w-full relative aspect-[3/4]">
+                          {group.image && (
+                            <Image
+                              src={group.image}
+                              alt={group.name}
+                              fill
+                              className="object-cover bg-cover"
+                            />
+                          )}
+                        </div>
+                        <div className="px-3 py-2">
+                          <Typography variant="body2" className="capitalize">
+                            {group.name}
+                          </Typography>
+                        </div>
+                        <div className="p-3 flex items-center justify-between gap-4">
+                          <div className="flex items-center gap-2">
+                            <Typography
+                              variant="caption"
+                              className="!text-slate-400"
+                            >
+                              Group: {group.id}
+                            </Typography>
+                            <Typography
+                              variant="caption"
+                              className="!text-slate-400"
+                            >
+                              {group.type}
+                            </Typography>
+                          </div>
+                          <div className="flex items-center gap-1">
+                            <button
+                              className="text-slate-400 hover:text-slate-300"
+                              onClick={() => handleTransfer(collectible.txId)}
+                            >
+                              <Icon path={mdiShare} size={0.9} />
+                            </button>
+                            <button
+                              className="text-slate-400 hover:text-slate-300"
+                              onClick={() => setSelectedImage(group.image)}
+                            >
+                              <Icon path={mdiFullscreen} size={0.9} />
+                            </button>
+                          </div>
+                        </div>
+                      </Box>
+                    ))}
+                  </div>
+                </div>
+              )
+          )
         ) : (
-          <div className="flex flex-col items-center justify-center h-full">
+          <div className="flex flex-col items-center justify-center flex-1 p-8">
             <Typography variant="body1" className="text-slate-400">
               {t('common.noCollectibles')}
             </Typography>

@@ -236,7 +236,12 @@
     "dismiss": "Dismiss",
     "importWallets": "Import wallets",
     "saveKeys": "Save Keys",
-    "activeKey": "Active Key"
+    "activeKey": "Active Key",
+    "collectibles": "Collectibles",
+    "earn": "Earn",
+    "activity": "Activity",
+    "keys": "Manage Keys",
+    "advanced": "Advanced"
   },
   "earn": {
     "savingPools": "SAVING POOLS",
