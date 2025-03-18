@@ -19,12 +19,14 @@ jest.mock('clsx', () => ({
   default: (...args: unknown[]) => args.filter(Boolean).join(' '),
 }));
 
-type TranslationKey = 'common.menu' | 'common.edit' | 'common.add';
+type TranslationKey = 'common.menu' | 'common.edit' | 'common.add' | 'common.networks' | 'common.connected';
 
 const translations: Record<TranslationKey, string> = {
   'common.menu': 'Menu',
   'common.edit': 'Edit',
-  'common.add': 'Add'
+  'common.add': 'Add',
+  'common.networks': 'Networks',
+  'common.connected': 'CONNECTED'
 };
 
 // Mock useTranslation
@@ -37,6 +39,16 @@ jest.mock('react-i18next', () => ({
       changeLanguage: () => new Promise((resolve) => resolve(undefined)),
     },
   }),
+}));
+
+// Mock next/navigation
+jest.mock('next/navigation', () => ({
+  useRouter() {
+    return {
+      push: jest.fn(),
+      replace: jest.fn(),
+    };
+  },
 }));
 
 const renderWithTheme = (component: React.ReactElement) => {
@@ -61,9 +73,10 @@ describe('NavBar', () => {
     const menuButton = screen.getByRole('button', { name: /menu/i });
     fireEvent.click(menuButton);
 
-    // Menu should be visible
+    // Menu should be visible and contain networks text
     await waitFor(() => {
-      expect(screen.getByText('Menu')).toBeInTheDocument();
+      expect(screen.getByText('Networks')).toBeInTheDocument();
+      expect(screen.getByText('Add Custom Network')).toBeInTheDocument();
     });
   });
 
@@ -76,7 +89,7 @@ describe('NavBar', () => {
 
     // Wait for menu to be visible
     await waitFor(() => {
-      expect(screen.getByText('Menu')).toBeInTheDocument();
+      expect(screen.getByText('Networks')).toBeInTheDocument();
     });
 
     // Click close button
