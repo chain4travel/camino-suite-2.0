@@ -10,5 +10,5 @@ export interface NetworkModalProps {
   onClose: () => void;
   onSubmit: (network: Network) => void;
   initialValues?: Network;
-  mode: string;
+  editingNetworkmode: boolean;
 }

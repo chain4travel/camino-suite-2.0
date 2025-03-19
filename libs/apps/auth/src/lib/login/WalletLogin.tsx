@@ -73,11 +73,11 @@ const WalletLogin = ({
 
       <p className="text-sm text-center text-slate-400">
         {t('auth.termsNotice')}
-        <a href="/terms" className="ml-1 text-blue-500 hover:text-blue-400">
+        <a href="/terms" className="mx-1 text-blue-500 hover:text-blue-400">
           {t('auth.termsOfUse')}
         </a>
-        {t('common.and')}
-        <a href="/privacy" className="ml-1 text-blue-500 hover:text-blue-400">
+         {t('common.and')}
+        <a href="/privacy" className="mx-1 text-blue-500 hover:text-blue-400">
           {t('auth.privacyPolicy')}
         </a>
       </p>
