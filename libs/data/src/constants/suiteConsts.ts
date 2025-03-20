@@ -19,7 +19,7 @@ export const PLATFORM_SWITCHER = [
     private: false,
   },
   {
-    name: 'governance',
+    name: 'Governance',
     description: 'Participate and vote on proposals.',
     url: '/governance',
     private: false,
