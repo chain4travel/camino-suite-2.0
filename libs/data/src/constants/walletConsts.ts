@@ -12,27 +12,31 @@ export const WALLET_NAV_ITEMS = [
 export const PLATFORM_SWITCHER = [
   {
     id: 'wallet',
-    label: 'Wallet',
+    name: 'Wallet',
     url: '/wallet',
-    description: 'Secure, non-custodial wallet for Camino Assets.'
+    description: 'Secure, non-custodial wallet for Camino Assets.',
+    hidden: false
   },
   {
     id: 'explorer',
-    label: 'Explorer',
+    name: 'Explorer',
     url: '/explorer',
-    description: 'Lookup network activity and statistics.'
+    description: 'Lookup network activity and statistics.',
+    hidden: false
   },
   {
     id: 'governance',
-    label: 'Governance',
+    name: 'Governance',
     url: '/governance',
-    description: 'Participate and vote on proposals.'
+    description: 'Participate and vote on proposals.',
+    hidden: true
   },
   {
     id: 'partners',
-    label: 'Partners',
+    name: 'Partners',
     url: '/partners',
-    description: 'Partners of the Camino Network.'
+    description: 'Partners of the Camino Network.',
+    hidden: true
   }
 ] as const;
 

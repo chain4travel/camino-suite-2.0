@@ -9,6 +9,8 @@ import NavCard from '../components/home/NavCard';
 
 export default function Index() {
   const { t } = useTranslation();
+  
+  const visiblePlatforms = PLATFORM_SWITCHER.filter(platform => !platform.hidden);
 
   return (
     <Container>
@@ -23,10 +25,12 @@ export default function Index() {
           </Typography>
         </div>
 
-        {/* Platform Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {PLATFORM_SWITCHER.map((platform: OptionType) => (
-            <NavCard key={platform.name} platform={platform} />
+        {/* Platform Cards */}
+        <div className="flex flex-col md:flex-row gap-6 justify-center">
+          {visiblePlatforms.map((platform: OptionType) => (
+            <div key={platform.name} className="w-full md:w-[400px]">
+              <NavCard platform={platform} />
+            </div>
           ))}
         </div>
       </div>
