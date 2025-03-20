@@ -19,9 +19,9 @@ export const PLATFORM_SWITCHER = [
     private: false,
   },
   {
-    name: 'DAC',
-    description: 'Decentralized Autonomous Consortium',
-    url: '/dac',
+    name: 'governance',
+    description: 'Participate and vote on proposals.',
+    url: '/governance',
     private: false,
   },
   {
