@@ -1,10 +1,15 @@
 import { Box, CamBtn, Typography } from '@camino/ui';
 import { OptionType } from 'libs/ui/src/lib/PlatformSwitcher/PlatformSwitcher.types';
 import { useTranslation } from 'react-i18next';
-import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 
 const NavCard = ({ platform }: { platform: OptionType }) => {
   const { t } = useTranslation();
+  const router = useRouter();
+  
+  const handleClick = () => {
+    router.push(platform.url);
+  };
   
   return (
     <Box className="!p-2 h-[200px] flex flex-col bg-white dark:bg-slate-950">
@@ -18,11 +23,13 @@ const NavCard = ({ platform }: { platform: OptionType }) => {
           </Typography>
         </div>
 
-        <Link href={platform.url} className="w-full mt-auto">
-          <CamBtn variant="secondary" className="w-full !border-primary hover:!border-primary-50">
-            {t('common.goTo')} {platform.name}
-          </CamBtn>
-        </Link>
+        <CamBtn 
+          variant="secondary" 
+          className="w-full !border-primary hover:!border-primary-50"
+          onClick={handleClick}
+        >
+          {t('common.goTo')} {platform.name}
+        </CamBtn>
       </div>
     </Box>
   );
