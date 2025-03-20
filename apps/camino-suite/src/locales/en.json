@@ -241,7 +241,15 @@
     "earn": "Earn",
     "activity": "Activity",
     "keys": "Manage Keys",
-    "advanced": "Advanced"
+    "advanced": "Advanced",
+    "suiteDescription": "The Camino Suite unifies all network wide applications of the Camino Network",
+    "goTo": "Go to",
+    "walletDescription": "Secure, non-custodial wallet for Camino Assets.",
+    "explorerDescription": "Lookup network activity and statistics.",
+    "governanceDescription": "Participate and vote on proposals.",
+    "partnersDescription": "Partners of the Camino Network.",
+    "networks": "Networks",
+    "connected": "CONNECTED"
   },
   "earn": {
     "savingPools": "SAVING POOLS",
