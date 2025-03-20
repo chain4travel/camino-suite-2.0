@@ -7,7 +7,7 @@ const NavCard = ({ platform }: { platform: OptionType }) => {
   const { t } = useTranslation();
   
   return (
-    <Box className="!p-0 h-[180px] flex flex-col bg-white dark:bg-slate-950">
+    <Box className="!p-2 h-[200px] flex flex-col bg-white dark:bg-slate-950">
       <div className="w-full h-full p-4 flex flex-col gap-4">
         <div className="flex-1 flex flex-col gap-2">
           <Typography variant="h3">
