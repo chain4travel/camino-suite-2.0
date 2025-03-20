@@ -3,8 +3,7 @@
 import { Typography, Container } from '@camino/ui';
 import { useTranslation } from 'react-i18next';
 import { PLATFORM_SWITCHER } from '@camino/data';
-import Link from 'next/link';
-import { OptionType } from 'libs/ui/src/lib/PlatformSwitcher/PlatformSwitcher.types';
+import { OptionType } from '../components/home/NavCard';
 import NavCard from '../components/home/NavCard';
 
 export default function Index() {
