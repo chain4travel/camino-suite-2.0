@@ -17,7 +17,7 @@ const inter = Inter({
 const resources = {
   en: { translation: enTranslations },
   es: { translation: esTranslations },
-  fr: { translation: frTranslations }
+  fr: { translation: frTranslations },
 };
 
 export const metadata = {
