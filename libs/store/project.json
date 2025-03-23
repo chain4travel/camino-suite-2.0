@@ -3,7 +3,7 @@
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "libs/store/src",
   "projectType": "library",
-  "tags": [],
+  "tags": ["scope:shared", "type:state"],
   "targets": {
     "lint": {
       "executor": "@nx/linter:eslint",
@@ -20,14 +20,30 @@
       }
     },
     "build": {
-      "executor": "@nx/js:tsc",
+      "executor": "@nx/webpack:webpack",
       "outputs": ["{options.outputPath}"],
       "options": {
         "outputPath": "dist/libs/store",
-        "tsConfig": "libs/store/tsconfig.lib.json",
-        "packageJson": "libs/store/package.json",
         "main": "libs/store/src/index.ts",
-        "assets": ["libs/store/*.md"]
+        "tsConfig": "libs/store/tsconfig.lib.json",
+        "assets": [
+          {
+            "glob": "*.md",
+            "input": "libs/store/",
+            "output": "."
+          }
+        ],
+        "webpackConfig": "libs/store/webpack.config.js",
+        "target": "web",
+        "compiler": "babel",
+        "sourceMap": true
+      },
+      "configurations": {
+        "production": {
+          "optimization": true,
+          "extractLicenses": true,
+          "generatePackageJson": true
+        }
       }
     }
   }
