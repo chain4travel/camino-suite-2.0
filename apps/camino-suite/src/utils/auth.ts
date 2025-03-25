@@ -13,12 +13,3 @@ export const setAuthToken = (token: string) => {
 export const removeAuthToken = () => {
   deleteCookie(AUTH_TOKEN_KEY);
 };
-
-// Add auth token to all API requests
-export const addAuthHeader = (headers: Headers) => {
-  const token = getAuthToken();
-  if (token) {
-    headers.set('x-auth-token', token);
-  }
-  return headers;
-}; 
