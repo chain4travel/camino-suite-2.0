@@ -7,6 +7,7 @@ import { StoreProvider } from '@camino/store';
 import enTranslations from '../locales/en.json';
 import esTranslations from '../locales/es.json';
 import frTranslations from '../locales/fr.json';
+import { AuthProvider } from '../context/AuthContext';
 
 const inter = Inter({
   subsets: ['latin'],
@@ -38,9 +39,11 @@ export default function RootLayout({
       >
         <ThemeProvider>
           <StoreProvider>
-            <I18nProvider resources={resources}>
-              <Layout>{children}</Layout>
-            </I18nProvider>
+            <AuthProvider>
+              <I18nProvider resources={resources}>
+                <Layout>{children}</Layout>
+              </I18nProvider>
+            </AuthProvider>
           </StoreProvider>
         </ThemeProvider>
       </body>
