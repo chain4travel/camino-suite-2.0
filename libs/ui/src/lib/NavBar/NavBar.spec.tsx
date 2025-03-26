@@ -49,6 +49,9 @@ jest.mock('next/navigation', () => ({
       replace: jest.fn(),
     };
   },
+  usePathname() {
+    return '/wallet';
+  }
 }));
 
 const renderWithTheme = (component: React.ReactElement) => {

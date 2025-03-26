@@ -1,9 +1,11 @@
 import '@testing-library/jest-dom';
 
-import { render, screen } from '@testing-library/react';
+import { render, screen, fireEvent } from '@testing-library/react';
 
-import PlatformSwitcher from '.';
+import PlatformSwitcher from './index';
 import React from 'react';
+import { OptionType } from './PlatformSwitcher.types';
+
 
 // Mock all dependencies before importing the component
 jest.mock('@mdi/js', () => ({
@@ -43,33 +45,76 @@ jest.mock('@headlessui/react', () => ({
   },
 }));
 
-const mockOptions = [
-  {
-    name: 'Wallet',
-    description: 'Secure, non-custodial wallet',
-    url: '/wallet',
-    private: true,
-  },
-  {
-    name: 'Explorer',
-    description: 'Network activity and statistics',
-    url: '/explorer',
-    private: true,
-  },
-];
+// Mock translations
+jest.mock('react-i18next', () => ({
+  useTranslation: () => ({
+    t: (key: string) => key,
+  }),
+}));
 
 describe('PlatformSwitcher', () => {
-  const onSelect = jest.fn();
+  const mockOptions: OptionType[] = [
+    {
+      name: 'Wallet',
+      url: '/wallet',
+      description: 'Wallet Description',
+      private: false,
+    },
+    {
+      name: 'Explorer',
+      url: '/explorer',
+      description: 'Explorer Description',
+      private: false,
+    },
+  ];
 
-  beforeEach(() => {
-    onSelect.mockClear();
+  const mockOnSelect = jest.fn();
+
+  it('renders correctly with options', () => {
+    render(
+      <PlatformSwitcher
+        options={mockOptions}
+        activeApp="Wallet"
+        onSelect={mockOnSelect}
+      />
+    );
+
+    expect(screen.getByTestId('typography-h3')).toHaveTextContent('Wallet');
+  });
+
+  it('calls onSelect when an option is clicked', () => {
+    render(
+      <PlatformSwitcher
+        options={mockOptions}
+        activeApp="Wallet"
+        onSelect={mockOnSelect}
+      />
+    );
+
+    const menuItems = screen.getAllByTestId('typography-h6');
+    const explorerOption = menuItems.find(item => item.textContent === 'Explorer');
+    fireEvent.click(explorerOption!);
+    expect(mockOnSelect).toHaveBeenCalledWith(mockOptions[1]);
+  });
+
+  it('shows active app correctly', () => {
+    render(
+      <PlatformSwitcher
+        options={mockOptions}
+        activeApp="Explorer"
+        onSelect={mockOnSelect}
+      />
+    );
+
+    const activeElement = screen.getByTestId('typography-h3');
+    expect(activeElement).toHaveTextContent('Explorer');
   });
 
   it('renders with initial active app', () => {
     render(
       <PlatformSwitcher
         options={mockOptions}
-        onSelect={onSelect}
+        onSelect={mockOnSelect}
         activeApp="Wallet"
       />
     );
@@ -81,7 +126,7 @@ describe('PlatformSwitcher', () => {
     render(
       <PlatformSwitcher
         options={mockOptions}
-        onSelect={onSelect}
+        onSelect={mockOnSelect}
         activeApp="Wallet"
       />
     );
@@ -94,7 +139,7 @@ describe('PlatformSwitcher', () => {
     render(
       <PlatformSwitcher
         options={mockOptions}
-        onSelect={onSelect}
+        onSelect={mockOnSelect}
         activeApp="Wallet"
       />
     );

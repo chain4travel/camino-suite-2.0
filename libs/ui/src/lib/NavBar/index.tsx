@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { mdiMenu, mdiWalletOutline, mdiWhiteBalanceSunny } from '@mdi/js';
+import { usePathname } from 'next/navigation';
 
 import Drawer from './Drawer';
 import Icon from '@mdi/react';
@@ -20,7 +21,25 @@ import { useRouter } from 'next/navigation';
 
 const Navbar = () => {
   const router = useRouter();
+  const pathname = usePathname();
   const { theme, toggleTheme } = useTheme();
+
+  // Get active platform based on current path
+  const getActivePlatform = () => {
+    return (
+      PLATFORM_SWITCHER.find((platform) => {
+        // Remove trailing slash from both paths for comparison
+        const cleanPathname = pathname?.replace(/\/$/, '') || '';
+
+        // Check if current path starts with platform url
+        return (
+          cleanPathname === platform.url ||
+          cleanPathname.startsWith(`${platform.url}/`)
+        );
+      })?.name || ''
+    );
+  };
+
   const [isNetworkModalOpen, setIsNetworkModalOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [editingNetwork, setEditingNetwork] = useState<NetworkOption | null>(
@@ -152,7 +171,7 @@ const Navbar = () => {
           {/* Left side - Platform Switcher */}
           <PlatformSwitcher
             options={PLATFORM_SWITCHER}
-            activeApp=""
+            activeApp={getActivePlatform()}
             onSelect={handleSwitcherSelect}
           />
 
