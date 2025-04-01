@@ -3,6 +3,7 @@ export interface Network {
   url: string;
   magellanAddress: string;
   signavaultAddress: string;
+  status: string;
 }
 
 export interface NetworkModalProps {

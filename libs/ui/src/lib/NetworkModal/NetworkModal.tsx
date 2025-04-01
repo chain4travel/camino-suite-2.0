@@ -19,7 +19,8 @@ const NetworkModal = ({
     name: '',
     url: '',
     magellanAddress: '',
-    signavaultAddress: ''
+    signavaultAddress: '',
+    status: 'custom'
   });
 
   useEffect(() => {
@@ -31,7 +32,8 @@ const NetworkModal = ({
         name: '',
         url: '',
         magellanAddress: '',
-        signavaultAddress: ''
+        signavaultAddress: '',
+        status: 'custom'
       });
     }
   }, [isOpen, initialValues]);

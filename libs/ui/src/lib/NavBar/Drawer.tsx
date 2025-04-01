@@ -39,6 +39,7 @@ interface DrawerProps {
   onLogout: () => void;
   toggleTheme: () => void;
   onLogin: () => void;
+  isAuthenticated?: boolean;
 }
 
 const Drawer = ({
@@ -56,6 +57,7 @@ const Drawer = ({
   onLogout,
   toggleTheme,
   onLogin,
+  isAuthenticated,
 }: DrawerProps) => {
   const { t } = useTranslation();
 
