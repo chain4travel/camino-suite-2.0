@@ -50,7 +50,8 @@ const NetworkModal = ({
       name: '',
       url: '',
       magellanAddress: '',
-      signavaultAddress: ''
+      signavaultAddress: '',
+      status: 'custom'
     });
     onClose();
   };
