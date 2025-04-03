@@ -1,28 +1,28 @@
 'use client';
 
 import { useState } from 'react';
-import { mdiMenu, mdiWalletOutline, mdiWhiteBalanceSunny } from '@mdi/js';
 import { usePathname } from 'next/navigation';
 
 import Drawer from './Drawer';
-import Icon from '@mdi/react';
-import Link from 'next/link';
 import { Network } from '../NetworkModal/NetworkModal.types';
 import NetworkModal from '../NetworkModal/NetworkModal';
 import { NetworkOption } from '../NetworkSwitcher/NetworkSwitcher.types';
 import NetworkSwitcher from '../NetworkSwitcher';
 import { PLATFORM_SWITCHER } from '@camino/data';
 import PlatformSwitcher from '../PlatformSwitcher';
-import Typography from '../Typography';
 import { clsx } from 'clsx';
 import { useTheme } from '../../context/ThemeContext';
 import { OptionType } from '../PlatformSwitcher/PlatformSwitcher.types';
 import { useRouter } from 'next/navigation';
+import LoggedInNav from './LoggedInNav';
+import LoggedOutNav from './LoggedOutNav';
+import ThemeToggle from './ThemeToggle';
 
 const Navbar = () => {
   const router = useRouter();
   const pathname = usePathname();
   const { theme, toggleTheme } = useTheme();
+  const [isAuthenticated, setIsAuthenticated] = useState(true); // Basic auth state
 
   // Get active platform based on current path
   const getActivePlatform = () => {
@@ -53,9 +53,11 @@ const Navbar = () => {
   const defaultNetworks: NetworkOption[] = [
     {
       name: 'Camino',
+      status: 'mainnet',
     },
     {
       name: 'Columbus',
+      status: 'testnet',
     },
   ];
 
@@ -110,54 +112,27 @@ const Navbar = () => {
     router.push(option.url);
   };
 
-  const NavItems = ({ onItemClick }: { onItemClick?: () => void }) => (
-    <>
-      <button
-        className="flex items-center gap-1 text-sm capitalize"
-        onClick={() => {
-          toggleTheme();
-          onItemClick?.();
-        }}
-      >
-        <Icon
-          path={mdiWhiteBalanceSunny}
-          size={1}
-          className={
-            theme === 'light'
-              ? '[&>path]:!fill-slate-950'
-              : '[&>path]:!fill-slate-100'
-          }
-        />
-        <Typography>{theme}</Typography>
-      </button>
-      <NetworkSwitcher
-        options={allNetworks}
-        onSelect={(network) => {
-          handleNetworkSelect(network);
-          onItemClick?.();
-        }}
-        activeNetwork={activeNetwork?.name || ''}
-        onAddNetwork={() => {
-          setIsNetworkModalOpen(true);
-          onItemClick?.();
-        }}
-        onEditNetwork={(network: NetworkOption) => {
-          setEditingNetwork(network);
-          setIsNetworkModalOpen(true);
-          onItemClick?.();
-        }}
-        onDeleteNetwork={(network) => {
-          handleDeleteNetwork(network);
-          onItemClick?.();
-        }}
-      />
-      <Link href="/login" onClick={onItemClick}>
-        <Typography className="flex gap-1">
-          <Icon path={mdiWalletOutline} size={1} /> Login
-        </Typography>
-      </Link>
-    </>
-  );
+  const handleLogin = () => {
+    // this state is temporary, it should be removed when the login is implemented from the store
+    setIsAuthenticated(true);
+    router.push('/login');
+  };
+
+  const handleLogout = () => {
+    setIsAuthenticated(false);
+    router.push('/login');
+  };
+
+  // Add wallet address state
+  const [walletAddress] = useState('P-cami...enkl8'); // For now using static address
+
+  const handleVerifyWallet = () => {
+    router.push('/verify-wallet');
+  };
+
+  const handleSettings = () => {
+    router.push('/settings');
+  };
 
   return (
     <>
@@ -175,27 +150,34 @@ const Navbar = () => {
             onSelect={handleSwitcherSelect}
           />
 
-          {/* Right side - Desktop Menu */}
+          {/* Right side - Network Switcher and Auth Nav */}
           <div className="items-center hidden gap-4 md:flex">
-            <NavItems />
-          </div>
-
-          {/* Mobile Menu Button */}
-          <button
-            className="md:hidden"
-            onClick={() => setIsMobileMenuOpen(true)}
-            aria-label="menu"
-          >
-            <Icon
-              path={mdiMenu}
-              size={1}
-              className={
-                theme === 'light'
-                  ? '[&>path]:!fill-slate-950'
-                  : '[&>path]:!fill-slate-100'
-              }
+            {!isAuthenticated && <ThemeToggle />}
+            <NetworkSwitcher
+              options={allNetworks}
+              onSelect={handleNetworkSelect}
+              activeNetwork={activeNetwork?.name || ''}
+              onAddNetwork={() => setIsNetworkModalOpen(true)}
+              onEditNetwork={(network) => {
+                setEditingNetwork(network);
+                setIsNetworkModalOpen(true);
+              }}
+              onDeleteNetwork={handleDeleteNetwork}
             />
-          </button>
+
+            {isAuthenticated ? (
+              <LoggedInNav
+                onMobileMenuOpen={() => setIsMobileMenuOpen(true)}
+                onLogout={handleLogout}
+                walletAddress={walletAddress}
+              />
+            ) : (
+              <LoggedOutNav
+                onMobileMenuOpen={() => setIsMobileMenuOpen(true)}
+                onLogin={handleLogin}
+              />
+            )}
+          </div>
         </div>
       </nav>
 
@@ -214,19 +196,11 @@ const Navbar = () => {
           setIsNetworkModalOpen(true);
         }}
         onDeleteNetwork={handleDeleteNetwork}
-        onVerifyWallet={() => {
-          console.log('Verify wallet');
-        }}
-        onSettings={() => {
-          console.log('Settings');
-        }}
-        onLogout={() => {
-          console.log('Logout');
-        }}
-        onLogin={() => {
-          // Use the same login logic as the main navbar
-          window.location.href = '/login';
-        }}
+        onLogin={handleLogin}
+        onLogout={handleLogout}
+        isAuthenticated={isAuthenticated}
+        onVerifyWallet={handleVerifyWallet}
+        onSettings={handleSettings}
       />
 
       {/* Network Modal */}
@@ -241,6 +215,7 @@ const Navbar = () => {
                 url: editingNetwork.url || '',
                 magellanAddress: editingNetwork.magellanAddress || '',
                 signavaultAddress: editingNetwork.signavaultAddress || '',
+                status: editingNetwork.status || 'custom',
               }
             : undefined
         }
