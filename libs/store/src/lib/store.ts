@@ -2,8 +2,6 @@
 import { configureStore, combineReducers } from '@reduxjs/toolkit';
 
 // Import reducers
-import counterReducer from './slices/counterSlice';
-import apiReducer from './slices/apiSlice';
 import networkReducer from './slices/networkSlice';
 
 // Import middleware
@@ -12,9 +10,7 @@ import { errorTrackingMiddleware } from './middleware/error-tracking';
 
 // Create root reducer with proper typing
 const rootReducer = combineReducers({
-  counter: counterReducer,
   network: networkReducer,
-  api: apiReducer,
   // Add more reducers as needed
 });
 

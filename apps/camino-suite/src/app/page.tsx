@@ -1,20 +1,22 @@
 'use client';
 
 import {
-  decrement,
-  increment,
+  initializeNetworks,
   useAppDispatch,
   useAppSelector,
 } from '@camino/store';
 import { LanguageSwitcher } from '@camino/ui';
 import { Typography } from '@camino/ui';
+import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 
 export default function Index() {
   const { t } = useTranslation();
-  const count = useAppSelector((state) => state.counter.value);
+  const network = useAppSelector((state) => state.network);
   const dispatch = useAppDispatch();
-  console.log('count', count);
+  useEffect(() => {
+    dispatch(initializeNetworks());
+  }, []);
   return <></>;
   // return (
   //   <div className="w-full">

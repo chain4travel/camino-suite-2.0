@@ -42,6 +42,42 @@ export const loadSelectedNetwork = createAsyncThunk<
   }
 });
 
+export const initializeNetworks = createAsyncThunk<
+  void,
+  void,
+  {
+    state: RootState;
+    dispatch: AppDispatch;
+  }
+>('network/initializeNetworks', async (_, { dispatch }) => {
+  try {
+    const camino: CamNetwork = new CamNetwork(
+      'Camino',
+      'https://api.camino.network',
+      1000,
+      'https://magellan.camino.network',
+      'https://explorer.camino.network',
+      true
+    );
+
+    const columbus: CamNetwork = new CamNetwork(
+      'Columbus',
+      'https://columbus.camino.network',
+      1001,
+      'https://magellan.columbus.camino.network',
+      'https://explorer.camino.network',
+      true
+    );
+
+    dispatch(addNetwork(camino));
+    dispatch(addNetwork(columbus));
+    dispatch(setNetwork(columbus));
+    // console.log(columbus);
+  } catch (error) {
+    console.error('Error initializing networks:', error);
+  }
+});
+
 export const setNetwork = createAsyncThunk<
   boolean,
   CamNetwork,
@@ -152,6 +188,19 @@ export const networkSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
+      .addCase(initializeNetworks.pending, (state) => {
+        state.status = 'connecting';
+        console.log('Initializing networks');
+      })
+      .addCase(initializeNetworks.fulfilled, (state) => {
+        state.status = 'connected';
+        console.log(state.networks);
+        console.log('Initialized networks');
+      })
+      .addCase(initializeNetworks.rejected, (state) => {
+        state.status = 'disconnected';
+        console.log('Initializing rejected');
+      })
       .addCase(loadSelectedNetwork.pending, (state) => {
         state.status = 'connecting';
       })
