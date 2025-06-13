@@ -11,7 +11,7 @@ const Box = ({
   return (
     <div
       className={clsx(
-        'flex items-center justify-center p-4 border rounded-xl border-slate-700',
+        'flex items-center justify-center p-4 border rounded-xl border-slate-700 overflow-hidden',
         className
       )}
       {...rest}

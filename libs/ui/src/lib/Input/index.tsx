@@ -1,49 +1,43 @@
 'use client';
 
 import React, { forwardRef } from 'react';
-
 import Icon from '@mdi/react';
 import { InputProps } from './Input.types';
 import clsx from 'clsx';
-import { useTranslation } from 'react-i18next';
 
-const Input = forwardRef<HTMLInputElement, InputProps>(
-  (
-    {
-      className,
-      label,
-      error,
-      helpText,
-      rightIcon,
-      isSuccess,
-      onIconClick,
-      iconAriaLabel,
-      iconDisabled,
-      variant = 'default',
-      required,
-      ...props
-    },
-    ref
-  ) => {
-    const { t } = useTranslation();
+const Input = forwardRef<HTMLInputElement | HTMLTextAreaElement, InputProps>(
+  ({
+    className,
+    label,
+    error,
+    helpText,
+    rightIcon,
+    isSuccess,
+    onIconClick,
+    iconAriaLabel,
+    iconDisabled,
+    variant = 'input',
+    rows = 4,
+    required,
+    ...props
+  }, ref) => {
 
     const inputClasses = clsx(
-      'w-full px-4 py-2.5 rounded-lg font-normal text-sm transition-colors',
+      'w-full px-4 py-2.5 rounded-lg font-normal text-sm transition-colors disabled:opacity-50 disabled:cursor-not-allowed dark:disabled:opacity-20',
       'bg-white dark:bg-gray-900',
       'border border-gray-200 dark:border-gray-700',
       'placeholder:text-gray-500 dark:placeholder:text-slate-400',
       'text-gray-900 dark:text-white',
       'focus:outline-none focus:ring-2 focus:ring-blue-500/20 dark:focus:ring-blue-500/20 focus:border-blue-500 dark:focus:border-blue-500',
       {
-        'border-red-500 dark:border-red-500 focus:border-red-500 dark:focus:border-red-500 focus:ring-red-500/20 dark:focus:ring-red-500/20':
-          error,
-        'border-green-500 dark:border-green-500 focus:border-green-500 dark:focus:border-green-500 focus:ring-green-500/20 dark:focus:ring-green-500/20':
-          isSuccess,
-        'pr-12': rightIcon && variant === 'default',
-        'text-center tracking-widest': variant === 'validation-code',
+        'border-red-500 dark:border-red-500 focus:border-red-500 dark:focus:border-red-500 focus:ring-red-500/20 dark:focus:ring-red-500/20': error,
+        'border-green-500 dark:border-green-500 focus:border-green-500 dark:focus:border-green-500 focus:ring-green-500/20 dark:focus:ring-green-500/20': isSuccess,
+        'pr-12': rightIcon && variant === 'input',
       },
       className
     );
+
+    const InputElement = variant === 'textarea' ? 'textarea' : 'input';
 
     return (
       <div className="w-full">
@@ -58,13 +52,21 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
           </label>
         )}
         <div className="relative">
-          <input
-            ref={ref}
-            className={inputClasses}
-            maxLength={variant === 'validation-code' ? 12 : undefined}
-            {...props}
-          />
-          {rightIcon && variant === 'default' && (
+          {variant === 'textarea' ? (
+            <textarea
+              ref={ref as React.Ref<HTMLTextAreaElement>}
+              rows={rows}
+              className={inputClasses}
+              {...props}
+            />
+          ) : (
+            <input
+              ref={ref as React.Ref<HTMLInputElement>}
+              className={inputClasses}
+              {...props}
+            />
+          )}
+          {rightIcon && variant === 'input' && (
             <button
               type="button"
               onClick={onIconClick}
@@ -80,20 +82,13 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
               <Icon
                 path={rightIcon as string}
                 size={1}
-                className="text-gray-700 dark:text-slate-300 group-enabled:group-hover:text-white dark:group-enabled:group-hover:text-slate-950"
+                className="text-gray-700 dark:text-slate-300"
               />
             </button>
           )}
         </div>
         {error && (
           <p className="flex items-center gap-1 mt-1 text-sm text-red-500 dark:text-red-400">
-            <span
-              role="img"
-              aria-label={t('common.warning')}
-              className="inline-block w-4 h-4"
-            >
-              ⚠️
-            </span>
             {error}
           </p>
         )}

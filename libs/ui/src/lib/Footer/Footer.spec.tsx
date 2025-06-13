@@ -47,7 +47,7 @@ describe('Footer', () => {
     const footer = screen.getByRole('contentinfo');
     const classes = footer.className.split(' ');
     expect(classes).toContain('w-full');
-    expect(classes).toContain('px-6');
+    expect(classes).toContain('px-2');
     expect(classes).toContain('py-10');
     expect(classes).toContain('border-t');
     expect(classes).toContain('border-slate-400');

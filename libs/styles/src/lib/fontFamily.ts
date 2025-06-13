@@ -1,3 +1,3 @@
 export const fontFamily = {
-  inter: ['var(--font-inter)'],
+  inter: ['var(--font-inter)', 'sans-serif'],
 };

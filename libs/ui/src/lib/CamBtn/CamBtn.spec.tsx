@@ -3,7 +3,6 @@ import '@testing-library/jest-dom';
 import { fireEvent, render, screen } from '@testing-library/react';
 
 import CamBtn from '.';
-import Icon from '@mdi/react';
 import React from 'react';
 import { mdiAccount } from '@mdi/js';
 

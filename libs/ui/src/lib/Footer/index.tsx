@@ -31,7 +31,7 @@ const Footer = () => {
   return (
     <footer
       className={clsx(
-        'w-full px-6 py-10 border-t border-slate-400',
+        'w-full px-2 lg:px-8 py-10 border-t border-slate-400',
         theme === 'light' ? 'bg-white text-black' : 'bg-slate-950 text-white'
       )}
     >
@@ -47,7 +47,7 @@ const Footer = () => {
               {t('footer.description')}
             </Typography>
             {/* Social Icons */}
-            <div className="flex gap-4 mt-6">
+            <div className="flex flex-wrap gap-4 mt-6">
               {socialMedia?.map(({ name, url, icon }) => (
                 <a
                   href={url}

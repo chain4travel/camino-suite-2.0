@@ -1,7 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { mdiAccount, mdiContentCopy } from '@mdi/js';
-
-import Icon from '@mdi/react';
 import Input from '.';
 
 const meta: Meta<typeof Input> = {

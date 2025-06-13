@@ -6,3 +6,4 @@ export * from './lib/wallet-api';
 export * from './constants/suiteConsts';
 export * from './constants/footerConsts';
 export * from './constants/routePathsConsts';
+export * from './constants/walletConsts';

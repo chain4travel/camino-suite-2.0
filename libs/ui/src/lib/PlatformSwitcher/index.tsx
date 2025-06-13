@@ -25,8 +25,8 @@ const PlatformSwitcher = ({
   }, [activeApp, options]);
 
   const CustomTrigger = () => (
-    <div className="flex items-center justify-center gap-2 [&>h3]:mt-1">
-      <Logo className="w-10 h-10 md:hidden" />
+    <div className="flex items-center justify-center gap-2 [&>h3]:mt-1 [&>svg]:mt-1">
+      <Logo className="w-8 h-8 md:hidden" />
       <CaminoLogo  className="hidden lg:block" />
       <Typography variant="h3" as="h3" color="#149EED">
         {currentOption?.name}
@@ -47,7 +47,7 @@ const PlatformSwitcher = ({
     <Dropdown
       trigger={<CustomTrigger />}
       endIcon={mdiChevronDown}
-      menuButtonClassName="!bg-transparent !border-0 hover:!bg-transparent dark:hover:!bg-transparent"
+      menuButtonClassName="!bg-transparent !border-0 hover:!bg-transparent dark:hover:!bg-transparent [&>svg]:mt-1"
       menuItemsClassName="absolute mt-4 origin-top-right border w-fit rounded-xl border-slate-700 bg-slate-950"
     >
       {filteredOptions.map((option, index) => (

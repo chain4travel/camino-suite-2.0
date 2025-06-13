@@ -1,39 +1,64 @@
-'use client'
+'use client';
 
-import { Dialog, Transition } from '@headlessui/react';
-import { Fragment, useState } from 'react';
-import { mdiClose, mdiMenu, mdiWalletOutline, mdiWhiteBalanceSunny } from '@mdi/js';
+import { useState } from 'react';
+import { usePathname } from 'next/navigation';
 
 import Drawer from './Drawer';
-import Icon from '@mdi/react';
-import Link from 'next/link';
 import { Network } from '../NetworkModal/NetworkModal.types';
 import NetworkModal from '../NetworkModal/NetworkModal';
 import { NetworkOption } from '../NetworkSwitcher/NetworkSwitcher.types';
 import NetworkSwitcher from '../NetworkSwitcher';
 import { PLATFORM_SWITCHER } from '@camino/data';
 import PlatformSwitcher from '../PlatformSwitcher';
-import Typography from '../Typography';
 import { clsx } from 'clsx';
 import { useTheme } from '../../context/ThemeContext';
-import { useTranslation } from 'react-i18next';
+import { OptionType } from '../PlatformSwitcher/PlatformSwitcher.types';
+import { useRouter } from 'next/navigation';
+import LoggedInNav from './LoggedInNav';
+import LoggedOutNav from './LoggedOutNav';
+import ThemeToggle from './ThemeToggle';
 
 const Navbar = () => {
-  const { t } = useTranslation();
+  const router = useRouter();
+  const pathname = usePathname();
   const { theme, toggleTheme } = useTheme();
+  const [isAuthenticated, setIsAuthenticated] = useState(true); // Basic auth state
+
+  // Get active platform based on current path
+  const getActivePlatform = () => {
+    return (
+      PLATFORM_SWITCHER.find((platform) => {
+        // Remove trailing slash from both paths for comparison
+        const cleanPathname = pathname?.replace(/\/$/, '') || '';
+
+        // Check if current path starts with platform url
+        return (
+          cleanPathname === platform.url ||
+          cleanPathname.startsWith(`${platform.url}/`)
+        );
+      })?.name || ''
+    );
+  };
+
   const [isNetworkModalOpen, setIsNetworkModalOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [editingNetwork, setEditingNetwork] = useState<NetworkOption | null>(null);
+  const [editingNetwork, setEditingNetwork] = useState<NetworkOption | null>(
+    null
+  );
   const [customNetworks, setCustomNetworks] = useState<NetworkOption[]>([]);
-  const [activeNetwork, setActiveNetwork] = useState<NetworkOption | null>(null);
+  const [activeNetwork, setActiveNetwork] = useState<NetworkOption | null>(
+    null
+  );
 
   const defaultNetworks: NetworkOption[] = [
     {
       name: 'Camino',
+      status: 'mainnet',
     },
     {
       name: 'Columbus',
-    }
+      status: 'testnet',
+    },
   ];
 
   const handleAddNetwork = (network: Network) => {
@@ -41,7 +66,7 @@ const Navbar = () => {
       ...network,
       isCustom: true,
     };
-    setCustomNetworks(prev => [...prev, newNetwork]);
+    setCustomNetworks((prev) => [...prev, newNetwork]);
     // Set the new network as active
     const networkSwitcherOption = {
       name: network.name,
@@ -56,18 +81,16 @@ const Navbar = () => {
   const handleEditNetwork = (network: Network) => {
     if (!editingNetwork) return;
 
-    setCustomNetworks(prev =>
-      prev.map(n =>
-        n.name === editingNetwork.name
-          ? { ...network, isCustom: true }
-          : n
+    setCustomNetworks((prev) =>
+      prev.map((n) =>
+        n.name === editingNetwork.name ? { ...network, isCustom: true } : n
       )
     );
     setEditingNetwork(null);
   };
 
   const handleDeleteNetwork = (network: NetworkOption) => {
-    setCustomNetworks(prev => prev.filter(n => n.name !== network.name));
+    setCustomNetworks((prev) => prev.filter((n) => n.name !== network.name));
   };
 
   const handleModalClose = () => {
@@ -84,64 +107,38 @@ const Navbar = () => {
 
   const allNetworks = [...defaultNetworks, ...customNetworks];
 
-  const handleSwitcherSelect = () => {
-    console.log('Selected option:');
+  const handleSwitcherSelect = (option: OptionType) => {
+    console.log('Selected option:', option);
+    router.push(option.url);
   };
 
-  const NavItems = ({ onItemClick }: { onItemClick?: () => void }) => (
-    <>
-      <button
-        className="flex items-center gap-1 text-sm capitalize"
-        onClick={() => {
-          toggleTheme();
-          onItemClick?.();
-        }}
-      >
-        <Icon
-          path={mdiWhiteBalanceSunny}
-          size={1}
-          className={
-            theme === 'light'
-              ? '[&>path]:!fill-slate-950'
-              : '[&>path]:!fill-slate-100'
-          }
-        />
-        <Typography>{theme}</Typography>
-      </button>
-      <NetworkSwitcher
-        options={allNetworks}
-        onSelect={(network) => {
-          handleNetworkSelect(network);
-          onItemClick?.();
-        }}
-        activeNetwork={activeNetwork?.name || ''}
-        onAddNetwork={() => {
-          setIsNetworkModalOpen(true);
-          onItemClick?.();
-        }}
-        onEditNetwork={(network: NetworkOption) => {
-          setEditingNetwork(network);
-          setIsNetworkModalOpen(true);
-          onItemClick?.();
-        }}
-        onDeleteNetwork={(network) => {
-          handleDeleteNetwork(network);
-          onItemClick?.();
-        }}
-      />
-      <Link href="/login" onClick={onItemClick}>
-        <Typography className='flex gap-1'>
-          <Icon path={mdiWalletOutline} size={1} /> Login
-        </Typography>
-      </Link>
-    </>
-  );
+  const handleLogin = () => {
+    // this state is temporary, it should be removed when the login is implemented from the store
+    setIsAuthenticated(true);
+    router.push('/login');
+  };
+
+  const handleLogout = () => {
+    setIsAuthenticated(false);
+    router.push('/login');
+  };
+
+  // Add wallet address state
+  const [walletAddress] = useState('P-cami...enkl8'); // For now using static address
+
+  const handleVerifyWallet = () => {
+    router.push('/verify-wallet');
+  };
+
+  const handleSettings = () => {
+    router.push('/settings');
+  };
 
   return (
     <>
       <nav
         className={clsx(
-          'w-full px-6 py-4 border-b border-slate-700 relative z-50',
+          'w-full px-2 lg:px-8 py-4 border-b border-slate-700 relative z-50',
           theme === 'light' ? 'bg-white' : 'bg-slate-950'
         )}
       >
@@ -149,27 +146,38 @@ const Navbar = () => {
           {/* Left side - Platform Switcher */}
           <PlatformSwitcher
             options={PLATFORM_SWITCHER}
-            activeApp=""
+            activeApp={getActivePlatform()}
             onSelect={handleSwitcherSelect}
           />
 
-          {/* Right side - Desktop Menu */}
+          {/* Right side - Network Switcher and Auth Nav */}
           <div className="items-center hidden gap-4 md:flex">
-            <NavItems />
-          </div>
-
-          {/* Mobile Menu Button */}
-          <button
-            className="md:hidden"
-            onClick={() => setIsMobileMenuOpen(true)}
-            aria-label="menu"
-          >
-            <Icon
-              path={mdiMenu}
-              size={1}
-              className={theme === 'light' ? '[&>path]:!fill-slate-950' : '[&>path]:!fill-slate-100'}
+            {!isAuthenticated && <ThemeToggle />}
+            <NetworkSwitcher
+              options={allNetworks}
+              onSelect={handleNetworkSelect}
+              activeNetwork={activeNetwork?.name || ''}
+              onAddNetwork={() => setIsNetworkModalOpen(true)}
+              onEditNetwork={(network) => {
+                setEditingNetwork(network);
+                setIsNetworkModalOpen(true);
+              }}
+              onDeleteNetwork={handleDeleteNetwork}
             />
-          </button>
+
+            {isAuthenticated ? (
+              <LoggedInNav
+                onMobileMenuOpen={() => setIsMobileMenuOpen(true)}
+                onLogout={handleLogout}
+                walletAddress={walletAddress}
+              />
+            ) : (
+              <LoggedOutNav
+                onMobileMenuOpen={() => setIsMobileMenuOpen(true)}
+                onLogin={handleLogin}
+              />
+            )}
+          </div>
         </div>
       </nav>
 
@@ -178,22 +186,40 @@ const Navbar = () => {
         isOpen={isMobileMenuOpen}
         onClose={() => setIsMobileMenuOpen(false)}
         theme={theme}
-      >
-        <NavItems onItemClick={() => setIsMobileMenuOpen(false)} />
-      </Drawer>
+        toggleTheme={toggleTheme}
+        networks={allNetworks}
+        activeNetwork={activeNetwork?.name || ''}
+        onNetworkSelect={handleNetworkSelect}
+        onAddNetwork={() => setIsNetworkModalOpen(true)}
+        onEditNetwork={(network) => {
+          setEditingNetwork(network);
+          setIsNetworkModalOpen(true);
+        }}
+        onDeleteNetwork={handleDeleteNetwork}
+        onLogin={handleLogin}
+        onLogout={handleLogout}
+        isAuthenticated={isAuthenticated}
+        onVerifyWallet={handleVerifyWallet}
+        onSettings={handleSettings}
+      />
 
       {/* Network Modal */}
       <NetworkModal
         isOpen={isNetworkModalOpen}
         onClose={handleModalClose}
         onSubmit={editingNetwork ? handleEditNetwork : handleAddNetwork}
-        initialValues={editingNetwork ? {
-          name: editingNetwork.name,
-          url: editingNetwork.url || '',
-          magellanAddress: editingNetwork.magellanAddress || '',
-          signavaultAddress: editingNetwork.signavaultAddress || ''
-        } : undefined}
-        mode={editingNetwork ? t('common.edit') : t('common.add')}
+        initialValues={
+          editingNetwork
+            ? {
+                name: editingNetwork.name,
+                url: editingNetwork.url || '',
+                magellanAddress: editingNetwork.magellanAddress || '',
+                signavaultAddress: editingNetwork.signavaultAddress || '',
+                status: editingNetwork.status || 'custom',
+              }
+            : undefined
+        }
+        editingNetworkmode={!!editingNetwork}
       />
     </>
   );
