@@ -38,7 +38,7 @@ export const Login = () => {
   };
 
   return (
-    <Box className="w-full" >
+    <Box className="w-full bg-white dark:bg-slate-950">
       {renderAccessMethod()}
     </Box>
   );

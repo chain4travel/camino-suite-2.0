@@ -14,7 +14,7 @@ export const GenerateKeyPhrase = ({handleGenerateKeys}: {handleGenerateKeys: () 
 
 
   return (
-    <Box className="flex flex-col items-center justify-center w-full max-w-2xl p-8 mx-auto space-y-8">
+    <Box className="flex flex-col bg-white dark:bg-slate-950 items-center justify-center w-full max-w-2xl p-8 mx-auto space-y-8">
       <div className="w-fit h-fit">
         <Logo />
       </div>

@@ -28,7 +28,7 @@ export const MnemonicKeys = ({ onComplete }: MnemonicKeysProps) => {
 
 
   return (
-    <Box className="flex flex-col !items-start w-full gap-20 p-8 lg:flex-row">
+    <Box className="flex flex-col !items-start w-full gap-20 p-8 lg:flex-row bg-white dark:bg-slate-950">
       <div className="flex flex-col items-end max-w-lg gap-4">
         <Box className="w-full p-4 bg-gray-200/50 dark:bg-slate-800/50">
           <div className="flex flex-wrap gap-2 ">
