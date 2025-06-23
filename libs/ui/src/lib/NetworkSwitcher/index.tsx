@@ -35,7 +35,7 @@ const NetworkSwitcher = ({
         size="sm"
         variant="primary"
         className="absolute top-[-20px] right-[-25px]"
-        text= {currentOption?.name || ''}
+        text= {currentOption?.status || ''}
       />
       <Typography>{currentOption?.name}</Typography>
     </div>

@@ -4,8 +4,7 @@ export * from './lib/store';
 export * from './lib/hooks';
 
 // Export all slice actions and reducers
-export * from './lib/slices/counterSlice';
-export * from './lib/slices/apiSlice';
+export * from './lib/slices/networkSlice';
 
 // Export middleware
 export * from './lib/middleware/logger';

@@ -6,6 +6,7 @@ export interface NetworkOption {
   url?: string;
   magellanAddress?: string;
   signavaultAddress?: string;
+  status?: string;
 }
 
 export interface NetworkSwitcherProps {

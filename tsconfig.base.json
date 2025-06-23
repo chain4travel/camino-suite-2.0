@@ -21,7 +21,8 @@
       "@camino/store": ["libs/store/src/index.ts"],
       "@camino/styles": ["libs/styles/src/index.ts"],
       "@camino/test": ["libs/test/src/index.ts"],
-      "@camino/ui": ["libs/ui/src/index.ts"]
+      "@camino/ui": ["libs/ui/src/index.ts"],
+      "@camino/wallet": ["libs/apps/wallet/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

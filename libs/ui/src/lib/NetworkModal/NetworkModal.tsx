@@ -13,13 +13,14 @@ const NetworkModal = ({
   onClose,
   onSubmit,
   initialValues,
-  mode
+  editingNetworkmode
 }: NetworkModalProps) => {
   const [formData, setFormData] = useState<Network>({
     name: '',
     url: '',
     magellanAddress: '',
-    signavaultAddress: ''
+    signavaultAddress: '',
+    status: 'custom'
   });
 
   useEffect(() => {
@@ -31,7 +32,8 @@ const NetworkModal = ({
         name: '',
         url: '',
         magellanAddress: '',
-        signavaultAddress: ''
+        signavaultAddress: '',
+        status: 'custom'
       });
     }
   }, [isOpen, initialValues]);
@@ -48,7 +50,8 @@ const NetworkModal = ({
       name: '',
       url: '',
       magellanAddress: '',
-      signavaultAddress: ''
+      signavaultAddress: '',
+      status: 'custom'
     });
     onClose();
   };
@@ -68,7 +71,7 @@ const NetworkModal = ({
     >
       <form onSubmit={handleSubmit} className="space-y-6">
         <Typography variant="h4" as="h2">
-          {mode === 'add' ? 'Add New Network' : 'Edit Network'}
+          {!editingNetworkmode ? 'Add New Network' : 'Edit Network'}
         </Typography>
 
         <div className="space-y-4">
@@ -110,7 +113,7 @@ const NetworkModal = ({
             type="submit"
             variant="primary"
           >
-            {mode === 'add' ? 'Add Network' : 'Edit Network'}
+            {!editingNetworkmode  ? 'Add Network' : 'Edit Network'}
           </Button>
         </div>
       </form>

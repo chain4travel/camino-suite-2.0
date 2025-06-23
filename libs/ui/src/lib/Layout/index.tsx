@@ -8,7 +8,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
   return (
     <div className="flex flex-col items-center justify-between w-full h-full min-h-screen dark:bg-slate-950">
       <Navbar />
-      <div className='flex items-center justify-center flex-1 w-full h-full min-h-[70vh] py-10'>
+      <div className='flex items-center justify-center flex-1 w-full h-full min-h-[70vh] bg-gray-200/50 dark:bg-slate-950'>
       {children}
       </div>
       <Footer />
