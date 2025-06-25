@@ -58,3 +58,5 @@ storybook-static
 
 # test __snapshots__ folders
 __snapshots__/
+.cursor/rules/nx-rules.mdc
+.github/instructions/nx.instructions.md

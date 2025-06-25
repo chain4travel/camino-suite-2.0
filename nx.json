@@ -94,8 +94,7 @@
     "@nx/react": {
       "library": {
         "style": "tailwind",
-        "linter": "eslint",
-        "unitTestRunner": "jest"
+        "linter": "eslint"
       },
       "application": {
         "babel": true,

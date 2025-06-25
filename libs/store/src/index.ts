@@ -1,18 +1,18 @@
-// libs/store/src/index.ts
-// Export core store functionality
-export * from './lib/store';
-export * from './lib/hooks';
+// Export network store
+export {
+  useNetworkStore,
+  useSelectedNetwork,
+  useNetworkStatus,
+  useAllNetworks,
+  useTxFee,
+  useDepositAndBond,
+} from './lib/modules/network/networkStore';
 
-// Export all slice actions and reducers
-export * from './lib/slices/counterSlice';
-export * from './lib/slices/apiSlice';
+export * from './lib/js/web3';
+// Export types
 
-// Export middleware
-export * from './lib/middleware/logger';
-export * from './lib/middleware/error-tracking';
+export type { AvaNetwork, NetworkStatus } from './lib/types/network.types';
 
-// Export components
-export { StoreProvider } from './lib/providers/StoreProvider';
-
-// Export TypeScript types
-export type { RootState, AppStore, AppDispatch } from './lib/store';
+// We'll add other stores here as we create them
+// export { useWalletStore } from './lib/modules/wallet/walletStore';
+// export { useAssetsStore } from './lib/modules/assets/assetsStore';

@@ -3,6 +3,7 @@ export interface Network {
   url: string;
   magellanAddress: string;
   signavaultAddress: string;
+  status: string;
 }
 
 export interface NetworkModalProps {
@@ -10,5 +11,5 @@ export interface NetworkModalProps {
   onClose: () => void;
   onSubmit: (network: Network) => void;
   initialValues?: Network;
-  mode: string;
+  editingNetworkmode: boolean;
 }

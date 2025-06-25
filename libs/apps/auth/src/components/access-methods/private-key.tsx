@@ -8,15 +8,16 @@ import { useTranslation } from 'react-i18next';
 
 export const PrivateKeyAccess = ({ onBack }: AccessMethodProps) => {
   const { t } = useTranslation();
-  const [privateKey, setPrivateKey] = useState('');
+  const [privateKey, setPrivateKey] = useState(
+    'b8135beab8a5de2cd14af132450b929c21e1a7ff3e1f3de07b9932b2783751a0'
+  );
   const [error, setError] = useState('');
 
-  const isValidPrivateKey = (privateKey);
+  const isValidPrivateKey = privateKey;
 
   const handlePrivateKeyChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     setPrivateKey(value);
-
 
     if (!value) {
       setError(t('auth.invalidPrivateKey'));
@@ -60,7 +61,7 @@ export const PrivateKeyAccess = ({ onBack }: AccessMethodProps) => {
       </CamBtn>
 
       <CamBtn
-        variant='transparent'
+        variant="transparent"
         className="w-full"
         onClick={onBack}
         fullWidth
