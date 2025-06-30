@@ -1,7 +1,7 @@
-import { AvaNetwork } from '../js/AvaNetwork';
+import { AvaNetwork } from '@/js/AvaNetwork';
 import { ethers } from 'ethers';
 import store from '@/store';
-import { WalletType } from '../js/wallets/types';
+import { WalletType } from '@/js/wallets/types';
 
 const SOCKET_RECONNECT_TIMEOUT = 1000;
 

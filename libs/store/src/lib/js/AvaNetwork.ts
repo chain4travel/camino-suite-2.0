@@ -71,12 +71,12 @@ class AvaNetwork {
           method: 'info.getNetworkID',
         },
         {
-          withCredentials: true,
+          withCredentials: false,
         }
       );
-      this.withCredentials = true;
-    } catch (e) {
       this.withCredentials = false;
+    } catch (e) {
+      this.withCredentials = true;
     }
   }
 

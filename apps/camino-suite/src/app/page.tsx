@@ -29,6 +29,7 @@ export default function Index() {
     // Initialize networks on component mount
     init();
   }, [init]);
+  console.log('Selected Network:', selectedNetwork);
 
   return (
     <Container>

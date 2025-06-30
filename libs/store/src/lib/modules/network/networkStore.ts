@@ -1,8 +1,12 @@
 // libs/store/src/lib/modules/network/networkStore.ts
 import { create } from 'zustand';
-import { shallow } from 'zustand/shallow';
 import { BN } from '@c4tplatform/caminojs/dist';
-import { AvaNetwork, NetworkStatus } from '../../types/network.types';
+import { AvaNetwork } from '../../js/AvaNetwork';
+import { NetworkStatus } from '../../types/network.types';
+import { ava, infoApi } from '../../js/AVA';
+import { explorer_api } from '../../helpers/explorer_api';
+import { web3 } from '../../js/web3';
+import { setSocketNetwork } from '../../providers';
 
 interface NetworkStore {
   // State
@@ -12,17 +16,17 @@ interface NetworkStore {
   status: NetworkStatus;
   txFee: BN;
   depositAndBond: boolean;
-  allNetworks: AvaNetwork[]; // Add this to state
+  allNetworks: AvaNetwork[];
 
-  // Actions (mutations equivalent)
+  // Actions
   addNetwork: (network: AvaNetwork) => void;
   selectNetwork: (network: AvaNetwork) => void;
   setStatus: (status: NetworkStatus) => void;
   setTxFee: (fee: BN) => void;
   setDepositAndBond: (value: boolean) => void;
-  updateAllNetworks: () => void; // Helper to update computed array
+  updateAllNetworks: () => void;
 
-  // Complex actions (Vuex actions equivalent)
+  // Complex actions
   addCustomNetwork: (network: AvaNetwork) => void;
   removeCustomNetwork: (network: AvaNetwork) => Promise<void>;
   saveSelectedNetwork: () => void;
@@ -32,6 +36,9 @@ interface NetworkStore {
   setNetwork: (network: AvaNetwork) => Promise<boolean>;
   updateTxFee: () => Promise<void>;
   init: () => Promise<boolean>;
+
+  // Getters
+  getAllNetworks: () => AvaNetwork[];
 }
 
 export const useNetworkStore = create<NetworkStore>((set, get) => ({
@@ -42,7 +49,7 @@ export const useNetworkStore = create<NetworkStore>((set, get) => ({
   status: 'disconnected',
   txFee: new BN(0),
   depositAndBond: false,
-  allNetworks: [], // Initialize empty array
+  allNetworks: [],
 
   // Helper to update computed array
   updateAllNetworks: () => {
@@ -50,7 +57,6 @@ export const useNetworkStore = create<NetworkStore>((set, get) => ({
     set({ allNetworks: [...networks, ...networksCustom] });
   },
 
-  // Simple mutations - now also update allNetworks
   addNetwork: (network) => {
     set((state) => {
       const newNetworks = [...state.networks, network];
@@ -72,9 +78,8 @@ export const useNetworkStore = create<NetworkStore>((set, get) => ({
 
   setDepositAndBond: (value) => set({ depositAndBond: value }),
 
-  // Complex actions
   addCustomNetwork: (network) => {
-    const { networksCustom, save, networks } = get();
+    const { networksCustom, save } = get();
 
     // Check if network already exists
     const exists = networksCustom.some((net) => net.url === network.url);
@@ -109,8 +114,10 @@ export const useNetworkStore = create<NetworkStore>((set, get) => ({
 
   saveSelectedNetwork: () => {
     const { selectedNetwork } = get();
-    const data = JSON.stringify(selectedNetwork?.url);
-    localStorage.setItem('network_selected', data);
+    if (selectedNetwork) {
+      const data = JSON.stringify(selectedNetwork.url);
+      localStorage.setItem('network_selected', data);
+    }
   },
 
   loadSelectedNetwork: async () => {
@@ -120,21 +127,37 @@ export const useNetworkStore = create<NetworkStore>((set, get) => ({
     if (!data) return false;
 
     try {
-      for (const net of allNetworks) {
-        if (JSON.stringify(net.url) === data) {
-          await setNetwork(net);
-          return true;
-        }
+      const savedUrl = JSON.parse(data);
+      const network = allNetworks.find((net) => net.url === savedUrl);
+
+      if (network) {
+        await setNetwork(network);
+        return true;
       }
       return false;
     } catch (e) {
+      console.error('Failed to load selected network:', e);
       return false;
     }
   },
 
   save: () => {
     const { networksCustom } = get();
-    const data = JSON.stringify(networksCustom);
+
+    // Convert AvaNetwork instances to serializable data
+    const serializableNetworks = networksCustom.map((network) => ({
+      name: network.name,
+      url: network.url,
+      networkId: network.networkId,
+      explorerUrl: network.explorerUrl,
+      explorerSiteUrl: network.explorerSiteUrl,
+      readonly: network.readonly,
+      protocol: network.protocol,
+      port: network.port,
+      ip: network.ip,
+    }));
+
+    const data = JSON.stringify(serializableNetworks);
     localStorage.setItem('networks', data);
   },
 
@@ -144,27 +167,20 @@ export const useNetworkStore = create<NetworkStore>((set, get) => ({
 
     if (data) {
       try {
-        const networks: AvaNetwork[] = JSON.parse(data);
+        const networkData = JSON.parse(data);
 
-        networks.forEach((n) => {
-          // Create new AvaNetwork instance
-          // For now, we'll use a simple object - later replace with actual AvaNetwork class
-          const newCustom: AvaNetwork = {
-            name: n.name,
-            url: n.url,
-            networkId: parseInt(n.networkId.toString()),
-            explorerUrl: n.explorerUrl,
-            explorerSiteUrl: n.explorerSiteUrl,
-            readonly: n.readonly,
-            protocol: n.protocol,
-            port: n.port,
-            ip: n.ip,
-            updateCredentials: async () => {
-              // TODO: Implement when we have the actual AvaNetwork class
-            },
-          };
+        networkData.forEach((n: any) => {
+          // Create new AvaNetwork instance from saved data
+          const customNetwork = new AvaNetwork(
+            n.name,
+            n.url,
+            n.networkId,
+            n.explorerUrl,
+            n.explorerSiteUrl,
+            n.readonly
+          );
 
-          addCustomNetwork(newCustom);
+          addCustomNetwork(customNetwork);
         });
       } catch (e) {
         console.error('Failed to load custom networks:', e);
@@ -184,33 +200,50 @@ export const useNetworkStore = create<NetworkStore>((set, get) => ({
     try {
       setStatus('connecting');
 
-      // TODO: Implement these when we have the actual dependencies
-      // await network.updateCredentials();
-      // ava.setRequestConfig('withCredentials', network.withCredentials);
-      // ava.setNetwork(network.ip, network.port, network.protocol, network.networkId);
-      // await ava.fetchNetworkSettings();
-      // ava.XChain().getAVAXAssetID(true);
-      // ava.PChain().getAVAXAssetID(true);
-      // ava.CChain().getAVAXAssetID(true);
+      // Update network credentials
+      await network.updateCredentials();
+
+      // Configure ava instance with new network
+      ava.setRequestConfig('withCredentials', network.withCredentials);
+      ava.setNetwork(
+        network.ip,
+        network.port,
+        network.protocol,
+        network.networkId
+      );
+
+      // Fetch network settings
+      await ava.fetchNetworkSettings();
+
+      // Update chain asset IDs
+      ava.XChain().getAVAXAssetID(true);
+      ava.PChain().getAVAXAssetID(true);
+      ava.CChain().getAVAXAssetID(true);
 
       selectNetwork(network);
       saveSelectedNetwork();
 
-      // TODO: Implement when we have ava instance
-      // const depositAndBond = ava.getNetwork().P.lockModeBondDeposit && ava.getNetwork().P.verifyNodeSignature;
-      // setDepositAndBond(depositAndBond);
+      // Set deposit and bond configuration
+      const avaNetwork = ava.getNetwork();
+      const depositAndBond =
+        avaNetwork.P.lockModeBondDeposit && avaNetwork.P.verifyNodeSignature;
+      setDepositAndBond(depositAndBond);
 
-      // TODO: Implement explorer and web3 updates
-      // explorer_api.defaults.baseURL = network.explorerUrl;
+      // Update explorer API base URL
+      explorer_api.defaults.baseURL = network.explorerUrl;
+
+      // Update Web3 provider
       // const web3Provider = `${network.protocol}://${network.ip}:${network.port}/ext/bc/C/rpc`;
       // web3.setProvider(web3Provider);
+
+      // Update socket network (if you have setSocketNetwork available)
       // setSocketNetwork(network);
 
-      // TODO: Implement other store updates
-      // commit('Assets/removeAllAssets', null, { root: true })
-      // await dispatch('Assets/updateAvaAsset', null, { root: true })
-      // await dispatch('Assets/onNetworkChange', network, { root: true })
-      // await dispatch('Launch/onNetworkChange', network, { root: true })
+      // TODO: Dispatch to other stores when they're available
+      // dispatch('Assets/removeAllAssets')
+      // await dispatch('Assets/updateAvaAsset')
+      // await dispatch('Assets/onNetworkChange', network)
+      // await dispatch('Launch/onNetworkChange', network)
 
       await updateTxFee();
 
@@ -225,13 +258,9 @@ export const useNetworkStore = create<NetworkStore>((set, get) => ({
 
   updateTxFee: async () => {
     try {
-      // TODO: Implement when we have infoApi
-      // const txFeeData = await infoApi.getTxFee();
-      // set({ txFee: txFeeData.txFee });
-      // ava.XChain().setTxFee(txFeeData.txFee);
-
-      // Placeholder for now
-      console.log('updateTxFee called - TODO: implement');
+      const txFeeData = await infoApi.getTxFee();
+      set({ txFee: txFeeData.txFee });
+      ava.XChain().setTxFee(txFeeData.txFee);
     } catch (e) {
       console.error('Failed to update tx fee:', e);
     }
@@ -242,53 +271,41 @@ export const useNetworkStore = create<NetworkStore>((set, get) => ({
       get();
 
     try {
-      // Create default networks - using simple objects for now
-      const camino: AvaNetwork = {
-        name: 'Camino',
-        url: 'https://api.camino.network',
-        networkId: 1000,
-        explorerUrl: 'https://magellan.camino.network',
-        explorerSiteUrl: 'https://explorer.camino.network',
-        readonly: true,
-        protocol: 'https',
-        port: 443,
-        ip: 'api.camino.network',
-        updateCredentials: async () => {},
-      };
-
-      const columbus: AvaNetwork = {
-        name: 'Columbus',
-        url: 'https://columbus.camino.network',
-        networkId: 1001,
-        explorerUrl: 'https://magellan.columbus.camino.network',
-        explorerSiteUrl: 'https://explorer.camino.network',
-        readonly: true,
-        protocol: 'https',
-        port: 443,
-        ip: 'columbus.camino.network',
-        updateCredentials: async () => {},
-      };
-
-      const avaxMain: AvaNetwork = {
-        name: 'Avalanche',
-        url: 'https://api.avax.network',
-        networkId: 1,
-        explorerUrl: 'https://explorerapi.avax.network',
-        explorerSiteUrl: 'https://explorer.avax.network',
-        readonly: true,
-        protocol: 'https',
-        port: 443,
-        ip: 'api.avax.network',
-        updateCredentials: async () => {},
-      };
-
-      // Load custom networks
+      // Load custom networks first
       load();
+
+      // Create default networks using AvaNetwork class
+      const camino = new AvaNetwork(
+        'Camino',
+        'https://api.camino.network',
+        1000,
+        'https://magellan.camino.network',
+        'https://explorer.camino.network',
+        true
+      );
+
+      const columbus = new AvaNetwork(
+        'Columbus',
+        'https://columbus.camino.network',
+        1001,
+        'https://magellan.columbus.camino.network',
+        'https://explorer.camino.network',
+        true
+      );
+
+      // const avaxMain = new AvaNetwork(
+      //   'Avalanche',
+      //   'https://api.avax.network',
+      //   1,
+      //   'https://explorerapi.avax.network',
+      //   'https://explorer.avax.network',
+      //   true
+      // );
 
       // Add default networks
       addNetwork(camino);
       addNetwork(columbus);
-      addNetwork(avaxMain);
+      // addNetwork(avaxMain);
 
       // Try to load selected network
       const isSet = await loadSelectedNetwork();

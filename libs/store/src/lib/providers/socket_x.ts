@@ -1,6 +1,7 @@
+// libs/store/src/lib/providers/socketX.ts (or wherever this file is located)
 import Sockette from 'sockette';
 import { WalletType } from '../js/wallets/types';
-import store from '@/store';
+import { useWalletStore } from '../modules/wallet/walletStore';
 import { AvaNetwork } from '../js/AvaNetwork';
 import { PubSub } from '@c4tplatform/caminojs/dist';
 
@@ -26,7 +27,10 @@ export function connectSocketX(network: AvaNetwork) {
 }
 
 export function updateFilterAddresses(): void {
-  let wallet: null | WalletType = store.state.activeWallet;
+  // Get active wallet from Zustand store instead of Vuex
+  const walletStore = useWalletStore.getState();
+  const wallet: null | WalletType = walletStore.activeWallet;
+
   if (!socketOpen || !wallet) return;
 
   let externalAddrs = wallet.getAllDerivedExternalAddresses();
@@ -60,13 +64,39 @@ function clearFilter() {
 }
 
 function updateWalletBalanceX() {
-  let wallet: null | WalletType = store.state.activeWallet;
+  // Get active wallet from Zustand store instead of Vuex
+  const walletStore = useWalletStore.getState();
+  const wallet: null | WalletType = walletStore.activeWallet;
+
   if (!socketOpen || !wallet) return;
 
+  // TODO: Replace these Vuex store dispatches with appropriate actions
+  // when you have converted the Assets and History modules to Zustand
+
   // Refresh the wallet balance
-  store.dispatch('Assets/updateUTXOsExternal').then(() => {
-    store.dispatch('History/updateTransactionHistory');
-  });
+  // OLD Vuex way:
+  // store.dispatch('Assets/updateUTXOsExternal').then(() => {
+  //   store.dispatch('History/updateTransactionHistory');
+  // });
+
+  // NEW: For now, we'll call the wallet's update method directly
+  // You'll need to implement these when you convert Assets and History modules
+  try {
+    // Direct wallet update - you might need to adjust this based on your wallet implementation
+    if (wallet.updateBalance) {
+      wallet.updateBalance();
+    }
+
+    // TODO: When you convert Assets and History modules, call their Zustand actions:
+    // const assetsStore = useAssetsStore.getState();
+    // const historyStore = useHistoryStore.getState();
+    // await assetsStore.updateUTXOsExternal();
+    // await historyStore.updateTransactionHistory();
+
+    console.log('Wallet balance update triggered for X chain');
+  } catch (error) {
+    console.error('Failed to update wallet balance:', error);
+  }
 }
 
 // AVM Socket Listeners
@@ -80,6 +110,21 @@ function xOnMessage() {
   updateWalletBalanceX();
 }
 
-function xOnClose() {}
+function xOnClose() {
+  socketOpen = false;
+}
 
-function xOnError() {}
+function xOnError(error: any) {
+  console.error('X Chain websocket error:', error);
+  socketOpen = false;
+}
+
+// Utility function to get socket status
+export function getSocketXStatus(): boolean {
+  return socketOpen;
+}
+
+// Utility function to manually clear the filter (useful for debugging)
+export function clearXFilter(): void {
+  clearFilter();
+}

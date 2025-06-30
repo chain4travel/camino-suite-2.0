@@ -8,18 +8,18 @@ import { privateToAddress } from '@ethereumjs/util';
 import createHash from 'create-hash';
 
 // Import wallet types and classes
-import { WalletType, HotWalletType, INetwork } from '/js/wallets/types';
-import { MnemonicWallet } from '@/js/wallets/MnemonicWallet';
-import { LedgerWallet } from '@/js/wallets/LedgerWallet';
-import { SingletonWallet } from '@/js/wallets/SingletonWallet';
-import { MultisigWallet } from '@/js/wallets/MultisigWallet';
-import { AllKeyFileDecryptedTypes } from '@/js/IKeystore';
+import { WalletType, HotWalletType, INetwork } from '../../js/wallets/types';
+import MnemonicWallet from '../../js/wallets/MnemonicWallet';
+import { LedgerWallet } from '../../js/wallets/LedgerWallet';
+import { SingletonWallet } from '../../js/wallets/SingletonWallet';
+// import { MultisigWallet } from '../../wallets/MultisigWallet';
+import { AllKeyFileDecryptedTypes } from '../../js/IKeystore';
 import {
   extractKeysFromDecryptedFile,
   KEYSTORE_VERSION,
   makeKeyfile,
   readKeyFile,
-} from '@/js/Keystore';
+} from '../../js/Keystore';
 import {
   IssueBatchTxInput,
   ImportKeyfileInput,
@@ -27,10 +27,10 @@ import {
   AccessWalletMultipleInput,
   AccessWalletMultipleInputParams,
   priceDict,
-} from '@/store/types';
-import { ava, bintools } from '@/AVA';
-import { updateFilterAddresses } from '@/providers';
-import { getAvaxPriceUSD } from '@/helpers/price_helper';
+} from '../../types/wallet.types';
+import { ava, bintools } from '../../js/AVA';
+import { updateFilterAddresses } from '../../providers';
+import { getAvaxPriceUSD } from '../../helpers/price_helper';
 
 // Wallet State Interface
 export interface WalletState {
@@ -220,6 +220,7 @@ export const useWalletStore = create<WalletStore>()(
           const wallet = await get().addWalletSingleton({ key });
           if (wallet) {
             get().setActiveWallet(wallet);
+            console.log('Accessing wallet:', wallet);
             await get().onAccess();
           }
         },
@@ -303,7 +304,7 @@ export const useWalletStore = create<WalletStore>()(
           const state = get();
           let pk = file ? file.key : (key as string);
           const accountHash = createHash('sha256').update(pk).digest();
-
+          console.log({ accountHash });
           try {
             const keyBuf = Buffer.from(pk, 'hex');
             privateToAddress(keyBuf);
@@ -316,13 +317,13 @@ export const useWalletStore = create<WalletStore>()(
 
           // Cannot add singleton wallets on ledger mode
           if (state.activeWallet?.type === 'ledger') return null;
-
+          console.log('Adding singleton wallet with key:', pk);
           // Make sure wallet doesn't exist already
           for (const w of state.wallets) {
             if (
               w.type === 'singleton' &&
               (w as any).accountHash &&
-              (w as any).accountHash.equals(accountHash)
+              w.accountHash === accountHash
             ) {
               throw new Error('Wallet already exists.');
             }
@@ -337,7 +338,8 @@ export const useWalletStore = create<WalletStore>()(
             state.volatileWallets.push(wallet);
           });
 
-          if (!file) get().updateMultisigWallets();
+          console.log('Wallet added:', wallet);
+          // if (!file) get().updateMultisigWallets();
           return wallet;
         },
 
