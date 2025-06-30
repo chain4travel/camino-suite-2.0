@@ -31,6 +31,7 @@ import {
 import { ava, bintools } from '../../js/AVA';
 import { updateFilterAddresses } from '../../providers';
 import { getAvaxPriceUSD } from '../../helpers/price_helper';
+import { useNetworkStore } from '../network/networkStore';
 
 // Wallet State Interface
 export interface WalletState {
@@ -328,8 +329,11 @@ export const useWalletStore = create<WalletStore>()(
               throw new Error('Wallet already exists.');
             }
           }
-
+          // const network = useNetworkStore.getState();
+          let network = ava.getNetwork();
+          console.log('Network:', network);
           const wallet = new SingletonWallet(pk);
+          console.log('Created wallet:', wallet);
           if (file?.name) wallet.name = file.name;
           (wallet as any).accountHash = accountHash;
 

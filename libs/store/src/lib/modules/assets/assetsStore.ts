@@ -47,7 +47,7 @@ import { getPayloadFromUTXO } from '../../helpers/helper';
 // import { isUrlBanned } from '../../components/misc/NftPayloadView/blacklist';
 
 // Import default token list and store references
-import ERC20_TOKEN_LIST from '../../ERC20Tokenlist.json';
+import ERC20_TOKEN_LIST from '../../js/abi/ERC20Tokenlist.json';
 import { useWalletStore } from '../wallet/walletStore';
 import { useNetworkStore } from '../network/networkStore';
 
@@ -174,43 +174,7 @@ const initialState: AssetsStoreState = {
 
 // Custom storage that excludes non-serializable data
 const createAssetsStorage = () => {
-  return createJSONStorage(() => localStorage, {
-    partialize: (state: AssetsStore) => ({
-      // Persist only serializable data
-      AVA_ASSET_ID: state.AVA_ASSET_ID,
-      evmChainId: state.evmChainId,
-      tokenListUrls: state.tokenListUrls,
-      tokenListsCustom: state.tokenListsCustom,
-      nftWhitelist: state.nftWhitelist,
-      // Note: We don't persist complex objects like assets, UTXOs, tokens
-      // They will be recreated when the wallet connects
-    }),
-    merge: (persistedState: any, currentState: AssetsStore) => ({
-      ...currentState,
-      ...persistedState,
-      // Always reset these on hydration
-      balanceLoading: false,
-      assets: [],
-      assetsDict: {},
-      platformBalances: {
-        balances: {},
-        unlocked: {},
-        locked: {},
-        lockedStakeable: {},
-        bonded: {},
-        deposited: {},
-        bondedDeposited: {},
-      },
-      nftFams: [],
-      nftFamsDict: {},
-      balanceDict: {},
-      nftUTXOs: [],
-      nftMintUTXOs: [],
-      erc20Tokens: [],
-      erc20TokensCustom: [],
-      tokenLists: [],
-    }),
-  });
+  return createJSONStorage(() => localStorage);
 };
 
 export const useAssetsStore = create<AssetsStore>()(
@@ -991,6 +955,14 @@ export const useAssetsStore = create<AssetsStore>()(
       {
         name: 'assets-store',
         storage: createAssetsStorage(),
+        partialize: (state: AssetsStore) => ({
+          // Persist only serializable data
+          AVA_ASSET_ID: state.AVA_ASSET_ID,
+          evmChainId: state.evmChainId,
+          tokenListUrls: state.tokenListUrls,
+          tokenListsCustom: state.tokenListsCustom,
+          nftWhitelist: state.nftWhitelist,
+        }),
       }
     ),
     { name: 'AssetsStore' }

@@ -4,7 +4,7 @@ import { BN } from '@c4tplatform/caminojs/dist';
 import { bnToBig } from '../helpers/helper';
 import Big from 'big.js';
 
-import ERC20Abi from '@/abi/IERC20.json';
+import ERC20Abi from './abi/IERC20.json';
 
 class Erc20Token {
   data: TokenListToken;

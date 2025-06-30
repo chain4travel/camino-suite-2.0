@@ -1,130 +1,247 @@
-// libs/store/src/lib/providers/socketX.ts (or wherever this file is located)
+// libs/store/src/lib/providers/socket_x.ts
 import Sockette from 'sockette';
+import { AvaNetwork } from '../js/AvaNetwork';
 import { WalletType } from '../js/wallets/types';
 import { useWalletStore } from '../modules/wallet/walletStore';
-import { AvaNetwork } from '../js/AvaNetwork';
+import { useAssetsStore } from '../modules/assets/assetsStore';
 import { PubSub } from '@c4tplatform/caminojs/dist';
 
+// Constants
 const FILTER_ADDRESS_SIZE = 1000;
+const GROUP_AMOUNT = 100; // Max addresses per message
 
+// Socket instance and state
 let socketX: Sockette;
 let socketOpen = false;
 
+/**
+ * Connect to the X-Chain WebSocket for AVM events
+ */
 export function connectSocketX(network: AvaNetwork) {
   socketOpen = false;
+
   if (socketX) {
     socketX.close();
   }
 
-  // Setup the X chain socket connection
-  let wsURL = network.getWsUrlX();
-  socketX = new Sockette(wsURL, {
-    onopen: xOnOpen,
-    onclose: xOnClose,
-    onmessage: xOnMessage,
-    onerror: xOnError,
-  });
-}
+  try {
+    // Setup the X chain socket connection
+    const wsURL = network.getWsUrlX();
+    console.log('Connecting to X-Chain WebSocket:', wsURL);
 
-export function updateFilterAddresses(): void {
-  // Get active wallet from Zustand store instead of Vuex
-  const walletStore = useWalletStore.getState();
-  const wallet: null | WalletType = walletStore.activeWallet;
-
-  if (!socketOpen || !wallet) return;
-
-  let externalAddrs = wallet.getAllDerivedExternalAddresses();
-  let addrsLen = externalAddrs.length;
-  let startIndex = Math.max(0, addrsLen - FILTER_ADDRESS_SIZE);
-  let addrs = externalAddrs.slice(startIndex);
-
-  let pubsub = new PubSub();
-  let bloom = pubsub.newBloom(FILTER_ADDRESS_SIZE);
-  socketX.send(bloom);
-
-  // Divide addresses by 100 and send multiple messages
-  // There is a max msg size ~10kb
-  const GROUP_AMOUNT = 100;
-  let index = 0;
-  while (index < addrs.length) {
-    let chunk = addrs.slice(index, index + GROUP_AMOUNT);
-    let addAddrs = pubsub.addAddresses(chunk);
-    socketX.send(addAddrs);
-    index += GROUP_AMOUNT;
+    socketX = new Sockette(wsURL, {
+      onopen: xOnOpen,
+      onclose: xOnClose,
+      onmessage: xOnMessage,
+      onerror: xOnError,
+    });
+  } catch (error) {
+    console.error('Failed to connect X-Chain WebSocket:', error);
   }
 }
 
-// Clears the filter listening to X chain transactions
-function clearFilter() {
-  if (!socketOpen) return;
-
-  let pubsub = new PubSub();
-  let bloom = pubsub.newBloom(FILTER_ADDRESS_SIZE);
-  socketX.send(bloom);
-}
-
-function updateWalletBalanceX() {
-  // Get active wallet from Zustand store instead of Vuex
+/**
+ * Update filter addresses for the X-Chain socket
+ */
+export function updateFilterAddresses(): void {
+  // Get active wallet from Zustand store
   const walletStore = useWalletStore.getState();
   const wallet: null | WalletType = walletStore.activeWallet;
 
-  if (!socketOpen || !wallet) return;
+  if (!socketOpen || !wallet) {
+    console.log(
+      'Cannot update filter addresses - socket not open or no wallet'
+    );
+    return;
+  }
 
-  // TODO: Replace these Vuex store dispatches with appropriate actions
-  // when you have converted the Assets and History modules to Zustand
-
-  // Refresh the wallet balance
-  // OLD Vuex way:
-  // store.dispatch('Assets/updateUTXOsExternal').then(() => {
-  //   store.dispatch('History/updateTransactionHistory');
-  // });
-
-  // NEW: For now, we'll call the wallet's update method directly
-  // You'll need to implement these when you convert Assets and History modules
   try {
-    // Direct wallet update - you might need to adjust this based on your wallet implementation
-    if (wallet.updateBalance) {
-      wallet.updateBalance();
+    const externalAddrs = wallet.getAllDerivedExternalAddresses();
+    const addrsLen = externalAddrs.length;
+    const startIndex = Math.max(0, addrsLen - FILTER_ADDRESS_SIZE);
+    const addrs = externalAddrs.slice(startIndex);
+
+    console.log(`Updating filter addresses: ${addrs.length} addresses`);
+
+    const pubsub = new PubSub();
+    const bloom = pubsub.newBloom(FILTER_ADDRESS_SIZE);
+    socketX.send(bloom);
+
+    // Divide addresses by GROUP_AMOUNT and send multiple messages
+    // There is a max msg size ~10kb
+    let index = 0;
+    while (index < addrs.length) {
+      const chunk = addrs.slice(index, index + GROUP_AMOUNT);
+      const addAddrs = pubsub.addAddresses(chunk);
+      socketX.send(addAddrs);
+      index += GROUP_AMOUNT;
     }
 
-    // TODO: When you convert Assets and History modules, call their Zustand actions:
-    // const assetsStore = useAssetsStore.getState();
-    // const historyStore = useHistoryStore.getState();
-    // await assetsStore.updateUTXOsExternal();
-    // await historyStore.updateTransactionHistory();
-
-    console.log('Wallet balance update triggered for X chain');
+    console.log('Filter addresses updated successfully');
   } catch (error) {
-    console.error('Failed to update wallet balance:', error);
+    console.error('Failed to update filter addresses:', error);
   }
 }
 
-// AVM Socket Listeners
+/**
+ * Clear the filter listening to X chain transactions
+ */
+function clearFilter() {
+  if (!socketOpen) {
+    console.log('Cannot clear filter - socket not open');
+    return;
+  }
 
+  try {
+    const pubsub = new PubSub();
+    const bloom = pubsub.newBloom(FILTER_ADDRESS_SIZE);
+    socketX.send(bloom);
+    console.log('X-Chain filter cleared');
+  } catch (error) {
+    console.error('Failed to clear filter:', error);
+  }
+}
+
+/**
+ * Update wallet X-Chain balance
+ */
+function updateWalletBalanceX() {
+  // Get active wallet from Zustand store
+  const walletStore = useWalletStore.getState();
+  const wallet: null | WalletType = walletStore.activeWallet;
+
+  if (!socketOpen || !wallet) {
+    console.log('Cannot update wallet balance - socket not open or no wallet');
+    return;
+  }
+
+  console.log('Updating X-Chain wallet balance...');
+
+  // Use Zustand assets store instead of Vuex dispatch
+  const assetsStore = useAssetsStore.getState();
+
+  // Refresh the wallet balance using the new Zustand store
+  assetsStore
+    .updateUTXOsExternal()
+    .then(() => {
+      console.log('X-Chain balance updated successfully');
+
+      // TODO: Update this when History module is converted to Zustand
+      // For now, we'll just log
+      console.log('History update pending - convert History module to Zustand');
+
+      // When you have a history store converted, replace with:
+      // const historyStore = useHistoryStore.getState();
+      // historyStore.updateTransactionHistory();
+    })
+    .catch((error) => {
+      console.error('Failed to update X-Chain balance:', error);
+    });
+}
+
+// ==========================================
+// Socket Event Listeners
+// ==========================================
+
+/**
+ * Handle X-Chain WebSocket open event
+ */
 function xOnOpen() {
+  console.log('X-Chain WebSocket connected');
   socketOpen = true;
   updateFilterAddresses();
 }
 
-function xOnMessage() {
+/**
+ * Handle X-Chain WebSocket message event
+ */
+function xOnMessage(event: MessageEvent) {
+  console.log('X-Chain WebSocket message received');
   updateWalletBalanceX();
 }
 
-function xOnClose() {
+/**
+ * Handle X-Chain WebSocket close event
+ */
+function xOnClose(event?: CloseEvent) {
+  console.log('X-Chain WebSocket disconnected');
+  socketOpen = false;
+
+  if (event) {
+    console.log('Close code:', event.code, 'Reason:', event.reason);
+  }
+}
+
+/**
+ * Handle X-Chain WebSocket error event
+ */
+function xOnError(error: Event) {
+  console.error('X-Chain WebSocket error:', error);
   socketOpen = false;
 }
 
-function xOnError(error: any) {
-  console.error('X Chain websocket error:', error);
-  socketOpen = false;
+// ==========================================
+// Utility Functions
+// ==========================================
+
+/**
+ * Disconnect X-Chain WebSocket
+ */
+export function disconnectSocketX() {
+  try {
+    if (socketX) {
+      socketX.close();
+      console.log('X-Chain WebSocket disconnected');
+    }
+    socketOpen = false;
+  } catch (error) {
+    console.error('Error disconnecting X-Chain WebSocket:', error);
+  }
 }
 
-// Utility function to get socket status
-export function getSocketXStatus(): boolean {
+/**
+ * Check if X-Chain WebSocket is connected
+ */
+export function isXChainConnected(): boolean {
   return socketOpen;
 }
 
-// Utility function to manually clear the filter (useful for debugging)
+/**
+ * Get X-Chain WebSocket status
+ */
+export function getXChainStatus() {
+  return {
+    connected: socketOpen,
+    socket: socketX ? 'available' : 'not_available',
+  };
+}
+
+/**
+ * Manually clear X-Chain filter (useful for debugging)
+ */
 export function clearXFilter(): void {
   clearFilter();
 }
+
+/**
+ * Force update filter addresses (useful for debugging)
+ */
+export function forceUpdateFilterAddresses(): void {
+  console.log('Force updating filter addresses...');
+  updateFilterAddresses();
+}
+
+/**
+ * Reconnect X-Chain WebSocket with current network
+ */
+export function reconnectSocketX() {
+  // Note: You'll need to pass the current network from your network store
+  // const networkStore = useNetworkStore.getState();
+  // if (networkStore.selectedNetwork) {
+  //   connectSocketX(networkStore.selectedNetwork);
+  // }
+  console.log('Reconnect requested - network reference needed');
+}
+
+// Export socket instance for external access if needed
+export { socketX };

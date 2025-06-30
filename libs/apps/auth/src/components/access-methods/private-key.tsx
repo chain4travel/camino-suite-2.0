@@ -2,12 +2,13 @@
 
 import { CamBtn, Input, Typography } from '@camino/ui';
 import { useCallback, useEffect, useState } from 'react';
-import { useWalletStore } from '@camino/store';
+import { useNetworkStore, useWalletStore } from '@camino/store';
 import { AccessMethodProps } from './types';
 import { useTranslation } from 'react-i18next';
 
 export const PrivateKeyAccess = ({ onBack }: AccessMethodProps) => {
   const { t } = useTranslation();
+  const { init, setNetwork } = useNetworkStore();
   const [privateKey, setPrivateKey] = useState(
     'b8135beab8a5de2cd14af132450b929c21e1a7ff3e1f3de07b9932b2783751a0'
   );
@@ -34,11 +35,13 @@ export const PrivateKeyAccess = ({ onBack }: AccessMethodProps) => {
       return;
     }
     console.log('Accessing with private key:', privateKey);
-    accessWalletSingleton(privateKey);
+    init().then(() => {
+      accessWalletSingleton(privateKey);
+    });
   }, [privateKey, isValidPrivateKey, t]);
 
   useEffect(() => {
-    console.log('Wallet address:', state);
+    // console.log('Wallet address:', state);
   }, [state]);
 
   return (

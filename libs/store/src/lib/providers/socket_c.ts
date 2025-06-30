@@ -1,17 +1,27 @@
-import { AvaNetwork } from '@/js/AvaNetwork';
-import { ethers } from 'ethers';
-import store from '@/store';
-import { WalletType } from '@/js/wallets/types';
+// libs/store/src/lib/providers/socket_c.ts
+import { ethers, WebSocketProvider } from 'ethers';
+import { AvaNetwork } from '../js/AvaNetwork';
+import { WalletType } from '../js/wallets/types';
+import { useWalletStore } from '../modules/wallet/walletStore';
 
+// Constants
 const SOCKET_RECONNECT_TIMEOUT = 1000;
+const SUBSCRIBE_TIMEOUT = 500;
 
+// Socket instance and state
+export let socketEVM: WebSocketProvider;
+let evmSubscriptionTimeout: number;
+
+/**
+ * Connect to the C-Chain WebSocket for EVM events
+ */
 export function connectSocketC(network: AvaNetwork) {
   try {
-    let wsUrl = network.getWsUrlC();
-    let wsProvider = new ethers.providers.WebSocketProvider(wsUrl);
+    const wsUrl = network.getWsUrlC();
+    const wsProvider = new WebSocketProvider(wsUrl);
 
     if (socketEVM) {
-      socketEVM._websocket.onclose = () => {};
+      // For ethers v6, use destroy method
       socketEVM.destroy();
       socketEVM = wsProvider;
     } else {
@@ -20,32 +30,36 @@ export function connectSocketC(network: AvaNetwork) {
 
     updateEVMSubscriptions();
 
-    // Save default function so we can keep calling it
-    let defaultOnOpen = wsProvider._websocket.onopen;
-    let defaultOnClose = wsProvider._websocket.onclose;
+    // Handle connection events
+    wsProvider.on('open', () => {
+      console.log('C-Chain WebSocket connected');
+    });
 
-    wsProvider._websocket.onopen = (ev: any) => {
-      if (defaultOnOpen) defaultOnOpen(ev);
-    };
-
-    wsProvider._websocket.onclose = (ev: any) => {
-      if (defaultOnClose) defaultOnClose(ev);
+    wsProvider.on('close', (code: number, reason: string) => {
+      console.log(
+        'C-Chain WebSocket disconnected, attempting to reconnect...',
+        { code, reason }
+      );
 
       setTimeout(() => {
         connectSocketC(network);
       }, SOCKET_RECONNECT_TIMEOUT);
-    };
+    });
+
+    wsProvider.on('error', (error: any) => {
+      console.error('C-Chain WebSocket error:', error);
+    });
   } catch (e) {
-    console.info('EVM Websocket connection failed.');
+    console.error('EVM Websocket connection failed:', e);
   }
 }
 
-let evmSubscriptionTimeout: number;
-const SUBSCRIBE_TIMEOUT = 500;
-
+/**
+ * Update EVM subscriptions (block headers)
+ */
 export function updateEVMSubscriptions() {
   if (!socketEVM) {
-    // try again later
+    // Try again later
     if (evmSubscriptionTimeout) {
       clearTimeout(evmSubscriptionTimeout);
     }
@@ -59,25 +73,99 @@ export function updateEVMSubscriptions() {
   addBlockHeaderListener(socketEVM);
 }
 
-function removeBlockHeaderListener(
-  provider: ethers.providers.WebSocketProvider
-) {
+/**
+ * Remove block header event listener
+ */
+function removeBlockHeaderListener(provider: WebSocketProvider) {
   provider.off('block', blockHeaderCallback);
 }
 
-function addBlockHeaderListener(provider: ethers.providers.WebSocketProvider) {
+/**
+ * Add block header event listener
+ */
+function addBlockHeaderListener(provider: WebSocketProvider) {
   provider.on('block', blockHeaderCallback);
 }
 
-function blockHeaderCallback() {
+/**
+ * Handle new block events
+ */
+function blockHeaderCallback(blockNumber: number) {
+  console.log('New C-Chain block:', blockNumber);
   updateWalletBalanceC();
 }
 
+/**
+ * Update wallet C-Chain balance
+ */
 function updateWalletBalanceC() {
-  let wallet: null | WalletType = store.state.activeWallet;
-  if (!wallet) return;
-  // Refresh the wallet balance
-  wallet.getEthBalance();
+  // Get active wallet from Zustand store
+  const walletStore = useWalletStore.getState();
+  const wallet: null | WalletType = walletStore.activeWallet;
+
+  if (!wallet) {
+    console.log('No active wallet for C-Chain balance update');
+    return;
+  }
+
+  try {
+    // Refresh the wallet ETH balance
+    wallet.getEthBalance();
+    console.log('C-Chain wallet balance updated');
+  } catch (error) {
+    console.error('Failed to update C-Chain wallet balance:', error);
+  }
 }
 
-export let socketEVM: ethers.providers.WebSocketProvider;
+/**
+ * Disconnect C-Chain WebSocket
+ */
+export function disconnectSocketC() {
+  try {
+    if (socketEVM) {
+      socketEVM.destroy();
+      console.log('C-Chain WebSocket disconnected');
+    }
+
+    if (evmSubscriptionTimeout) {
+      clearTimeout(evmSubscriptionTimeout);
+      evmSubscriptionTimeout = 0;
+    }
+  } catch (error) {
+    console.error('Error disconnecting C-Chain WebSocket:', error);
+  }
+}
+
+/**
+ * Check if C-Chain WebSocket is connected
+ */
+export function isCChainConnected(): boolean {
+  try {
+    return !!(socketEVM && socketEVM.ready);
+  } catch {
+    return false;
+  }
+}
+
+/**
+ * Get C-Chain WebSocket status
+ */
+export function getCChainStatus() {
+  return {
+    connected: isCChainConnected(),
+    provider: socketEVM ? 'available' : 'not_available',
+    ready: socketEVM?.ready ?? false,
+  };
+}
+
+/**
+ * Reconnect C-Chain WebSocket with current network
+ */
+export function reconnectSocketC() {
+  // Note: You'll need to pass the current network from your network store
+  // const networkStore = useNetworkStore.getState();
+  // if (networkStore.selectedNetwork) {
+  //   connectSocketC(networkStore.selectedNetwork);
+  // }
+  console.log('Reconnect requested - network reference needed');
+}
