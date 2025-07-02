@@ -279,7 +279,6 @@ export const useNetworkStore = create<NetworkStore>()(
 
         init: async (): Promise<boolean> => {
           try {
-            console.log('Initializing network store...');
             const camino = new AvaNetwork(
               'Camino',
               'https://api.camino.network',

@@ -1,6 +1,6 @@
 // libs/store/src/lib/modules/wallet/walletStore.ts
 import { create } from 'zustand';
-import { devtools, persist, createJSONStorage } from 'zustand/middleware';
+import { devtools } from 'zustand/middleware';
 import { immer } from 'zustand/middleware/immer';
 import { Buffer as BufferAvalanche } from '@c4tplatform/caminojs/dist';
 import { MultisigAliasReply } from '@c4tplatform/caminojs/dist/apis/platformvm';
@@ -32,6 +32,7 @@ import { ava, bintools } from '../../js/AVA';
 import { updateFilterAddresses } from '../../providers';
 import { getAvaxPriceUSD } from '../../helpers/price_helper';
 import { useNetworkStore } from '../network/networkStore';
+import { useAssetsStore } from '../assets/assetsStore';
 
 // Wallet State Interface
 export interface WalletState {
@@ -140,543 +141,534 @@ const initialState: WalletState = {
   network: { name: '' },
 };
 
-// Custom storage that excludes non-serializable wallet instances
-const createWalletStorage = () => {
-  return createJSONStorage(() => localStorage, {
-    partialize: (state: WalletStore) => ({
-      isAuth: state.isAuth,
-      address: state.address,
-      warnUpdateKeyfile: state.warnUpdateKeyfile,
-      walletsDeleted: state.walletsDeleted,
-      prices: state.prices,
-      network: state.network,
-      // Note: We don't persist wallet instances as they contain non-serializable objects
-      // They will be recreated on app initialization
-    }),
-    merge: (persistedState: any, currentState: WalletStore) => ({
-      ...currentState,
-      ...persistedState,
-      // Always reset these on hydration
-      activeWallet: null,
-      storedActiveWallet: null,
-      wallets: [],
-      volatileWallets: [],
-    }),
-  });
-};
-
 export const useWalletStore = create<WalletStore>()(
   devtools(
-    persist(
-      immer((set, get) => ({
-        ...initialState,
+    immer((set, get) => ({
+      ...initialState,
 
-        // Core authentication actions
-        accessWallet: async (mnemonic: string) => {
-          const wallet = await get().addWalletMnemonic({ key: mnemonic });
-          if (wallet) {
-            get().setActiveWallet(wallet);
-            await get().onAccess();
-          }
-          return wallet as MnemonicWallet;
-        },
-
-        accessWalletMultiple: async ({
-          keys: keyList,
-          activeIndex,
-        }: AccessWalletMultipleInputParams) => {
-          const state = get();
-
-          for (let i = 0; i < keyList.length; i++) {
-            try {
-              const keyInfo = keyList[i];
-              if (keyInfo.type === 'mnemonic') {
-                await get().addWalletMnemonic({ file: keyInfo });
-              } else if (keyInfo.type === 'singleton') {
-                await get().addWalletSingleton({ file: keyInfo });
-              } else {
-                await get().addWalletsMultisig({ file: keyInfo });
-              }
-            } catch (e) {
-              continue;
-            }
-          }
-
-          const currentState = get();
-          if (activeIndex >= keyList.length) activeIndex = 0;
-          get().setActiveWallet(currentState.wallets[activeIndex]);
-          await get().onAccess(currentState.wallets[activeIndex]);
-          get().updateMultisigWallets();
-        },
-
-        accessWalletLedger: async (wallet: LedgerWallet) => {
-          set((state) => {
-            state.wallets = [wallet];
-          });
+      // Core authentication actions
+      accessWallet: async (mnemonic: string) => {
+        const wallet = await get().addWalletMnemonic({ key: mnemonic });
+        if (wallet) {
           get().setActiveWallet(wallet);
           await get().onAccess();
-        },
+        }
+        return wallet as MnemonicWallet;
+      },
 
-        accessWalletSingleton: async (key: string) => {
-          const wallet = await get().addWalletSingleton({ key });
-          if (wallet) {
-            get().setActiveWallet(wallet);
-            console.log('Accessing wallet:', wallet);
-            await get().onAccess();
+      accessWalletMultiple: async ({
+        keys: keyList,
+        activeIndex,
+      }: AccessWalletMultipleInputParams) => {
+        const state = get();
+
+        for (let i = 0; i < keyList.length; i++) {
+          try {
+            const keyInfo = keyList[i];
+            if (keyInfo.type === 'mnemonic') {
+              await get().addWalletMnemonic({ file: keyInfo });
+            } else if (keyInfo.type === 'singleton') {
+              await get().addWalletSingleton({ file: keyInfo });
+            } else {
+              await get().addWalletsMultisig({ file: keyInfo });
+            }
+          } catch (e) {
+            continue;
           }
-        },
+        }
 
-        onAccess: async (wallet?: WalletType) => {
+        const currentState = get();
+        if (activeIndex >= keyList.length) activeIndex = 0;
+        get().setActiveWallet(currentState.wallets[activeIndex]);
+        await get().onAccess(currentState.wallets[activeIndex]);
+        get().updateMultisigWallets();
+      },
+
+      accessWalletLedger: async (wallet: LedgerWallet) => {
+        set((state) => {
+          state.wallets = [wallet];
+        });
+        get().setActiveWallet(wallet);
+        await get().onAccess();
+      },
+
+      accessWalletSingleton: async (key: string) => {
+        const wallet = await get().addWalletSingleton({ key });
+        if (wallet) {
+          get().setActiveWallet(wallet);
+          await get().onAccess();
+        }
+      },
+
+      onAccess: async (wallet?: WalletType) => {
+        set((state) => {
+          state.isAuth = true;
+        });
+        // Dispatch to other modules would happen here
+        // For now, we'll just activate the wallet
+        const currentState = get();
+        const activeWallet = wallet || currentState.activeWallet;
+        if (activeWallet) {
+          console.log('Wallet accessed:', activeWallet);
+          get().activateWallet(activeWallet as MnemonicWallet | LedgerWallet);
+        }
+      },
+
+      logout: async () => {
+        set((state) => {
+          state.wallets = [];
+          state.volatileWallets = [];
+          state.activeWallet = null;
+          state.storedActiveWallet = null;
+          state.address = null;
+          state.isAuth = false;
+        });
+
+        // Dispatch logout to other modules would happen here
+        // dispatch('Accounts/onLogout')
+        // dispatch('Assets/onLogout')
+        // dispatch('Launch/onLogout')
+      },
+
+      timeoutLogout: async () => {
+        // Add notification would happen here
+        // dispatch('Notifications/add', { ... })
+        await get().logout();
+      },
+
+      // Wallet management actions
+      addWalletMnemonic: async ({ key, file }) => {
+        const state = get();
+
+        // Cannot add mnemonic wallets on ledger mode
+        if (state.activeWallet?.type === 'ledger') return null;
+
+        // Get mnemonic either from key or from file
+        const mnemonic = file ? file.key : (key as string);
+        const accountHash = createHash('sha256').update(mnemonic).digest();
+
+        // Split mnemonic and seed hash
+        const mParts = mnemonic.split('\n');
+
+        // Make sure wallet doesn't exist already
+        for (const w of state.wallets) {
+          if (
+            w.type === 'mnemonic' &&
+            (w as any).accountHash &&
+            (w as any).accountHash.equals(accountHash)
+          ) {
+            throw new Error('Wallet already exists.');
+          }
+        }
+
+        const wallet = new SingletonWallet('', mParts[0], mParts[1]);
+        if (file?.name) wallet.name = file.name;
+        (wallet as any).accountHash = accountHash;
+
+        set((state) => {
+          state.wallets.push(wallet);
+          state.volatileWallets.push(wallet);
+        });
+
+        if (!file) get().updateMultisigWallets();
+        return wallet;
+      },
+
+      addWalletSingleton: async ({ key, file }) => {
+        const state = get();
+        let pk = file ? file.key : (key as string);
+        const accountHash = createHash('sha256').update(pk).digest();
+
+        try {
+          const keyBuf = Buffer.from(pk, 'hex');
+          privateToAddress(keyBuf);
+          pk = `PrivateKey-${bintools.cb58Encode(
+            BufferAvalanche.from(keyBuf)
+          )}`;
+        } catch (e) {
+          // Handle error silently
+        }
+
+        // Cannot add singleton wallets on ledger mode
+        if (state.activeWallet?.type === 'ledger') return null;
+
+        // Make sure wallet doesn't exist already
+        for (const w of state.wallets) {
+          if (
+            w.type === 'singleton' &&
+            (w as any).accountHash &&
+            w.accountHash === accountHash
+          ) {
+            throw new Error('Wallet already exists.');
+          }
+        }
+
+        const wallet = new SingletonWallet(pk);
+        if (file?.name) wallet.name = file.name;
+        (wallet as any).accountHash = accountHash;
+
+        set((state) => {
+          state.wallets.push(wallet);
+          state.volatileWallets.push(wallet);
+        });
+
+        // if (!file) get().updateMultisigWallets();
+        return wallet;
+      },
+
+      addWalletsMultisig: async ({ keys, file }) => {
+        const state = get();
+
+        // Cannot add multisig wallets on ledger mode
+        if (state.activeWallet?.type === 'ledger') return null;
+
+        if (file) {
+          const wallet = new MultisigWallet();
+          if (file.name) wallet.name = file.name;
+          (wallet as any).accountHash = createHash('sha256')
+            .update(file.key)
+            .digest();
+          wallet.setKey(file.key);
+
           set((state) => {
-            state.isAuth = true;
+            state.wallets.push(wallet);
+            state.volatileWallets.push(wallet);
           });
 
-          // Dispatch to other modules would happen here
-          // For now, we'll just activate the wallet
-          const currentState = get();
-          const activeWallet = wallet || currentState.activeWallet;
-          if (activeWallet) {
-            get().activateWallet(activeWallet as MnemonicWallet | LedgerWallet);
+          return [wallet];
+        }
+
+        const wallets: MultisigWallet[] = [];
+        const staticAddresses = get().getStaticAddresses('P');
+
+        for (const alias of keys as string[]) {
+          let response: MultisigAliasReply;
+          try {
+            response = await ava.PChain().getMultisigAlias(alias);
+          } catch (e) {
+            continue;
           }
-        },
 
-        logout: async () => {
-          localStorage.removeItem('w');
+          const aliasBuffer = bintools.stringToAddress(alias);
+
+          // Make sure wallet doesn't exist already
+          for (const wallet of state.wallets) {
+            if (wallet.type === 'multisig') {
+              if (
+                (wallet as MultisigWallet).alias().compare(aliasBuffer) === 0
+              ) {
+                throw new Error('Wallet already exists.');
+              }
+            }
+          }
+
+          // Check that we have at least one staticAddress in owner
+          if (
+            !response.addresses.some((address) =>
+              staticAddresses.includes(address)
+            )
+          ) {
+            continue;
+          }
+
+          const wallet = new MultisigWallet(
+            aliasBuffer,
+            response.memo,
+            response
+          );
+          (wallet as any).accountHash = createHash('sha256')
+            .update(wallet.getKey())
+            .digest();
+          wallets.push(wallet);
+
           set((state) => {
-            state.wallets = [];
-            state.volatileWallets = [];
-            state.activeWallet = null;
-            state.storedActiveWallet = null;
-            state.address = null;
-            state.isAuth = false;
+            state.wallets.push(wallet);
+            state.volatileWallets.push(wallet);
           });
+        }
 
-          // Dispatch logout to other modules would happen here
-          // dispatch('Accounts/onLogout')
-          // dispatch('Assets/onLogout')
-          // dispatch('Launch/onLogout')
-        },
+        get().updateMultisigWallets();
+        return wallets;
+      },
 
-        timeoutLogout: async () => {
+      removeWallet: (wallet: WalletType) => {
+        set((state) => {
+          const index = state.wallets.indexOf(wallet);
+          if (index >= 0) {
+            state.wallets.splice(index, 1);
+            state.walletsDeleted = true;
+          }
+
+          const volatileIndex = state.volatileWallets.indexOf(wallet);
+          if (volatileIndex >= 0) {
+            state.volatileWallets.splice(volatileIndex, 1);
+          }
+        });
+
+        // Commit to accounts module would happen here
+        // commit('Accounts/deleteKey', wallet)
+        get().updateMultisigWallets();
+      },
+
+      removeAllKeys: async () => {
+        const state = get();
+        const wallets = [...state.wallets];
+
+        while (wallets.length > 0) {
+          const wallet = wallets[0];
+          get().removeWallet(wallet);
+          wallets.shift();
+
           // Add notification would happen here
           // dispatch('Notifications/add', { ... })
-          await get().logout();
-        },
+        }
 
-        // Wallet management actions
-        addWalletMnemonic: async ({ key, file }) => {
-          const state = get();
+        set((state) => {
+          state.wallets = [];
+          state.volatileWallets = [];
+        });
+      },
 
-          // Cannot add mnemonic wallets on ledger mode
-          if (state.activeWallet?.type === 'ledger') return null;
-
-          // Get mnemonic either from key or from file
-          const mnemonic = file ? file.key : (key as string);
-          const accountHash = createHash('sha256').update(mnemonic).digest();
-
-          // Split mnemonic and seed hash
-          const mParts = mnemonic.split('\n');
-
-          // Make sure wallet doesn't exist already
-          for (const w of state.wallets) {
-            if (
-              w.type === 'mnemonic' &&
-              (w as any).accountHash &&
-              (w as any).accountHash.equals(accountHash)
-            ) {
-              throw new Error('Wallet already exists.');
-            }
+      updateMultisigWallets: () => {
+        const state = get();
+        state.wallets.forEach((w) => {
+          if (w instanceof MultisigWallet) {
+            w.updateWallets(state.wallets);
           }
+        });
+      },
 
-          const wallet = new SingletonWallet('', mParts[0], mParts[1]);
-          if (file?.name) wallet.name = file.name;
-          (wallet as any).accountHash = accountHash;
+      // Wallet operations
+      issueBatchTx: async (data: IssueBatchTxInput) => {
+        const state = get();
+        const wallet = state.activeWallet;
+        if (!wallet) return 'error';
 
-          set((state) => {
-            state.wallets.push(wallet);
-            state.volatileWallets.push(wallet);
-          });
+        const txId: string = await wallet.issueBatchTx(
+          data.chainId,
+          data.orders,
+          data.toAddress,
+          data.memo
+        );
+        return txId;
+      },
 
-          if (!file) get().updateMultisigWallets();
-          return wallet;
-        },
+      activateWallet: async (wallet: MnemonicWallet | LedgerWallet) => {
+        if (wallet) {
+          wallet.initialize();
+          get().setActiveWallet(wallet);
+          get().updateActiveAddress();
+        }
 
-        addWalletSingleton: async ({ key, file }) => {
-          const state = get();
-          let pk = file ? file.key : (key as string);
-          const accountHash = createHash('sha256').update(pk).digest();
-          console.log({ accountHash });
+        // Add the missing asset updates using dynamic import
+        const updateAssets = async () => {
           try {
-            const keyBuf = Buffer.from(pk, 'hex');
-            privateToAddress(keyBuf);
-            pk = `PrivateKey-${bintools.cb58Encode(
-              BufferAvalanche.from(keyBuf)
-            )}`;
-          } catch (e) {
-            // Handle error silently
-          }
+            const assetsStore = useAssetsStore.getState();
 
-          // Cannot add singleton wallets on ledger mode
-          if (state.activeWallet?.type === 'ledger') return null;
-          console.log('Adding singleton wallet with key:', pk);
-          // Make sure wallet doesn't exist already
-          for (const w of state.wallets) {
-            if (
-              w.type === 'singleton' &&
-              (w as any).accountHash &&
-              w.accountHash === accountHash
-            ) {
-              throw new Error('Wallet already exists.');
-            }
-          }
-          // const network = useNetworkStore.getState();
-          let network = ava.getNetwork();
-          console.log('Network:', network);
-          const wallet = new SingletonWallet(pk);
-          console.log('Created wallet:', wallet);
-          if (file?.name) wallet.name = file.name;
-          (wallet as any).accountHash = accountHash;
+            assetsStore.updateWallet();
+            await assetsStore.updateAvaAsset();
 
-          set((state) => {
-            state.wallets.push(wallet);
-            state.volatileWallets.push(wallet);
-          });
+            // TODO: Add Accounts KYC update when that module is converted
+            // dispatch('Accounts/updateKycStatus')
 
-          console.log('Wallet added:', wallet);
-          // if (!file) get().updateMultisigWallets();
-          return wallet;
-        },
-
-        addWalletsMultisig: async ({ keys, file }) => {
-          const state = get();
-
-          // Cannot add multisig wallets on ledger mode
-          if (state.activeWallet?.type === 'ledger') return null;
-
-          if (file) {
-            const wallet = new MultisigWallet();
-            if (file.name) wallet.name = file.name;
-            (wallet as any).accountHash = createHash('sha256')
-              .update(file.key)
-              .digest();
-            wallet.setKey(file.key);
-
-            set((state) => {
-              state.wallets.push(wallet);
-              state.volatileWallets.push(wallet);
-            });
-
-            return [wallet];
-          }
-
-          const wallets: MultisigWallet[] = [];
-          const staticAddresses = get().getStaticAddresses('P');
-
-          for (const alias of keys as string[]) {
-            let response: MultisigAliasReply;
-            try {
-              response = await ava.PChain().getMultisigAlias(alias);
-            } catch (e) {
-              continue;
-            }
-
-            const aliasBuffer = bintools.stringToAddress(alias);
-
-            // Make sure wallet doesn't exist already
-            for (const wallet of state.wallets) {
-              if (wallet.type === 'multisig') {
-                if (
-                  (wallet as MultisigWallet).alias().compare(aliasBuffer) === 0
-                ) {
-                  throw new Error('Wallet already exists.');
-                }
-              }
-            }
-
-            // Check that we have at least one staticAddress in owner
-            if (
-              !response.addresses.some((address) =>
-                staticAddresses.includes(address)
-              )
-            ) {
-              continue;
-            }
-
-            const wallet = new MultisigWallet(
-              aliasBuffer,
-              response.memo,
-              response
+            await assetsStore.updateUTXOs();
+            console.log(
+              'balance before in dunction:',
+              wallet.ethBalance.toString()
             );
-            (wallet as any).accountHash = createHash('sha256')
-              .update(wallet.getKey())
-              .digest();
-            wallets.push(wallet);
-
-            set((state) => {
-              state.wallets.push(wallet);
-              state.volatileWallets.push(wallet);
-            });
+            // ← This loads the funds!
+            console.log('Assets updated after wallet activation');
+          } catch (error) {
+            console.warn(
+              'Failed to update assets on wallet activation:',
+              error
+            );
           }
+        };
+        console.log('balance before:', wallet.ethBalance.toString());
+        // Execute the async asset updates
+        await updateAssets();
+        console.log('balance after:', wallet.ethBalance.toString());
+        console.log('Wallet activated Balance:', wallet.ethBalance.toString());
+        updateFilterAddresses();
+      },
 
-          get().updateMultisigWallets();
-          return wallets;
-        },
+      // Import/Export
+      exportWallets: async (input: ExportWalletsInput) => {
+        const state = get();
+        try {
+          const pass = input.password;
+          const wallets = input.wallets;
+          const wallet = state.activeWallet as
+            | MnemonicWallet
+            | SingletonWallet
+            | null;
+          if (!wallet) throw new Error('No active wallet.');
 
-        removeWallet: (wallet: WalletType) => {
-          set((state) => {
-            const index = state.wallets.indexOf(wallet);
-            if (index >= 0) {
-              state.wallets.splice(index, 1);
-              state.walletsDeleted = true;
-            }
+          const activeIndex = wallets.findIndex((w) => w.id === wallet.id);
+          const fileData = await makeKeyfile(wallets, pass, activeIndex);
 
-            const volatileIndex = state.volatileWallets.indexOf(wallet);
-            if (volatileIndex >= 0) {
-              state.volatileWallets.splice(volatileIndex, 1);
-            }
+          // Download the file
+          const text = JSON.stringify(fileData);
+          const utcDate = new Date();
+          const dateString = utcDate.toISOString().replace(' ', '_');
+          const filename = `NATIVE_${dateString}.json`;
+
+          const blob = new Blob([text], { type: 'application/json' });
+          const url = URL.createObjectURL(blob);
+          const element = document.createElement('a');
+
+          element.setAttribute('href', url);
+          element.setAttribute('download', filename);
+          element.style.display = 'none';
+          document.body.appendChild(element);
+          element.click();
+          document.body.removeChild(element);
+        } catch (e) {
+          // Add notification would happen here
+          // dispatch('Notifications/add', { ... })
+          throw e;
+        }
+      },
+
+      importKeyfile: async (data: ImportKeyfileInput) => {
+        const state = get();
+        const pass = data.password;
+        const fileData = data.data;
+        const version = fileData.version;
+
+        // Decrypt the key file with the password
+        const keyFile: AllKeyFileDecryptedTypes = await readKeyFile(
+          fileData,
+          pass
+        );
+        // Extract wallet keys
+        const keys = extractKeysFromDecryptedFile(keyFile);
+
+        // If not auth, login user then add keys
+        if (!state.isAuth) {
+          await get().accessWalletMultiple({
+            keys,
+            activeIndex: keyFile.activeIndex,
           });
+        } else {
+          for (let i = 0; i < keys.length; i++) {
+            const key = keys[i];
 
-          // Commit to accounts module would happen here
-          // commit('Accounts/deleteKey', wallet)
-          get().updateMultisigWallets();
-        },
-
-        removeAllKeys: async () => {
-          const state = get();
-          const wallets = [...state.wallets];
-
-          while (wallets.length > 0) {
-            const wallet = wallets[0];
-            get().removeWallet(wallet);
-            wallets.shift();
-
-            // Add notification would happen here
-            // dispatch('Notifications/add', { ... })
-          }
-
-          set((state) => {
-            state.wallets = [];
-            state.volatileWallets = [];
-          });
-        },
-
-        updateMultisigWallets: () => {
-          const state = get();
-          state.wallets.forEach((w) => {
-            if (w instanceof MultisigWallet) {
-              w.updateWallets(state.wallets);
+            if (key.type === 'mnemonic') {
+              await get().addWalletMnemonic({ file: key });
+            } else if (key.type === 'singleton') {
+              await get().addWalletSingleton({ file: key });
+            } else if (key.type === 'multisig') {
+              await get().addWalletsMultisig({ file: key });
             }
-          });
-        },
-
-        // Wallet operations
-        issueBatchTx: async (data: IssueBatchTxInput) => {
-          const state = get();
-          const wallet = state.activeWallet;
-          if (!wallet) return 'error';
-
-          const txId: string = await wallet.issueBatchTx(
-            data.chainId,
-            data.orders,
-            data.toAddress,
-            data.memo
-          );
-          return txId;
-        },
-
-        activateWallet: (wallet: MnemonicWallet | LedgerWallet) => {
-          if (wallet) {
-            wallet.initialize();
-            get().setActiveWallet(wallet);
-            get().updateActiveAddress();
           }
+        }
 
-          // Dispatch to other modules would happen here
-          // dispatch('Assets/updateWallet').then(() => { ... })
-          updateFilterAddresses();
-        },
+        set((state) => {
+          // Keystore warning flag asking users to update their keystore files
+          state.warnUpdateKeyfile = version !== KEYSTORE_VERSION;
+          state.volatileWallets = [];
+        });
 
-        // Import/Export
-        exportWallets: async (input: ExportWalletsInput) => {
-          const state = get();
-          try {
-            const pass = input.password;
-            const wallets = input.wallets;
-            const wallet = state.activeWallet as
-              | MnemonicWallet
-              | SingletonWallet
-              | null;
-            if (!wallet) throw new Error('No active wallet.');
+        return {
+          success: true,
+          message: 'success',
+        };
+      },
 
-            const activeIndex = wallets.findIndex((w) => w.id === wallet.id);
-            const fileData = await makeKeyfile(wallets, pass, activeIndex);
+      // Utilities
+      updateAvaxPrice: async () => {
+        const usd = await getAvaxPriceUSD();
+        set((state) => {
+          state.prices = { usd };
+        });
+      },
 
-            // Download the file
-            const text = JSON.stringify(fileData);
-            const utcDate = new Date();
-            const dateString = utcDate.toISOString().replace(' ', '_');
-            const filename = `NATIVE_${dateString}.json`;
+      updateTransaction: (options) => {
+        // This would dispatch to other modules
+        // Implementation depends on how you handle other store modules
+        if (options.onlyMultisig) {
+          setTimeout(() => {
+            // dispatch('Signavault/updateTransaction').then(() => {
+            //   dispatch('History/updateMultisigTransactionHistory')
+            // })
+          }, 3000);
+        } else if (options.withMultisig) {
+          setTimeout(() => {
+            // dispatch('Assets/updateUTXOs').then(() => { ... })
+          }, 3000);
+        } else {
+          setTimeout(() => {
+            // dispatch('Assets/updateUTXOs').then(() => { ... })
+          }, 3000);
+        }
 
-            const blob = new Blob([text], { type: 'application/json' });
-            const url = URL.createObjectURL(blob);
-            const element = document.createElement('a');
+        if (options.msgType) {
+          // Add notification would happen here
+          // dispatch('Notifications/add', { ... })
+        }
+      },
 
-            element.setAttribute('href', url);
-            element.setAttribute('download', filename);
-            element.style.display = 'none';
-            document.body.appendChild(element);
-            element.click();
-            document.body.removeChild(element);
-          } catch (e) {
-            // Add notification would happen here
-            // dispatch('Notifications/add', { ... })
-            throw e;
-          }
-        },
+      updateBalances: () => {
+        // This would dispatch to other modules
+        // dispatch('Assets/updateUTXOs').then(() => { ... })
+      },
 
-        importKeyfile: async (data: ImportKeyfileInput) => {
-          const state = get();
-          const pass = data.password;
-          const fileData = data.data;
-          const version = fileData.version;
-
-          // Decrypt the key file with the password
-          const keyFile: AllKeyFileDecryptedTypes = await readKeyFile(
-            fileData,
-            pass
-          );
-          // Extract wallet keys
-          const keys = extractKeysFromDecryptedFile(keyFile);
-
-          // If not auth, login user then add keys
-          if (!state.isAuth) {
-            await get().accessWalletMultiple({
-              keys,
-              activeIndex: keyFile.activeIndex,
-            });
+      // Mutations (converted from Vuex mutations)
+      updateActiveAddress: () => {
+        set((state) => {
+          if (!state.activeWallet) {
+            state.address = null;
           } else {
-            for (let i = 0; i < keys.length; i++) {
-              const key = keys[i];
-
-              if (key.type === 'mnemonic') {
-                await get().addWalletMnemonic({ file: key });
-              } else if (key.type === 'singleton') {
-                await get().addWalletSingleton({ file: key });
-              } else if (key.type === 'multisig') {
-                await get().addWalletsMultisig({ file: key });
-              }
-            }
+            const addrNow = state.activeWallet.getCurrentAddressAvm();
+            state.address = addrNow;
+            // Update the websocket addresses
+            updateFilterAddresses();
           }
+        });
+      },
 
-          set((state) => {
-            // Keystore warning flag asking users to update their keystore files
-            state.warnUpdateKeyfile = version !== KEYSTORE_VERSION;
-            state.volatileWallets = [];
-          });
-
-          return {
-            success: true,
-            message: 'success',
-          };
-        },
-
-        // Utilities
-        updateAvaxPrice: async () => {
-          const usd = await getAvaxPriceUSD();
-          set((state) => {
-            state.prices = { usd };
-          });
-        },
-
-        updateTransaction: (options) => {
-          // This would dispatch to other modules
-          // Implementation depends on how you handle other store modules
-          if (options.onlyMultisig) {
-            setTimeout(() => {
-              // dispatch('Signavault/updateTransaction').then(() => {
-              //   dispatch('History/updateMultisigTransactionHistory')
-              // })
-            }, 3000);
-          } else if (options.withMultisig) {
-            setTimeout(() => {
-              // dispatch('Assets/updateUTXOs').then(() => { ... })
-            }, 3000);
-          } else {
-            setTimeout(() => {
-              // dispatch('Assets/updateUTXOs').then(() => { ... })
-            }, 3000);
+      setActiveWallet: (wallet: WalletType | null) => {
+        set((state) => {
+          state.activeWallet = wallet;
+          if (!state.storedActiveWallet) {
+            state.storedActiveWallet = wallet;
           }
+        });
+      },
 
-          if (options.msgType) {
-            // Add notification would happen here
-            // dispatch('Notifications/add', { ... })
-          }
-        },
+      setNetwork: (net: INetwork) => {
+        set((state) => {
+          state.network = net;
+        });
+      },
 
-        updateBalances: () => {
-          // This would dispatch to other modules
-          // dispatch('Assets/updateUTXOs').then(() => { ... })
-        },
+      // Getters (converted from Vuex getters)
+      getAddresses: () => {
+        const state = get();
+        const wallet = state.activeWallet;
+        if (!wallet) return [];
+        return wallet.getAllAddressesX();
+      },
 
-        // Mutations (converted from Vuex mutations)
-        updateActiveAddress: () => {
-          set((state) => {
-            if (!state.activeWallet) {
-              state.address = null;
-            } else {
-              const addrNow = state.activeWallet.getCurrentAddressAvm();
-              state.address = addrNow;
-              // Update the websocket addresses
-              updateFilterAddresses();
-            }
-          });
-        },
+      getStaticAddresses: (chain: string) => {
+        const state = get();
+        return state.wallets
+          .map((w) => w.getStaticAddress(chain as any))
+          .filter((e) => e !== '');
+      },
 
-        setActiveWallet: (wallet: WalletType | null) => {
-          set((state) => {
-            state.activeWallet = wallet;
-            if (!state.storedActiveWallet) {
-              state.storedActiveWallet = wallet;
-            }
-          });
-        },
-
-        setNetwork: (net: INetwork) => {
-          set((state) => {
-            state.network = net;
-          });
-        },
-
-        // Getters (converted from Vuex getters)
-        getAddresses: () => {
-          const state = get();
-          const wallet = state.activeWallet;
-          if (!wallet) return [];
-          return wallet.getAllAddressesX();
-        },
-
-        getStaticAddresses: (chain: string) => {
-          const state = get();
-          return state.wallets
-            .map((w) => w.getStaticAddress(chain as any))
-            .filter((e) => e !== '');
-        },
-
-        getAccountChanged: () => {
-          const state = get();
-          return (
-            state.volatileWallets.length > 0 ||
-            state.warnUpdateKeyfile ||
-            state.walletsDeleted ||
-            state.activeWallet !== state.storedActiveWallet
-          );
-        },
-      })),
-      {
-        name: 'wallet-store',
-        storage: createWalletStorage(),
-      }
-    ),
+      getAccountChanged: () => {
+        const state = get();
+        return (
+          state.volatileWallets.length > 0 ||
+          state.warnUpdateKeyfile ||
+          state.walletsDeleted ||
+          state.activeWallet !== state.storedActiveWallet
+        );
+      },
+    })),
     { name: 'WalletStore' }
   )
 );

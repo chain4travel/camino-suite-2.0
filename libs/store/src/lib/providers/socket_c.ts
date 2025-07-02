@@ -91,7 +91,7 @@ function addBlockHeaderListener(provider: WebSocketProvider) {
  * Handle new block events
  */
 function blockHeaderCallback(blockNumber: number) {
-  console.log('New C-Chain block:', blockNumber);
+  // console.log('New C-Chain block:', blockNumber);
   updateWalletBalanceC();
 }
 
@@ -104,14 +104,14 @@ function updateWalletBalanceC() {
   const wallet: null | WalletType = walletStore.activeWallet;
 
   if (!wallet) {
-    console.log('No active wallet for C-Chain balance update');
+    // console.log('No active wallet for C-Chain balance update');
     return;
   }
 
   try {
     // Refresh the wallet ETH balance
     wallet.getEthBalance();
-    console.log('C-Chain wallet balance updated');
+    // console.log('C-Chain wallet balance updated');
   } catch (error) {
     console.error('Failed to update C-Chain wallet balance:', error);
   }
@@ -124,7 +124,7 @@ export function disconnectSocketC() {
   try {
     if (socketEVM) {
       socketEVM.destroy();
-      console.log('C-Chain WebSocket disconnected');
+      // console.log('C-Chain WebSocket disconnected');
     }
 
     if (evmSubscriptionTimeout) {
@@ -167,5 +167,5 @@ export function reconnectSocketC() {
   // if (networkStore.selectedNetwork) {
   //   connectSocketC(networkStore.selectedNetwork);
   // }
-  console.log('Reconnect requested - network reference needed');
+  // console.log('Reconnect requested - network reference needed');
 }

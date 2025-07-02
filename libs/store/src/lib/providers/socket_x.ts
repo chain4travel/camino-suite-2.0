@@ -27,7 +27,7 @@ export function connectSocketX(network: AvaNetwork) {
   try {
     // Setup the X chain socket connection
     const wsURL = network.getWsUrlX();
-    console.log('Connecting to X-Chain WebSocket:', wsURL);
+    // console.log('Connecting to X-Chain WebSocket:', wsURL);
 
     socketX = new Sockette(wsURL, {
       onopen: xOnOpen,
@@ -49,9 +49,9 @@ export function updateFilterAddresses(): void {
   const wallet: null | WalletType = walletStore.activeWallet;
 
   if (!socketOpen || !wallet) {
-    console.log(
-      'Cannot update filter addresses - socket not open or no wallet'
-    );
+    // console.log(
+    //   'Cannot update filter addresses - socket not open or no wallet'
+    // );
     return;
   }
 
@@ -61,7 +61,7 @@ export function updateFilterAddresses(): void {
     const startIndex = Math.max(0, addrsLen - FILTER_ADDRESS_SIZE);
     const addrs = externalAddrs.slice(startIndex);
 
-    console.log(`Updating filter addresses: ${addrs.length} addresses`);
+    // console.log(`Updating filter addresses: ${addrs.length} addresses`);
 
     const pubsub = new PubSub();
     const bloom = pubsub.newBloom(FILTER_ADDRESS_SIZE);
@@ -77,7 +77,7 @@ export function updateFilterAddresses(): void {
       index += GROUP_AMOUNT;
     }
 
-    console.log('Filter addresses updated successfully');
+    // console.log('Filter addresses updated successfully');
   } catch (error) {
     console.error('Failed to update filter addresses:', error);
   }
@@ -88,7 +88,7 @@ export function updateFilterAddresses(): void {
  */
 function clearFilter() {
   if (!socketOpen) {
-    console.log('Cannot clear filter - socket not open');
+    // console.log('Cannot clear filter - socket not open');
     return;
   }
 
@@ -96,7 +96,7 @@ function clearFilter() {
     const pubsub = new PubSub();
     const bloom = pubsub.newBloom(FILTER_ADDRESS_SIZE);
     socketX.send(bloom);
-    console.log('X-Chain filter cleared');
+    // console.log('X-Chain filter cleared');
   } catch (error) {
     console.error('Failed to clear filter:', error);
   }
@@ -111,11 +111,11 @@ function updateWalletBalanceX() {
   const wallet: null | WalletType = walletStore.activeWallet;
 
   if (!socketOpen || !wallet) {
-    console.log('Cannot update wallet balance - socket not open or no wallet');
+    // console.log('Cannot update wallet balance - socket not open or no wallet');
     return;
   }
 
-  console.log('Updating X-Chain wallet balance...');
+  // console.log('Updating X-Chain wallet balance...');
 
   // Use Zustand assets store instead of Vuex dispatch
   const assetsStore = useAssetsStore.getState();
@@ -124,7 +124,7 @@ function updateWalletBalanceX() {
   assetsStore
     .updateUTXOsExternal()
     .then(() => {
-      console.log('X-Chain balance updated successfully');
+      // console.log('X-Chain balance updated successfully');
 
       // TODO: Update this when History module is converted to Zustand
       // For now, we'll just log
@@ -147,7 +147,7 @@ function updateWalletBalanceX() {
  * Handle X-Chain WebSocket open event
  */
 function xOnOpen() {
-  console.log('X-Chain WebSocket connected');
+  // console.log('X-Chain WebSocket connected');
   socketOpen = true;
   updateFilterAddresses();
 }
@@ -156,7 +156,7 @@ function xOnOpen() {
  * Handle X-Chain WebSocket message event
  */
 function xOnMessage(event: MessageEvent) {
-  console.log('X-Chain WebSocket message received');
+  // console.log('X-Chain WebSocket message received');
   updateWalletBalanceX();
 }
 
@@ -164,11 +164,11 @@ function xOnMessage(event: MessageEvent) {
  * Handle X-Chain WebSocket close event
  */
 function xOnClose(event?: CloseEvent) {
-  console.log('X-Chain WebSocket disconnected');
+  // console.log('X-Chain WebSocket disconnected');
   socketOpen = false;
 
   if (event) {
-    console.log('Close code:', event.code, 'Reason:', event.reason);
+    // console.log('Close code:', event.code, 'Reason:', event.reason);
   }
 }
 
@@ -191,7 +191,7 @@ export function disconnectSocketX() {
   try {
     if (socketX) {
       socketX.close();
-      console.log('X-Chain WebSocket disconnected');
+      // console.log('X-Chain WebSocket disconnected');
     }
     socketOpen = false;
   } catch (error) {
@@ -227,7 +227,7 @@ export function clearXFilter(): void {
  * Force update filter addresses (useful for debugging)
  */
 export function forceUpdateFilterAddresses(): void {
-  console.log('Force updating filter addresses...');
+  // console.log('Force updating filter addresses...');
   updateFilterAddresses();
 }
 
@@ -240,7 +240,7 @@ export function reconnectSocketX() {
   // if (networkStore.selectedNetwork) {
   //   connectSocketX(networkStore.selectedNetwork);
   // }
-  console.log('Reconnect requested - network reference needed');
+  // console.log('Reconnect requested - network reference needed');
 }
 
 // Export socket instance for external access if needed

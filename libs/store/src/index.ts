@@ -8,6 +8,7 @@ export {
   useDepositAndBond,
 } from './lib/modules/network/networkStore';
 
+export * from './lib/modules/assets/assetsStore';
 export * from './lib/js/web3';
 // Export types
 

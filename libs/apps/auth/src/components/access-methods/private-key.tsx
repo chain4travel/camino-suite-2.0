@@ -2,9 +2,18 @@
 
 import { CamBtn, Input, Typography } from '@camino/ui';
 import { useCallback, useEffect, useState } from 'react';
-import { useNetworkStore, useWalletStore } from '@camino/store';
+import {
+  useAssetsActions,
+  useAssetsStore,
+  useComputedAssets,
+  useNetworkStore,
+  useWalletStore,
+} from '@camino/store';
 import { AccessMethodProps } from './types';
 import { useTranslation } from 'react-i18next';
+import { useAssetsSelectors, usePlatformBalances } from '@camino/store';
+import { ONEAVAX } from '@c4tplatform/caminojs/dist/utils';
+import { Big, BN } from 'libs/store/src/lib/helpers/helper';
 
 export const PrivateKeyAccess = ({ onBack }: AccessMethodProps) => {
   const { t } = useTranslation();
@@ -15,7 +24,23 @@ export const PrivateKeyAccess = ({ onBack }: AccessMethodProps) => {
   const { accessWalletSingleton } = useWalletStore();
   const state = useWalletStore((state) => state);
   const [error, setError] = useState('');
+  // const { walletAssetsArray, assetAVA, balanceLoading } = useAssetsSelectors();
 
+  const { balanceLoading, AVA_ASSET_ID, balanceDict } = useAssetsSelectors();
+
+  function cleanAvaxBN(val: BN): string {
+    const big = Big(val.toString()).div(Big(ONEAVAX.toString()));
+    return big.toLocaleString();
+  }
+  // Get computed values (properly memoized)
+  const { walletAssetsArray, assetAVA, walletAssetsDict } = useComputedAssets();
+
+  // Get platform balances (memoized)
+  const { walletPlatformBalance } = usePlatformBalances();
+
+  // Get actions
+  const { updateUTXOs } = useAssetsActions();
+  const { getAssetAVA } = useAssetsStore();
   const isValidPrivateKey = privateKey;
 
   const handlePrivateKeyChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -36,12 +61,23 @@ export const PrivateKeyAccess = ({ onBack }: AccessMethodProps) => {
     }
     console.log('Accessing with private key:', privateKey);
     init().then(() => {
-      accessWalletSingleton(privateKey);
+      accessWalletSingleton(privateKey)
+        .then(() => {
+          getAssetAVA();
+          console.log({ etchbalance: state.activeWallet?.ethBalance });
+        })
+        .catch(() => {
+          console.error('Failed to access wallet with private key');
+        });
     });
   }, [privateKey, isValidPrivateKey, t]);
 
   useEffect(() => {
-    // console.log('Wallet address:', state);
+    // console.log({ state });
+    if (state.activeWallet) {
+      // console.log('Active wallet:', state.activeWallet);
+      // console.log({ balance: state.activeWallet.ethBalance.toString() });
+    }
   }, [state]);
 
   return (

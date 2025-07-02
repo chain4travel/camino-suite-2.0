@@ -1,6 +1,6 @@
 import * as bip39 from 'bip39';
 import HDKey from 'hdkey';
-import { privateToAddress } from '@ethereumjs/util';
+import { Address } from '@ethereumjs/util';
 import { Transaction } from '@ethereumjs/tx';
 
 import { ava, bintools } from '../AVA';
@@ -12,7 +12,7 @@ import { buildUnsignedTransaction } from '../TxHelper';
 import { AvaWalletCore, UnsafeWallet } from './types';
 import MnemonicPhrase from './MnemonicPhrase';
 import Erc20Token from '../Erc20Token';
-import { WalletCore } from './WalletCore';
+import { WalletCore } from '../wallets/WalletCore';
 import { WalletHelper } from '../../helpers/wallet_helper';
 import { avmGetAllUTXOs, platformGetAllUTXOs } from '../../helpers/utxo_helper';
 
@@ -107,7 +107,18 @@ class SingletonWallet
     let pkBuffNative = Buffer.from(pkHex, 'hex');
 
     this.ethKey = pkHex;
-    this.ethAddress = privateToAddress(pkBuffNative).toString('hex');
+
+    // FIXED: Proper ETH address generation using Address.fromPrivateKey
+    try {
+      const ethAddressObj = Address.fromPrivateKey(pkBuffNative);
+      this.ethAddress = ethAddressObj.toString().slice(2).toLowerCase(); // Remove 0x prefix and make lowercase
+      console.log('ETH Address generated:', this.ethAddress);
+    } catch (error) {
+      console.error('Error generating ETH address:', error);
+      // Fallback to empty string or throw error
+      this.ethAddress = '';
+    }
+
     this.ethBalance = new BN(0);
 
     let cPrivKey =
@@ -205,6 +216,7 @@ class SingletonWallet
 
   async getEthBalance() {
     let bal = await WalletHelper.getEthBalance(this);
+
     this.ethBalance = bal;
     return bal;
   }
@@ -229,7 +241,6 @@ class SingletonWallet
 
     await this.getStake();
     await this.getEthBalance();
-
     this.isFetchUtxos = false;
 
     return;
@@ -283,6 +294,20 @@ class SingletonWallet
     let cKeypair = this.ethKeyChain.importKey(this.ethKeyBech);
     this.ethAddressBech = cKeypair.getAddressString();
     this.ethBalance = new BN(0);
+
+    // Regenerate ETH address on network change if needed
+    if (this.ethKey) {
+      try {
+        const pkBuffNative = Buffer.from(this.ethKey, 'hex');
+        const ethAddressObj = Address.fromPrivateKey(pkBuffNative);
+        this.ethAddress = ethAddressObj.toString().slice(2).toLowerCase();
+      } catch (error) {
+        console.error(
+          'Error regenerating ETH address on network change:',
+          error
+        );
+      }
+    }
   }
 
   async signX(unsignedTx: AVMUnsignedTx): Promise<AVMTx> {
