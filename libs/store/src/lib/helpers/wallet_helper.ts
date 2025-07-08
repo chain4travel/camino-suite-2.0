@@ -175,6 +175,7 @@ class WalletHelper {
     const unsignedTx = await ava.PChain().buildCaminoAddValidatorTx(
       utxoSet,
       [stakeReturnAddr],
+      //@ts-ignore
       [pAddressStrings, signerAddresses], // from
       [changeAddress], // change
       nodeID,

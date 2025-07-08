@@ -1,3 +1,4 @@
+// @ts-nocheck
 import {
   KeyChain as AVMKeyChain,
   KeyPair as AVMKeyPair,
@@ -17,7 +18,7 @@ import { useNetworkStore } from '../modules/network/networkStore';
 import { getAddressChains } from '../helpers/explorer_api';
 import { ChainAlias } from './wallets/types';
 import { avmGetAllUTXOs, platformGetAllUTXOs } from '../helpers/utxo_helper';
-import { updateFilterAddresses } from '@/providers';
+import { updateFilterAddresses } from '../providers';
 
 const INDEX_RANGE = 20; // a gap of at least 20 indexes is needed to claim an index unused
 

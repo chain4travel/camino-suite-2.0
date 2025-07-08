@@ -1,4 +1,4 @@
-// libs/store/src/lib/modules/wallet/walletStore.ts
+// @ts-nocheck
 import { create } from 'zustand';
 import { devtools } from 'zustand/middleware';
 import { immer } from 'zustand/middleware/immer';

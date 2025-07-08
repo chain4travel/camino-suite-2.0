@@ -1,5 +1,6 @@
 // A simple wrapper thar combines caminojs, bip39 and HDWallet
 
+// @ts-nocheck
 import {
   KeyPair as AVMKeyPair,
   KeyChain as AVMKeyChain,

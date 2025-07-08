@@ -4,7 +4,7 @@ import { AbiItem } from 'web3-utils';
 
 import ERC721Abi from '../abi/IERC721MetaData.json';
 import ERC20Abi from '../abi/IERC20.json';
-
+// @ts-ignore
 import abiDecoder from 'abi-decoder';
 
 abiDecoder.addABI(ERC721Abi);

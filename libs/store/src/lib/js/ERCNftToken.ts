@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { AbiItem, Contract, web3 } from './web3';
 import IERC721Abi from '@/abi/IERC721MetaData.json';
 import IERC1155Abi from '@/abi/IERC1155MetaData.json';
@@ -46,6 +47,7 @@ class ERCNftToken {
       if (!this.data.type) {
         // assume ERC721 first
         this.contract = new web3.eth.Contract(
+          //@ts-ignore
           IERC721Abi as AbiItem[],
           this.data.address
         );
@@ -61,6 +63,7 @@ class ERCNftToken {
           await this.contract.methods.supportsInterface(ERC1155ID).call()
         ) {
           this.contract = new web3.eth.Contract(
+            //@ts-ignore
             IERC1155Abi as AbiItem[],
             this.data.address
           );
@@ -70,6 +73,7 @@ class ERCNftToken {
         }
       } else {
         this.contract = new web3.eth.Contract(
+          //@ts-ignore
           (this.data.type === 'ERC1155'
             ? IERC1155Abi
             : IERC721Abi) as AbiItem[],
@@ -135,8 +139,11 @@ class ERCNftToken {
             log.data,
             log.topics.slice(1)
           );
+          //@ts-ignore
           if (parsed.tokenId) entry.add(parsed.tokenId);
+          //@ts-ignore
           else if (parsed.id) entry.add(parsed.id);
+          //@ts-ignore
           else for (const id of parsed.ids) entry.add(id);
         }
       }

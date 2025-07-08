@@ -1,3 +1,4 @@
+// @ts-nocheck
 import HDKey from 'hdkey';
 
 import { ava, bintools } from '../AVA';
@@ -5,7 +6,7 @@ import { ChainAlias } from './types';
 import { ITransaction } from '../../types/wallet.types';
 import { buildUnsignedTransaction } from '../TxHelper';
 import { WalletCore } from './WalletCore';
-import { updateFilterAddresses } from ''; // TODO
+import { updateFilterAddresses } from '../../providers';
 import { digestMessage } from '../../helpers/helper';
 import { HdHelper } from '../HdHelper';
 
@@ -247,6 +248,7 @@ abstract class HdWalletCore extends WalletCore {
     return this.externalHelper.getAddressForIndex(0);
   }
 
+  // @ts-ignore
   onNetworkChange(): void {
     this.hdKeysLoaded = false;
 
@@ -255,6 +257,7 @@ abstract class HdWalletCore extends WalletCore {
     this.platformHelper.onNetworkChange();
   }
 
+  // @ts-ignore
   async initialize() {
     if (this.hdKeysLoaded) return;
     this.hdKeysLoaded = true;

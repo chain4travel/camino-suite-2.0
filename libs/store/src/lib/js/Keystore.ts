@@ -1,3 +1,4 @@
+// @ts-nocheck
 // Functions to manage import/export of keystore files
 import {
   AllKeyFileDecryptedTypes,

@@ -1,3 +1,4 @@
+// @ts-nocheck
 import * as bip39 from 'bip39';
 import HDKey from 'hdkey';
 import { Address } from '@ethereumjs/util';

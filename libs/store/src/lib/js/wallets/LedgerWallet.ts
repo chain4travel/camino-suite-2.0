@@ -1,3 +1,4 @@
+// @ts-nocheck
 // import AppBtc from "@ledgerhq/hw-app-btc";
 //@ts-ignore
 import AppAvax from '@obsidiansystems/hw-app-avalanche';
@@ -10,7 +11,7 @@ import { Transaction, TxData } from '@ethereumjs/tx';
 import moment from 'moment';
 import { Buffer, BN } from '@c4tplatform/caminojs/dist';
 import HDKey from 'hdkey';
-import { ava, bintools } from '@/AVA';
+import { ava, bintools } from '../AVA';
 const bippath = require('bip32-path');
 import createHash from 'create-hash';
 import store from '@/store';

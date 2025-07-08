@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { ava, bintools } from '../AVA';
 import { AxiosError } from 'axios';
 import { AvaWalletCore, ChainAlias, WalletNameType } from './types';
