@@ -1,0 +1,16 @@
+{
+  "version": 2,
+  "name": "camino-suite",
+  "builds": [
+    {
+      "src": "apps/camino-suite/package.json",
+      "use": "@vercel/next"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/(.*)",
+      "dest": "/apps/camino-suite/$1"
+    }
+  ]
+}
