@@ -1,10 +1,9 @@
 'use client';
 
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { usePathname } from 'next/navigation';
 
 import Drawer from './Drawer';
-import { Network } from '../NetworkModal/NetworkModal.types';
 import NetworkModal from '../NetworkModal/NetworkModal';
 import { NetworkOption } from '../NetworkSwitcher/NetworkSwitcher.types';
 import NetworkSwitcher from '../NetworkSwitcher';
@@ -17,13 +16,20 @@ import { useRouter } from 'next/navigation';
 import LoggedInNav from './LoggedInNav';
 import LoggedOutNav from './LoggedOutNav';
 import ThemeToggle from './ThemeToggle';
+import { useNetwork } from '../../hooks/useNetwork';
+import { AvaNetwork, useWalletStore } from '@camino/store';
 
 const Navbar = () => {
   const router = useRouter();
   const pathname = usePathname();
   const { theme, toggleTheme } = useTheme();
-  const [isAuthenticated, setIsAuthenticated] = useState(true); // Basic auth state
-
+  const { isAuth, logout, address, activeWallet } = useWalletStore();
+  const {
+    allNetworks,
+    selectedNetwork: activeNetwork,
+    switchNetwork,
+    addNetwork,
+  } = useNetwork();
   // Get active platform based on current path
   const getActivePlatform = () => {
     return (
@@ -45,52 +51,18 @@ const Navbar = () => {
   const [editingNetwork, setEditingNetwork] = useState<NetworkOption | null>(
     null
   );
-  const [customNetworks, setCustomNetworks] = useState<NetworkOption[]>([]);
-  const [activeNetwork, setActiveNetwork] = useState<NetworkOption | null>(
-    null
-  );
 
-  const defaultNetworks: NetworkOption[] = [
-    {
-      name: 'Camino',
-      status: 'mainnet',
-    },
-    {
-      name: 'Columbus',
-      status: 'testnet',
-    },
-  ];
-
-  const handleAddNetwork = (network: Network) => {
-    const newNetwork: NetworkOption = {
-      ...network,
-      isCustom: true,
-    };
-    setCustomNetworks((prev) => [...prev, newNetwork]);
-    // Set the new network as active
-    const networkSwitcherOption = {
-      name: network.name,
-      isCustom: true,
-      url: network.url,
-      magellanAddress: network.magellanAddress,
-      signavaultAddress: network.signavaultAddress,
-    };
-    handleNetworkSelect(networkSwitcherOption);
+  const handleAddNetwork = (network: AvaNetwork) => {
+    addNetwork(network);
   };
 
-  const handleEditNetwork = (network: Network) => {
+  const handleEditNetwork = (network: AvaNetwork) => {
     if (!editingNetwork) return;
-
-    setCustomNetworks((prev) =>
-      prev.map((n) =>
-        n.name === editingNetwork.name ? { ...network, isCustom: true } : n
-      )
-    );
     setEditingNetwork(null);
   };
 
   const handleDeleteNetwork = (network: NetworkOption) => {
-    setCustomNetworks((prev) => prev.filter((n) => n.name !== network.name));
+    // setCustomNetworks((prev) => prev.filter((n) => n.name !== network.name));
   };
 
   const handleModalClose = () => {
@@ -98,33 +70,26 @@ const Navbar = () => {
     setEditingNetwork(null);
   };
 
-  const handleNetworkSelect = (network: NetworkOption) => {
-    setActiveNetwork(network);
-    // Handle network selection
-    console.log('Selected network:', network);
-    // Add your network selection logic here
+  const handleNetworkSelect = (network: AvaNetwork) => {
+    switchNetwork(network);
   };
 
-  const allNetworks = [...defaultNetworks, ...customNetworks];
-
   const handleSwitcherSelect = (option: OptionType) => {
-    console.log('Selected option:', option);
     router.push(option.url);
   };
 
   const handleLogin = () => {
-    // this state is temporary, it should be removed when the login is implemented from the store
-    setIsAuthenticated(true);
     router.push('/login');
   };
 
   const handleLogout = () => {
-    setIsAuthenticated(false);
-    router.push('/login');
+    logout().then(() => router.push('/login'));
   };
 
   // Add wallet address state
-  const [walletAddress] = useState('P-cami...enkl8'); // For now using static address
+  const walletAddress = useMemo(() => {
+    return activeWallet?.getCurrentAddressPlatform();
+  }, [address]);
 
   const handleVerifyWallet = () => {
     router.push('/verify-wallet');
@@ -152,7 +117,7 @@ const Navbar = () => {
 
           {/* Right side - Network Switcher and Auth Nav */}
           <div className="items-center hidden gap-4 md:flex">
-            {!isAuthenticated && <ThemeToggle />}
+            {!isAuth && <ThemeToggle />}
             <NetworkSwitcher
               options={allNetworks}
               onSelect={handleNetworkSelect}
@@ -165,7 +130,7 @@ const Navbar = () => {
               onDeleteNetwork={handleDeleteNetwork}
             />
 
-            {isAuthenticated ? (
+            {isAuth ? (
               <LoggedInNav
                 onMobileMenuOpen={() => setIsMobileMenuOpen(true)}
                 onLogout={handleLogout}
@@ -198,7 +163,7 @@ const Navbar = () => {
         onDeleteNetwork={handleDeleteNetwork}
         onLogin={handleLogin}
         onLogout={handleLogout}
-        isAuthenticated={isAuthenticated}
+        isAuthenticated={isAuth}
         onVerifyWallet={handleVerifyWallet}
         onSettings={handleSettings}
       />

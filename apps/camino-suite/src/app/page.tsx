@@ -5,11 +5,14 @@ import { useTranslation } from 'react-i18next';
 import { PLATFORM_SWITCHER } from '@camino/data';
 import { OptionType } from '../components/home/NavCard';
 import NavCard from '../components/home/NavCard';
+import { ProtectRoute } from '../components/ProtectRoute';
 
 export default function Index() {
   const { t } = useTranslation();
-  
-  const visiblePlatforms = PLATFORM_SWITCHER.filter(platform => !platform.hidden);
+
+  const visiblePlatforms = PLATFORM_SWITCHER.filter(
+    (platform) => !platform.hidden
+  );
 
   return (
     <Container>

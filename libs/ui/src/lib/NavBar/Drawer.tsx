@@ -23,17 +23,18 @@ import {
 import { useTranslation } from 'react-i18next';
 import { NetworkOption } from '../NetworkSwitcher/NetworkSwitcher.types';
 import CamBadge from '../CamBadge';
+import { AvaNetwork } from '@camino/store';
 
 interface DrawerProps {
   isOpen: boolean;
   onClose: () => void;
   theme: 'light' | 'dark';
-  networks: NetworkOption[];
+  networks: AvaNetwork[];
   activeNetwork: string;
-  onNetworkSelect: (network: NetworkOption) => void;
+  onNetworkSelect: (network: AvaNetwork) => void;
   onAddNetwork: () => void;
-  onEditNetwork: (network: NetworkOption) => void;
-  onDeleteNetwork: (network: NetworkOption) => void;
+  onEditNetwork: (network: AvaNetwork) => void;
+  onDeleteNetwork: (network: AvaNetwork) => void;
   onVerifyWallet: () => void;
   onSettings: () => void;
   onLogout: () => void;

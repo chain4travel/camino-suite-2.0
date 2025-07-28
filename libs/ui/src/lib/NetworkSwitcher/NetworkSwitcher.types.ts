@@ -1,3 +1,4 @@
+import { AvaNetwork } from '@camino/store';
 export interface NetworkOption {
   name: string;
   description?: string;
@@ -10,8 +11,8 @@ export interface NetworkOption {
 }
 
 export interface NetworkSwitcherProps {
-  options: NetworkOption[];
-  onSelect: (option: NetworkOption) => void;
+  options: AvaNetwork[];
+  onSelect: (option: AvaNetwork) => void;
   activeNetwork?: string;
   onAddNetwork: () => void;
   onEditNetwork?: (network: NetworkOption) => void;

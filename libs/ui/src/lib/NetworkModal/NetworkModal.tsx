@@ -7,20 +7,21 @@ import Button from '../CamBtn';
 import Input from '../Input';
 import Modal from '../Modal';
 import Typography from '../Typography';
+import { AvaNetwork } from '@camino/store';
 
 const NetworkModal = ({
   isOpen,
   onClose,
   onSubmit,
   initialValues,
-  editingNetworkmode
+  editingNetworkmode,
 }: NetworkModalProps) => {
   const [formData, setFormData] = useState<Network>({
     name: '',
     url: '',
     magellanAddress: '',
     signavaultAddress: '',
-    status: 'custom'
+    status: 'custom',
   });
 
   useEffect(() => {
@@ -33,14 +34,22 @@ const NetworkModal = ({
         url: '',
         magellanAddress: '',
         signavaultAddress: '',
-        status: 'custom'
+        status: 'custom',
       });
     }
   }, [isOpen, initialValues]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    onSubmit(formData);
+    const newCustomNetwork: AvaNetwork = new AvaNetwork(
+      formData.name,
+      formData.url,
+      1002,
+      formData.magellanAddress,
+      '',
+      true
+    );
+    onSubmit(newCustomNetwork);
     onClose();
   };
 
@@ -51,17 +60,18 @@ const NetworkModal = ({
       url: '',
       magellanAddress: '',
       signavaultAddress: '',
-      status: 'custom'
+      status: 'custom',
     });
     onClose();
   };
 
-  const handleChange = (field: keyof Network) => (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormData(prev => ({
-      ...prev,
-      [field]: e.target.value
-    }));
-  };
+  const handleChange =
+    (field: keyof Network) => (e: React.ChangeEvent<HTMLInputElement>) => {
+      setFormData((prev) => ({
+        ...prev,
+        [field]: e.target.value,
+      }));
+    };
 
   return (
     <Modal
@@ -102,18 +112,11 @@ const NetworkModal = ({
         </div>
 
         <div className="flex justify-end gap-4">
-          <Button
-            variant="secondary"
-            onClick={handleClose}
-            type="button"
-          >
+          <Button variant="secondary" onClick={handleClose} type="button">
             Cancel
           </Button>
-          <Button
-            type="submit"
-            variant="primary"
-          >
-            {!editingNetworkmode  ? 'Add Network' : 'Edit Network'}
+          <Button type="submit" variant="primary">
+            {!editingNetworkmode ? 'Add Network' : 'Edit Network'}
           </Button>
         </div>
       </form>

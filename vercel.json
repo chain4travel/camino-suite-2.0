@@ -1,0 +1,6 @@
+{
+  "version": 2,
+  "buildCommand": "yarn run build:all",
+  "outputDirectory": "dist/apps/camino-suite/.next",
+  "framework": "nextjs"
+}

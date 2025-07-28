@@ -1,0 +1,7 @@
+{
+  "version": 2,
+  "name": "camino-suite-storybook",
+  "buildCommand": "yarn run build:storybook",
+  "outputDirectory": "libs/ui/storybook-static",
+  "framework": null
+}

@@ -1,34 +1,15 @@
 import { Modal, Table, Tabs, Typography } from '@camino/ui';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { Column, UTXO } from './header.types';
+import {
+  balanceText,
+  sortFnc,
+  typeName,
+  useAssetsStore,
+  useWalletStore,
+} from '@camino/store';
 
-const CHAIN_UTXOS: Record<'X' | 'P', UTXO[]> = {
-  X: [
-    {
-      id: '2CffgzgLcXqAv3hPKQCjMtQbm2BGceLgcXFDq7gVoL8i2U3od1',
-      type: 'SECP Transfer Output',
-      threshold: 1,
-      owners: 'X-kopernikus1g65uqn6t77p656w64023nh8nd9updzmxh8ttv3',
-      balance: '199 999.976 CAM',
-    },
-  ],
-  P: [
-    {
-      id: '2CffgzgLcXqAv3hPKQCjMtQbm2BGceLgcXFDq7gVoL8i2U3od1',
-      type: 'SECP Transfer Output',
-      threshold: 1,
-      owners: 'P-kopernikus1g65uqn6t77p656w64023nh8nd9updzmxh8ttv3',
-      balance: '199 999.976 CAM',
-    },
-    {
-      id: '6wSuYBDbuEeb39Vz9ghCNUBmiqxJ6rBpzMF34UDWdJga66wVR',
-      type: 'Locked Output',
-      threshold: 1,
-      owners: 'P-kopernikus1g65uqn6t77p656w64023nh8nd9updzmxh8ttv3',
-      balance: '100 CAM',
-    },
-  ],
-};
+import { ava, bintools } from '@camino/store';
 
 const TABS = [
   { id: 'X', label: 'X Chain' },
@@ -89,6 +70,49 @@ interface UTXOModalProps {
 
 export const UTXOModal = ({ isOpen, onClose }: UTXOModalProps) => {
   const [activeChain, setActiveChain] = useState<'X' | 'P'>('X');
+  const { activeWallet } = useWalletStore();
+  const assetStore = useAssetsStore();
+
+  const avmUTXOs = useMemo(() => {
+    const utxos = activeWallet?.getUTXOSet().getAllUTXOs();
+    const sorted = utxos?.sort(sortFnc);
+    return sorted;
+  }, [assetStore]);
+
+  const platformUTXOs = useMemo(() => {
+    const utxos = activeWallet?.getPlatformUTXOSet().getAllUTXOs();
+    const sorted = utxos?.sort(sortFnc);
+    return sorted;
+  }, [assetStore]);
+
+  const data = useMemo(() => {
+    const utxosSorted = activeChain === 'X' ? avmUTXOs : platformUTXOs;
+    const list = utxosSorted?.map((utxo) => {
+      const hrp = ava.getHRP();
+      const out = utxo.getOutput();
+      const typeID = out.getTypeID();
+      const id = activeChain === 'X' ? 'X' : 'P';
+      const addrs = out.getAddresses();
+      const addrsClean = addrs.map((addr) => {
+        return bintools.addressToString(hrp, id, addr);
+      });
+      let assetID = utxo.getAssetID();
+      let idClean = bintools.cb58Encode(assetID);
+      let asset =
+        assetStore.assetsDict[idClean] || assetStore.nftFamsDict[idClean];
+      return {
+        id: utxo.getUTXOID(),
+        type: typeName(typeID),
+        threshold: out.getThreshold(),
+        owners: addrsClean.join(', '),
+        balance:
+          balanceText(typeID, utxo.getOutput(), assetStore.getAssetAVA()) +
+          ' ' +
+          (asset ? asset.symbol : ''),
+      };
+    });
+    return list;
+  }, [assetStore, activeChain]);
 
   const handleTabChange = (tabId: string) => {
     if (tabId === 'X' || tabId === 'P') {
@@ -115,7 +139,7 @@ export const UTXOModal = ({ isOpen, onClose }: UTXOModalProps) => {
         <div className="flex-1 overflow-auto">
           <Table
             columns={columns}
-            data={CHAIN_UTXOS[activeChain]}
+            data={data}
             className="min-w-[800px]"
             size="sm"
             showDividers

@@ -26,7 +26,9 @@ const WalletLayout = ({ children }: { children: React.ReactNode }) => {
             <div className="flex-1 flex flex-col gap-4">
               <Header />
               {/* Main content area */}
-              <Box className="flex-1 bg-white dark:bg-slate-950">{children}</Box>
+              <Box className="flex-1 bg-white dark:bg-slate-950">
+                {children}
+              </Box>
             </div>
 
             {/* Right sidebar */}

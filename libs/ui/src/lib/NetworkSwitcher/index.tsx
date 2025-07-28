@@ -10,6 +10,7 @@ import Dropdown from '../Dropdown';
 import Icon from '@mdi/react';
 import { MenuItem } from '@headlessui/react';
 import Typography from '../Typography';
+import { AvaNetwork } from '@camino/store';
 
 const NetworkSwitcher = ({
   options,
@@ -19,7 +20,7 @@ const NetworkSwitcher = ({
   onEditNetwork,
   onDeleteNetwork,
 }: NetworkSwitcherProps) => {
-  const [currentOption, setCurrentOption] = useState<NetworkOption | undefined>(
+  const [currentOption, setCurrentOption] = useState<AvaNetwork | undefined>(
     options.find((opt) => opt.name === activeNetwork) || options[0]
   );
 
@@ -35,7 +36,13 @@ const NetworkSwitcher = ({
         size="sm"
         variant="primary"
         className="absolute top-[-20px] right-[-25px]"
-        text= {currentOption?.status || ''}
+        text={
+          currentOption?.name === 'Camino'
+            ? 'mainnet'
+            : currentOption?.name === 'Columbus'
+            ? 'testnet'
+            : 'custom'
+        }
       />
       <Typography>{currentOption?.name}</Typography>
     </div>
@@ -58,7 +65,6 @@ const NetworkSwitcher = ({
       menuItemsClassName="absolute mt-4 origin-top-right border w-[300px] rounded-xl border-slate-700 bg-slate-950"
       placement="bottom-end"
     >
-
       {filteredOptions.map((option, index) => (
         <div key={option.name} className="relative group">
           <MenuItem>
@@ -83,7 +89,7 @@ const NetworkSwitcher = ({
                         onEditNetwork?.(option);
                       }}
                       title="Edit Network"
-                      className='!p-2 hover:!bg-primary !border-primary'
+                      className="!p-2 hover:!bg-primary !border-primary"
                     >
                       <Icon path={mdiPencil} size={0.5} />
                     </CamBtn>
@@ -93,12 +99,9 @@ const NetworkSwitcher = ({
                         onDeleteNetwork?.(option);
                       }}
                       title="Delete Network"
-                      className='!p-2'
+                      className="!p-2"
                     >
-                      <Icon
-                        path={mdiTrashCan}
-                        size={0.5}
-                      />
+                      <Icon path={mdiTrashCan} size={0.5} />
                     </CamBtn>
                   </div>
                 )}

@@ -24,6 +24,7 @@
     "enterPrivateKey": "Enter your private key",
     "accessWallet": "Access Wallet",
     "invalidPrivateKey": "Invalid private key format",
+    "invalidMnemonic": "Invalid mnemonic phrase. Please check your phrase.",
     "keystoreInstructions": "Select your keystore file and enter password",
     "selectKeystoreFile": "SELECT FILE",
     "selectFileFirst": "Please select a keystore file",

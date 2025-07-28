@@ -2,10 +2,11 @@
 
 import Icon from '@mdi/react';
 import { mdiContentCopy, mdiQrcode } from '@mdi/js';
-import { useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import clsx from 'clsx';
-import { Modal, Tooltip, Typography } from '@camino/ui';
+import { Modal, Tooltip, Typography, useNetwork } from '@camino/ui';
 import QRCode from 'react-qr-code';
+import { useNetworkStore, useWalletStore } from '@camino/store';
 
 type Chain = 'X' | 'P' | 'C';
 
@@ -15,19 +16,23 @@ const CHAIN_DESCRIPTIONS = {
   C: 'This is your C-Chain address. Use it to interact with the ethereum virtual machine.',
 };
 
-const CHAIN_ADDRESSES = {
-  X: 'X-kopernikus1g65uqn6t77p656w64023nh8nd9updzmxh8ttv3',
-  P: 'P-kopernikus1g65uqn6t77p656w64023nh8nd9updzmxh8ttv3',
-  C: '0x742d35Cc6634C0532925a3b844Bc454e4438f44e',
-};
-
 export const AddressCard = () => {
   const [isQRModalOpen, setIsQRModalOpen] = useState(false);
   const [activeChain, setActiveChain] = useState<Chain>('X');
 
   const handleCopy = async () => {
-    await navigator.clipboard.writeText(CHAIN_ADDRESSES[activeChain]);
+    await navigator.clipboard.writeText(addresses[activeChain]);
   };
+
+  const { activeWallet, address } = useWalletStore();
+
+  const addresses = useMemo(() => {
+    return {
+      X: address,
+      P: activeWallet?.getCurrentAddressPlatform(),
+      C: activeWallet?.ethAddress,
+    };
+  }, [address]);
 
   const handleChainChange = (chain: Chain) => {
     setActiveChain(chain);
@@ -40,13 +45,13 @@ export const AddressCard = () => {
         </Typography>
       </div>
       <div className="px-4 flex-1 flex flex-col items-center justify-center lg:flex-row lg:items-start lg:justify-start gap-4">
-        <QRCode size={110} value={CHAIN_ADDRESSES[activeChain]} />
+        <QRCode size={110} value={addresses[activeChain]} />
         <div className="flex-1 flex flex-col gap-1">
           <Typography variant="caption" className="!text-slate-400">
             {activeChain}-Chain Wallet Address
           </Typography>
           <Typography variant="h6" className="break-all">
-            {CHAIN_ADDRESSES[activeChain]}
+            {addresses[activeChain]}
           </Typography>
           <div className="flex items-center justify-center self-end mt-3 gap-2">
             <Tooltip content="Show QR Code">
@@ -98,9 +103,9 @@ export const AddressCard = () => {
         title={`${activeChain}-Chain Wallet Address`}
       >
         <div className="flex flex-col items-center gap-6 p-6">
-          <QRCode size={200} value={CHAIN_ADDRESSES[activeChain]} />
+          <QRCode size={200} value={addresses[activeChain]} />
           <Typography variant="h6" className="break-all text-center">
-            {CHAIN_ADDRESSES[activeChain]}
+            {addresses[activeChain]}
           </Typography>
         </div>
       </Modal>

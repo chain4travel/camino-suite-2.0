@@ -1,3 +1,5 @@
+import { AvaNetwork } from '@camino/store';
+
 export interface Network {
   name: string;
   url: string;
@@ -9,7 +11,7 @@ export interface Network {
 export interface NetworkModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onSubmit: (network: Network) => void;
+  onSubmit: (network: AvaNetwork) => void;
   initialValues?: Network;
   editingNetworkmode: boolean;
 }

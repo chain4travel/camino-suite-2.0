@@ -3,11 +3,12 @@ import './global.css';
 import { I18nProvider, Layout, ThemeProvider } from '@camino/ui';
 
 import { Inter } from 'next/font/google';
-// import { StoreProvider } from '@camino/store';
 import enTranslations from '../locales/en.json';
 import esTranslations from '../locales/es.json';
 import frTranslations from '../locales/fr.json';
 import { AuthProvider } from '../context/AuthContext';
+import { AppInitializer } from '../components/AppInitializer';
+import { RouteGuard } from '../components/RouteGuard';
 
 const inter = Inter({
   subsets: ['latin'],
@@ -38,13 +39,11 @@ export default function RootLayout({
         className={`flex flex-col items-center justify-center w-full ${inter.variable}`}
       >
         <ThemeProvider>
-          {/* <StoreProvider> */}
-          <AuthProvider>
-            <I18nProvider resources={resources}>
+          <I18nProvider resources={resources}>
+            <AppInitializer>
               <Layout>{children}</Layout>
-            </I18nProvider>
-          </AuthProvider>
-          {/* </StoreProvider> */}
+            </AppInitializer>
+          </I18nProvider>
         </ThemeProvider>
       </body>
     </html>

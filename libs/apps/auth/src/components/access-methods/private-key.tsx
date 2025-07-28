@@ -2,21 +2,22 @@
 
 import { CamBtn, Input, Typography } from '@camino/ui';
 import { useCallback, useState } from 'react';
-
+import { useWalletStore } from '@camino/store';
 import { AccessMethodProps } from './types';
 import { useTranslation } from 'react-i18next';
 
 export const PrivateKeyAccess = ({ onBack }: AccessMethodProps) => {
   const { t } = useTranslation();
   const [privateKey, setPrivateKey] = useState('');
+  const { accessWalletSingleton } = useWalletStore();
   const [error, setError] = useState('');
 
-  const isValidPrivateKey = (privateKey);
+  // Get actions
+  const isValidPrivateKey = privateKey;
 
   const handlePrivateKeyChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     setPrivateKey(value);
-
 
     if (!value) {
       setError(t('auth.invalidPrivateKey'));
@@ -30,7 +31,8 @@ export const PrivateKeyAccess = ({ onBack }: AccessMethodProps) => {
       setError(t('auth.invalidPrivateKey'));
       return;
     }
-    console.log('Accessing with private key:', privateKey);
+
+    accessWalletSingleton(privateKey);
   }, [privateKey, isValidPrivateKey, t]);
 
   return (
@@ -41,7 +43,7 @@ export const PrivateKeyAccess = ({ onBack }: AccessMethodProps) => {
 
       <Input
         className="w-full"
-        placeholder="PrivateKey-..."
+        placeholder="Private Key"
         value={privateKey}
         onChange={handlePrivateKeyChange}
         error={error}
@@ -60,7 +62,7 @@ export const PrivateKeyAccess = ({ onBack }: AccessMethodProps) => {
       </CamBtn>
 
       <CamBtn
-        variant='transparent'
+        variant="transparent"
         className="w-full"
         onClick={onBack}
         fullWidth

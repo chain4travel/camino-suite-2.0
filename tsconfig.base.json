@@ -11,8 +11,9 @@
     "target": "es2015",
     "module": "esnext",
     "lib": ["es2020", "dom"],
-    "skipLibCheck": true,
     "skipDefaultLibCheck": true,
+    "skipLibCheck": true,
+    "noEmitOnError": false,
     "baseUrl": ".",
     "paths": {
       "@camino/auth": ["libs/apps/auth/src/index.ts"],
@@ -24,6 +25,10 @@
       "@camino/ui": ["libs/ui/src/index.ts"],
       "@camino/wallet": ["libs/apps/wallet/src/index.ts"]
     }
+  },
+  "ts-node": {
+    "esm": true,
+    "experimentalSpecifierResolution": "node"
   },
   "exclude": ["node_modules", "tmp"]
 }

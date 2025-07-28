@@ -18,14 +18,14 @@ const MOCK_ASSETS: Asset[] = [
     name: 'Camino',
     symbol: 'CAM',
     balance: '10 000',
-    icon: '/images/cam-token.svg',
+    icon: '/images/native_token.png',
   },
   {
     id: '2',
     name: 'Monerium EURe',
     symbol: '(EURe) ERC20',
     balance: '0',
-    icon: '/images/cam-token.svg',
+    icon: '/images/eure_logo.png',
   },
 ];
 

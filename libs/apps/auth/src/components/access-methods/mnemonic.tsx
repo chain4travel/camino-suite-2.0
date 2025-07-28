@@ -1,20 +1,33 @@
 'use client';
 
-import { CamBtn, MnemonicInput, Typography } from '@camino/ui';
+import { Alert, CamBtn, MnemonicInput, Typography } from '@camino/ui';
 import { mdiEye, mdiEyeOff } from '@mdi/js';
 import { useCallback, useMemo, useState } from 'react';
-
+import * as bip39 from 'bip39';
 import { AccessMethodProps } from './types';
 import { useTranslation } from 'react-i18next';
+import { useWalletStore } from '@camino/store';
 
 export const MnemonicAccess = ({ onBack }: AccessMethodProps) => {
   const { t } = useTranslation();
   const [phrases, setPhrases] = useState<string[]>(Array(24).fill(''));
   const [showPhrase, setShowPhrase] = useState(false);
   const [error, setError] = useState('');
+  const { accessWallet } = useWalletStore();
 
   const isValid = useMemo(() => {
-    return phrases.every((phrase) => phrase.trim().length > 0);
+    const filledWords = phrases.filter((phrase) => phrase.trim() !== '');
+
+    if (filledWords.length !== 24) {
+      setError('');
+      return false;
+    }
+
+    const isValidMnemonic = bip39.validateMnemonic(phrases.join(' '));
+
+    setError(isValidMnemonic ? '' : t('auth.invalidMnemonic'));
+
+    return isValidMnemonic;
   }, [phrases]);
 
   const handleAccess = useCallback(() => {
@@ -22,7 +35,7 @@ export const MnemonicAccess = ({ onBack }: AccessMethodProps) => {
       setError(t('auth.invalidMnemonic'));
       return;
     }
-    console.log('Accessing with mnemonic:', phrases);
+    accessWallet(phrases.join(' '));
   }, [phrases, isValid, t]);
 
   return (
@@ -41,6 +54,12 @@ export const MnemonicAccess = ({ onBack }: AccessMethodProps) => {
         error={error}
       />
 
+      {error && (
+        <span className="text-xs lg:text-sm font-light text-error text-center">
+          {error}
+        </span>
+      )}
+
       <CamBtn
         variant="transparent"
         leftIcon={showPhrase ? mdiEyeOff : mdiEye}
@@ -48,12 +67,7 @@ export const MnemonicAccess = ({ onBack }: AccessMethodProps) => {
       >
         {showPhrase ? t('common.hidePhrase') : t('common.showPhrase')}
       </CamBtn>
-
-      <CamBtn
-        fullWidth
-        onClick={handleAccess}
-        disabled={!isValid}
-      >
+      <CamBtn fullWidth onClick={handleAccess} disabled={!isValid}>
         {t('auth.accessWallet')}
       </CamBtn>
 

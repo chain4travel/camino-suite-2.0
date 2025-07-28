@@ -23,6 +23,10 @@
       "configurations": {
         "production": {
           "outputPath": "dist/apps/camino-suite"
+        },
+        "test-deploy": {
+          "outputPath": "dist/apps/camino-suite",
+          "typeCheck": false
         }
       }
     }

@@ -6,6 +6,10 @@ import { useTheme } from '../../context/ThemeContext';
 import Typography from '../Typography';
 import AccountDropdown from './AccountDropdown';
 import { useRouter } from 'next/navigation';
+import {
+  displayFirstPartLongString,
+  displaySecondPartLongString,
+} from '../../utils/helpers';
 
 interface LoggedInNavProps {
   onMobileMenuOpen: () => void;
@@ -38,7 +42,10 @@ const LoggedInNav = ({
           size={1}
           className="text-slate-950 dark:text-slate-100"
         />
-        <Typography className="text-slate-500">{walletAddress}</Typography>
+        <Typography className="text-slate-500">
+          {displayFirstPartLongString(walletAddress)}&hellip;
+          {displaySecondPartLongString(walletAddress)}
+        </Typography>
       </div>
 
       <AccountDropdown

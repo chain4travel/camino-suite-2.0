@@ -56,7 +56,9 @@ export const Table = <T extends object>({
       <div className="w-full overflow-x-auto">
         <table className="w-full min-w-[640px]">
           {showHeader && (
-            <thead className={clsx(showDividers && 'border-b border-slate-700')}>
+            <thead
+              className={clsx(showDividers && 'border-b border-slate-700')}
+            >
               <tr
                 className={clsx(
                   layout === 'spaceBetween' && 'flex justify-between'
@@ -91,7 +93,8 @@ export const Table = <T extends object>({
                 className={clsx(
                   'transition-colors',
                   layout === 'spaceBetween' && 'flex justify-between',
-                  showHover && 'hover:bg-gray-300/50 dark:hover:bg-slate-800/50',
+                  showHover &&
+                    'hover:bg-gray-300/50 dark:hover:bg-slate-800/50',
                   onRowClick && 'cursor-pointer'
                 )}
               >

@@ -15,7 +15,7 @@ export { default as Alert } from './lib/Alert';
 export { default as Modal } from './lib/Modal';
 export { default as Checkbox } from './lib/Checkbox';
 export { default as Tooltip } from './lib/Tooltip';
-
+export { useNetwork } from './hooks/useNetwork';
 //layout components
 export { default as Layout } from './lib/Layout';
 export { default as Footer } from './lib/Footer';
