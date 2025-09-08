@@ -73,7 +73,9 @@ export const MnemonicConfirmation = ({
                   selectedIndices.includes(index)
                     ? 'border-primary text-slate-900 dark:text-slate-100'
                     : 'border-slate-700 text-slate-400'
-                } ${!selectedIndices.includes(index) ? 'cursor-not-allowed' : ''}`}
+                } ${
+                  !selectedIndices.includes(index) ? 'cursor-not-allowed' : ''
+                }`}
                 style={{ outline: 'none' }}
               />
             </div>

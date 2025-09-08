@@ -1,6 +1,8 @@
 import { Input, Typography, CamBtn } from '@camino/ui';
 import { useTranslation } from 'react-i18next';
 import { NFTSelector } from './NFTSelector';
+import { useAssetsStore } from '@camino/store';
+import { useMemo } from 'react';
 
 interface NFTGroup {
   id: number;
@@ -38,6 +40,19 @@ export const TransferForm = ({
 }: TransferFormProps) => {
   const { t } = useTranslation();
 
+  const { getWalletAssetsArray, getWalletAssetsDict } = useAssetsStore();
+
+  /******** getters **********/
+  const assetsList = useMemo(() => {
+    const assetsList = getWalletAssetsArray();
+    console.log('Assets List:', assetsList);
+    return assetsList;
+  }, []);
+
+  const assets = useMemo(() => {
+    return getWalletAssetsDict();
+  }, []);
+  /***************************/
   return (
     <div className="flex flex-col gap-6 py-6 flex-1">
       <div className="flex items-center gap-2">
@@ -61,7 +76,10 @@ export const TransferForm = ({
               </Typography>
             </button>
           </div>
-          <Typography variant="caption" className="mt-2 !text-slate-400 self-end">
+          <Typography
+            variant="caption"
+            className="mt-2 !text-slate-400 self-end"
+          >
             Balance: {selectedToken.balances[selectedChain]}
           </Typography>
         </div>
@@ -75,4 +93,4 @@ export const TransferForm = ({
       )}
     </div>
   );
-}; 
+};

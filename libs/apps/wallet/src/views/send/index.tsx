@@ -1,13 +1,14 @@
 'use client';
 import { Tabs, Typography } from '@camino/ui';
 import { useSearchParams } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { use, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ChainSelector } from '../../components/transfer/ChainSelector';
 import { TransferForm } from '../../components/transfer/TransferForm';
 import { AirdropForm } from '../../components/transfer/AirdropForm';
 import { SendForm } from '../../components/transfer/SendForm';
 import { TokenSelectorModal } from '../../components/transfer/TokenSelectorModal';
+import { ava, bnToBig, useAssetsStore, useWalletStore } from '@camino/store';
 
 const TABS = [
   { id: 'transfer', label: 'Transfer' },
@@ -24,7 +25,9 @@ export const SendView = () => {
   const { t } = useTranslation();
   const searchParams = useSearchParams();
   const [confirmedTransaction, setConfirmedTransaction] = useState(false);
-  const [activeTab, setActiveTab] = useState<'transfer' | 'airdrop'>('transfer');
+  const [activeTab, setActiveTab] = useState<'transfer' | 'airdrop'>(
+    'transfer'
+  );
   const [selectedChain, setSelectedChain] = useState<'P' | 'X' | 'C'>('P');
   const [amount, setAmount] = useState('0.00');
   const [memo, setMemo] = useState('');
@@ -41,6 +44,45 @@ export const SendView = () => {
     },
     icon: '/images/cam-token.svg',
   });
+
+  const { nftUTXOs, getAssetAVA, assets } = useAssetsStore();
+  const { activeWallet } = useWalletStore();
+
+  /******** getters **********/
+
+  const hasNFT = useMemo(() => {
+    console.log('NFTs:', nftUTXOs);
+  }, [nftUTXOs]);
+
+  const avaxAsset = useMemo(() => {
+    return getAssetAVA();
+  }, [assets]);
+
+  const nativeAssetSymbol = useMemo(() => {
+    return avaxAsset?.symbol || '';
+  }, [avaxAsset]);
+
+  const txFee = useMemo(() => {
+    if (selectedChain === 'P') {
+      return ava.PChain().getTxFee();
+    } else if (selectedChain === 'X') {
+      return ava.XChain().getTxFee();
+    }
+  }, [selectedChain]);
+
+  const txFeeBig = useMemo(() => {
+    if (!txFee || !avaxAsset) return '0';
+    return bnToBig(txFee, avaxAsset?.denomination);
+  }, [txFee, avaxAsset]);
+
+  const addresses = useMemo(() => {
+    if (!activeWallet) return [];
+    return activeWallet.getAllAddressesX();
+  }, [activeWallet]);
+
+  // const activeWallet = useMemo(() => {}, []);
+
+  /***************************/
 
   useEffect(() => {
     setAmount('0.00');
