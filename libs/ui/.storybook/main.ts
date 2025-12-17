@@ -7,6 +7,24 @@ const config: StorybookConfig = {
     name: '@storybook/nextjs',
     options: {},
   },
+  webpackFinal: async (config) => {
+    // Fix for ethers.js and other Node.js dependencies in browser builds
+    config.resolve = config.resolve || {};
+    config.resolve.fallback = {
+      ...config.resolve.fallback,
+      fs: false,
+      net: false,
+      tls: false,
+      crypto: false,
+      stream: false,
+      http: false,
+      https: false,
+      zlib: false,
+      path: false,
+      os: false,
+    };
+    return config;
+  },
 };
 
 export default config;
