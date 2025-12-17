@@ -1,4 +1,4 @@
-name: 'Docker Build and Deploy'
+name: 'Docker Build and Deploy to AWS'
 
 on:
   push:
@@ -11,9 +11,10 @@ on:
       - c4t
 
 env:
-  docker_image: "europe-west3-docker.pkg.dev/pwk-c4t-dev/internal-camino-dev/camino-new-suite"
-  cloudrun_region: europe-west1
-
+  AWS_REGION: eu-central-1
+  ECR_REPOSITORY: chain4travel-prod-ecr-camino-suite-20
+  ECS_CLUSTER: chain4travel-prod
+  ECS_SERVICE: suite-2-dev
 
 jobs:
   docker:
@@ -26,44 +27,51 @@ jobs:
           submodules: recursive
           fetch-depth: 0
 
-      - name: Prepare cloud run name
+      - name: Prepare Docker tag
         id: setDefaults
         run: |
           if [[ "${{ github.ref }}" == "refs/heads/c4t" ]] || [[ "${{ github.base_ref }}" == "c4t" ]]; then
               echo "tag=c4t" >> $GITHUB_OUTPUT
-              echo "cloudrun_name=new-camino-suite-c4t" >> $GITHUB_OUTPUT
           elif [[ "${{ github.ref }}" == "refs/heads/dev" ]] || [[ "${{ github.base_ref }}" == "dev" ]]; then
               echo "tag=dev" >> $GITHUB_OUTPUT
-              echo "cloudrun_name=new-camino-suite-dev" >> $GITHUB_OUTPUT
           else
               echo "tag=temp" >> $GITHUB_OUTPUT
           fi
 
-      - name: create docker image
-        run: docker build . -t ${{ env.docker_image }}:${{ steps.setDefaults.outputs.tag }}
-
-      - name: Cloud authentication
+      - name: Configure AWS credentials
         if: ${{ (github.event_name == 'push') }}
-        id: auth
-        uses: 'google-github-actions/auth@v1'
+        uses: aws-actions/configure-aws-credentials@v4
         with:
-          credentials_json: '${{ secrets.GCP_CREDS }}'
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
 
-      - name: Set up Cloud SDK
+      - name: Login to Amazon ECR
         if: ${{ (github.event_name == 'push') }}
-        uses: google-github-actions/setup-gcloud@v1
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v2
 
+      - name: Build Docker image
+        run: |
+          docker build . -t ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com/${{ env.ECR_REPOSITORY }}:${{ steps.setDefaults.outputs.tag }}
 
-
-      - name: push and deploy docker
+      - name: Push to ECR and Deploy to ECS
         if: ${{ (github.event_name == 'push') }}
         run: |
-          gcloud auth configure-docker --quiet europe-west3-docker.pkg.dev
-          docker push ${{ env.docker_image }}:${{ steps.setDefaults.outputs.tag }}
-          gcloud run deploy ${{ steps.setDefaults.outputs.cloudrun_name }} --image ${{ env.docker_image }}:${{ steps.setDefaults.outputs.tag }}   --region=${{ env.cloudrun_region }}
+          # Push image to ECR
+          docker push ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com/${{ env.ECR_REPOSITORY }}:${{ steps.setDefaults.outputs.tag }}
+          
+          # Force new deployment of ECS service
+          aws ecs update-service \
+            --cluster ${{ env.ECS_CLUSTER }} \
+            --service ${{ env.ECS_SERVICE }} \
+            --force-new-deployment \
+            --region ${{ env.AWS_REGION }}
+          
+          echo "✅ Deployment triggered for ECS service: ${{ env.ECS_SERVICE }}"
 
   deploy-storybook:
-    name: Deploy Storybook
+    name: Deploy Storybook to S3
     if: ${{ (github.event_name == 'push') }}
     needs: docker
     runs-on: ubuntu-latest
@@ -74,15 +82,14 @@ jobs:
           submodules: recursive
           fetch-depth: 0
 
-      - name: Prepare Bucket Name
+      - name: Prepare S3 Bucket Name
         id: setDefaults
         run: |
           if [[ "${{ github.ref }}" == "refs/heads/c4t" ]] || [[ "${{ github.base_ref }}" == "c4t" ]]; then
               echo "bucket=storybook.new-suite.camino.network" >> $GITHUB_OUTPUT
           elif [[ "${{ github.ref }}" == "refs/heads/dev" ]] || [[ "${{ github.base_ref }}" == "dev" ]]; then
-              echo "bucket=dev.storybook.new-suite.camino.network" >> $GITHUB_OUTPUT
+              echo "bucket=camino-suite-2-storybook-dev-bucket" >> $GITHUB_OUTPUT
           fi
-
 
       - uses: actions/setup-node@v4
         with:
@@ -94,16 +101,30 @@ jobs:
       - name: Build storybook
         run: yarn build:storybook
 
-      - name: Cloud authentication
-        id: auth
-        uses: 'google-github-actions/auth@v1'
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
         with:
-          credentials_json: '${{ secrets.GCP_CREDS }}'
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
 
-      - name: Set up Cloud SDK
-        uses: google-github-actions/setup-gcloud@v1
-
-
-      - name: Update Bucket
+      - name: Deploy to S3
         run: |
-          gsutil -m rsync -R -d libs/ui/storybook-static gs://${{ steps.setDefaults.outputs.bucket }}
+          aws s3 sync libs/ui/storybook-static s3://${{ steps.setDefaults.outputs.bucket }} --delete
+          echo "✅ Storybook deployed to S3 bucket: ${{ steps.setDefaults.outputs.bucket }}"
+
+      - name: Invalidate CloudFront Cache
+        run: |
+          # Get CloudFront distribution ID for the bucket
+          DISTRIBUTION_ID=$(aws cloudfront list-distributions \
+            --query "DistributionList.Items[?Origins.Items[?DomainName=='${{ steps.setDefaults.outputs.bucket }}.s3.${{ env.AWS_REGION }}.amazonaws.com']].Id" \
+            --output text)
+          
+          if [ -n "$DISTRIBUTION_ID" ]; then
+            aws cloudfront create-invalidation \
+              --distribution-id $DISTRIBUTION_ID \
+              --paths "/*"
+            echo "✅ CloudFront cache invalidated for distribution: $DISTRIBUTION_ID"
+          else
+            echo "⚠️  No CloudFront distribution found for bucket: ${{ steps.setDefaults.outputs.bucket }}"
+          fi
