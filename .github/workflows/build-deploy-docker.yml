@@ -86,7 +86,7 @@ jobs:
         id: setDefaults
         run: |
           if [[ "${{ github.ref }}" == "refs/heads/c4t" ]] || [[ "${{ github.base_ref }}" == "c4t" ]]; then
-              echo "bucket=storybook.new-suite.camino.network" >> $GITHUB_OUTPUT
+              echo "bucket=camino-suite-2-storybook-c4t-bucket" >> $GITHUB_OUTPUT
           elif [[ "${{ github.ref }}" == "refs/heads/dev" ]] || [[ "${{ github.base_ref }}" == "dev" ]]; then
               echo "bucket=camino-suite-2-storybook-dev-bucket" >> $GITHUB_OUTPUT
           fi
